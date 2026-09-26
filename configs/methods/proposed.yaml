@@ -1,0 +1,24 @@
+method: proposed_adaptive_qr_v2
+parameters:
+  block_size: 2
+  channel: 0
+  watermark_size: 64
+  arnold_iterations: 10
+  repetition: 5
+  q_angle_period: 0.12
+  r12_period: 8.0
+  distortion_scale: 1.0
+  lambda_distortion: 0.35
+  utility_imbalance_penalty: 0.15
+  selector_group_mean: true
+  perturb_plus_minus: 1.0
+  perturb_blur_sigma: 0.6
+  nlm:
+    enabled: true
+    compare_always: true
+    mild_h: 4.0
+    mild_template: 3
+    mild_search: 11
+    strong_h: 8.0
+    strong_template: 5
+    strong_search: 17

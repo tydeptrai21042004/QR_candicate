@@ -1,0 +1,3 @@
+method: {name: proposed, config: configs/methods/proposed.yaml}
+hosts: data/hosts/classical
+watermarks: data/watermarks

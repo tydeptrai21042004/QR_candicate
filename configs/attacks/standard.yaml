@@ -1,0 +1,27 @@
+attacks:
+  - name: clean
+  - name: gaussian_blur
+    params: {sigma: 1.0}
+  - name: sharpen
+    params: {sigma: 1.0, amount: 1.5}
+  - name: gaussian_noise
+    params: {mean: 0.0, variance: 0.003}
+    seeds: [0, 1, 2, 3, 4]
+  - name: salt_pepper
+    params: {density: 0.1}
+    seeds: [0, 1, 2, 3, 4]
+  - name: jpeg
+    params: {quality: 50}
+  - name: jpeg2000
+    params: {compression_ratio: 13.0}
+  - name: lowpass
+    params: {kx: 9, ky: 9}
+  - name: scale_resample
+    params: {scale: 0.2}
+  - name: rotation_resample
+    params: {angle: 45.0}
+  - name: gamma
+    params: {gamma: 1.5}
+  - name: occlusion
+    params: {fraction: 0.5, value: 0}
+    seeds: [0, 1, 2, 3, 4]
