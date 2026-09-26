@@ -35,7 +35,7 @@ def main():
         out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
         write_image(out, emb.image)
         side_path = Path(args.side_info) if args.side_info else out.with_suffix(".side.npz")
-        if method.name == "proposed_adaptive_qr_v2":
+        if method.name == "ccqr_r12_qim_v1":
             save_side_info(side_path, emb.side_info)
         if args.mode == "roundtrip":
             ext = method.extract(emb.image, key=key, side_info=emb.side_info, watermark_shape=wm.shape)
@@ -54,7 +54,7 @@ def main():
     wm = prepare_binary_watermark(args.watermark, 64)
     side = None
     if args.side_info:
-        side = load_side_info(args.side_info) if method.name == "proposed_adaptive_qr_v2" else None
+        side = load_side_info(args.side_info) if method.name == "ccqr_r12_qim_v1" else None
     ext = method.extract(image, key=key, side_info=side, watermark_shape=wm.shape)
     write_image(args.out, ext.watermark)
     print(f"Extracted: {args.out}")

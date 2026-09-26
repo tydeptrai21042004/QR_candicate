@@ -4,39 +4,28 @@ import cv2
 import numpy as np
 
 from ..core.config import ProposedConfig
-from .branch_selector import MODE_Q, MODE_R
-from .q_branch import q_llr
 from .r_branch import r_llr
-
-
-def observation_llr(block: np.ndarray, mode: int, cfg: ProposedConfig) -> float:
-    if mode == MODE_Q:
-        return q_llr(block, cfg.q_angle_period)
-    if mode == MODE_R:
-        return r_llr(block, cfg.r12_period)
-    raise ValueError(f"Unknown mode: {mode}")
 
 
 def decode_groups(
     channel: np.ndarray,
     positions: list[tuple[int, int]],
-    modes: np.ndarray,
+    periods: np.ndarray,
     repetition: int,
     block_size: int,
-    cfg: ProposedConfig,
 ) -> tuple[np.ndarray, float, np.ndarray]:
-    l = len(modes)
+    periods = np.asarray(periods, dtype=np.float64).ravel()
+    l = periods.size
     expected = l * repetition
     if len(positions) != expected:
         raise ValueError(f"positions={len(positions)} but expected={expected}")
     sums = np.zeros(l, dtype=np.float64)
     abs_sums = np.zeros(l, dtype=np.float64)
-    for k in range(l):
-        mode = int(modes[k])
+    for k, period in enumerate(periods):
         for j in range(repetition):
             row, col = positions[k * repetition + j]
             block = channel[row : row + block_size, col : col + block_size].astype(np.float64)
-            llr = observation_llr(block, mode, cfg)
+            llr = r_llr(block, float(period))
             sums[k] += llr
             abs_sums[k] += abs(llr)
     bits = (sums >= 0.0).astype(np.uint8)

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qrwatermark"
-version = "0.2.0"
-description = "Reproducible QR-domain color image watermarking research code and literature baselines"
+version = "0.3.0"
+description = "Convolution-certified R12-QIM watermarking research code and literature baselines"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

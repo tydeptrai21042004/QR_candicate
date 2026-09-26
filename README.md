@@ -1,63 +1,61 @@
-# QR Candidate — corrected research repository
+# QR Candidate — CCQR-R12-QIM research code
 
-This repository is a notebook-free refactor of the original `QR_candicate` prototype.
+This repository implements the revised proposal method:
 
-## Main corrections
+**CCQR-R12-QIM: Convolution-Certified R12-QIM Watermarking with Repeated Soft Recovery.**
 
-- Removed the monolithic Jupyter workflow.
-- Proposed method is a normal Python package under `src/qrwatermark/proposed/`.
-- Replaced the old fixed `|q22|-0.5` Q branch with symmetric **Q-angle QIM**.
-- Replaced the old diagonal `r22` R branch with **R12 QIM**, avoiding canonical QR sign reversal.
-- Q/R branch selection is **payload-independent**: the selector evaluates hypothetical bit 0 and bit 1 before it is allowed to see the real payload bit.
-- Replaced `robust_score / (MSE + 1e-9)` with a bounded distortion penalty.
-- One Q/R mode flag is stored per payload bit rather than per repeated embedding block.
-- Mode flags are bit-packed and HMAC-authenticated.
-- Replaced floating-point logistic-map block ordering with HMAC-SHA256 keyed ordering.
-- Removed hard-coded `/content` paths and hard-coded private keys.
-- Removed ground-truth-assisted watermark inversion/alignment from the evaluator.
-- NC no longer compares the extracted watermark with its inverse and silently keeps the larger value.
-- Added BER as a first-class metric.
-- Baselines and the proposed method share the same attack/evaluation pipeline.
-- Added tests for QR reconstruction, both proposal branches, side information, metrics, attacks, baselines, and clean end-to-end extraction.
+The proposal no longer uses adaptive Q/R branch selection.  The core method uses only the canonical QR statistic `R[0,1]` (`r12`), a finite-torus convolution model, payload-independent convolution-certified QIM-period selection, range-feasible lattice projection, and repeated soft decoding.
 
-## Repository layout
+## Main proposal changes
 
-```text
-QR_candicate_corrected/
-├── configs/
-│   ├── methods/
-│   ├── experiments/
-│   └── attacks/
-├── data/
-│   ├── hosts/classical/
-│   └── watermarks/
-├── src/qrwatermark/
-│   ├── core/
-│   ├── proposed/
-│   ├── baselines/
-│   │   ├── su2017_hessenberg/
-│   │   ├── su2020_schur/
-│   │   └── nha2022_improved_qr/
-│   ├── attacks/
-│   ├── evaluation/
-│   └── utils/
-├── scripts/
-└── tests/
+- **R12-only QR embedding.** The proposal embeds a binary watermark in the off-diagonal canonical QR coefficient `r12`; the Q branch and old `r22` branch are not part of the proposal path.
+- **Exact local distortion model.** If `delta` is the change in `r12`, orthogonal invariance gives exact continuous 2x2-block MSE `delta^2 / 4`.
+- **Finite-torus convolution model.** Normalized Gaussian kernels are represented as circular convolution operators on `Z_M x Z_N`; the implementation also records `max |H(omega)-1| = ||T_h-I||_(2->2)`.
+- **Payload-independent period selection.** Before the actual watermark bit is read, each repeated block group is tested against the configured convolution family.  The encoder chooses among a discrete period table using the worst observed `r12` convolution shift, an explicit safety factor, additive/rounding budgets, and a distortion constraint.
+- **Range-feasible QIM projection.** Among lattice points encoding the same bit, the encoder selects the nearest point whose reconstructed block remains inside `[0,255]`.  This avoids clipping invalidating the QR distortion model.
+- **Compact authenticated side information.** Only the period-table index is stored per payload bit.  Three periods require two authenticated side-information bits per watermark bit.
+- **Repeated soft recovery.** `r` repeated observations are accumulated as signed QIM evidence; ground truth is never used by the decoder.
+- **No heuristic Q/R score.** The previous `robustness/(MSE+eps)` and four-perturbation branch score are not used by the proposal.
+
+## Default proposal configuration
+
+```yaml
+repetition: 5
+period_candidates: [48.0, 52.0, 56.0]
+max_group_mse: 220.0
+convolution_kernel_size: 3
+convolution_gaussian_sigmas: [0.50, 0.75]
+convolution_safety_factor: 1.10
+additive_feature_budget: 4.0
+rounding_feature_budget: 1.0
 ```
 
-There is deliberately no `docs/`, `paper/`, `outputs/`, or Jupyter notebook in the repository.
-Run directories are created only when you explicitly supply `--run-dir`.
+NLM is disabled by default.  It remains available only as an ablation option.
+
+## Relevant source files
+
+```text
+src/qrwatermark/proposed/
+├── convolution.py     # finite-torus convolution + spectral operator severity
+├── certificate.py     # payload-independent certificate / period optimization
+├── r_branch.py        # canonical R12-QIM + range-feasible lattice projection
+├── embedding.py
+├── extraction.py
+├── soft_decoder.py
+├── side_info.py
+└── method.py
+```
 
 ## Installation
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\\Scripts\\activate
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 pip install -e .
 ```
 
-## One-image proposed-method round trip
+## One-image round trip
 
 ```bash
 python scripts/run_method.py roundtrip \
@@ -69,27 +67,20 @@ python scripts/run_method.py roundtrip \
   --out runs/example/watermarked.png
 ```
 
-The decoder receives only the watermarked image, key, authenticated side information, and algorithm parameters. The original watermark is never used to alter the decoded result.
-
-## Main comparison
+## Main experiments
 
 ```bash
 python scripts/run_main_comparison.py \
   --config configs/experiments/main_comparison.yaml \
   --key "replace-with-your-experiment-key" \
   --run-dir runs/main_comparison
-```
 
-## Other experiments
-
-```bash
-python scripts/run_robustness.py --key "..." --run-dir runs/robustness
-python scripts/run_attack_sweep.py --key "..." --run-dir runs/attack_sweep
 python scripts/run_ablation.py --key "..." --run-dir runs/ablation
 python scripts/run_leakage_test.py --key "..." --run-dir runs/leakage
 python scripts/run_repetition_study.py --key "..." --run-dir runs/repetition
-python scripts/run_runtime.py --key "..." --run-dir runs/runtime
 ```
+
+The leakage experiment now tests mutual information between the **payload-independent period code** and the watermark bits; there are no Q/R mode flags in CCQR-R12-QIM.
 
 ## Tests
 
@@ -97,16 +88,12 @@ python scripts/run_runtime.py --key "..." --run-dir runs/runtime
 pytest -q
 ```
 
+The tests include canonical QR reconstruction, exact R12 distortion, convolution-operator checks, payload-independent certificate selection, side-information authentication, clean end-to-end recovery, attacks, metrics, and baseline smoke tests.
+
 ## Baseline status
 
-### Nha et al. 2022
+The literature baselines remain under `src/qrwatermark/baselines/` and use the same benchmark/evaluation pipeline.  Their implementation status is documented in each baseline directory.
 
-The Nha/Thanh/Phong baseline follows the published 4x4 blue-channel R(1,1) quarter-period QIM embedding equations and the published extraction shortcut `R(1,1) = ||first column||`.
+## Evaluation rule
 
-### Su & Chen 2017 and Su et al. 2020
-
-The uploaded original repository contained no baseline source code. Public descriptions expose the principal mechanisms but not all equation-level implementation details needed to claim author-identical code. Therefore the included Su 2017 Hessenberg and Su 2020 Schur modules are **transparent reconstructed reference implementations**, not the authors' official source code. Their directories state this explicitly. If the exact original implementation or complete algorithm equations become available, replace only those baseline modules; the shared benchmark code does not need to change.
-
-## Important evaluation rule
-
-Ground truth is used only after extraction to compute metrics such as BER and NC. It must never be used to choose inversion, orientation, branch, preprocessing candidate, or any other decoder decision.
+Ground truth is used only after extraction to calculate metrics such as BER and NC.  It is never used to choose a period, invert a watermark, select a preprocessing candidate, or otherwise modify the decoder result.

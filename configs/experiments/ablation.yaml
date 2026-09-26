@@ -1,8 +1,16 @@
 base_config: configs/methods/proposed.yaml
 variants:
-  repeat_1: {repetition: 1}
-  repeat_3: {repetition: 3}
-  repeat_5: {repetition: 5}
-  repeat_7: {repetition: 7}
-  no_nlm:
-    nlm: {enabled: false, compare_always: false, mild_h: 4.0, mild_template: 3, mild_search: 11, strong_h: 8.0, strong_template: 5, strong_search: 17}
+  fixed_period_48:
+    period_candidates: [48.0]
+  fixed_period_56:
+    period_candidates: [56.0]
+  adaptive_no_convolution_bank:
+    convolution_gaussian_sigmas: []
+  repeat_1:
+    repetition: 1
+  repeat_3:
+    repetition: 3
+  full_ccqr:
+    repetition: 5
+    period_candidates: [48.0, 52.0, 56.0]
+    convolution_gaussian_sigmas: [0.50, 0.75]

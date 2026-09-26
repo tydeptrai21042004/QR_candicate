@@ -11,8 +11,10 @@ from .embedding import embed_image
 from .extraction import extract_image
 
 
-class ProposedAdaptiveQR(WatermarkMethod):
-    name = "proposed_adaptive_qr_v2"
+class ConvolutionCertifiedR12QIM(WatermarkMethod):
+    """CCQR-R12-QIM: convolution-certified semi-blind QR watermarking."""
+
+    name = "ccqr_r12_qim_v1"
 
     def __init__(self, config: ProposedConfig | None = None):
         self.config = config or ProposedConfig()
@@ -31,6 +33,10 @@ class ProposedAdaptiveQR(WatermarkMethod):
         watermark_shape: tuple[int, int] = (64, 64),
     ) -> ExtractionResult:
         if side_info is None:
-            raise ValueError("The proposed semi-blind method requires authenticated side information")
+            raise ValueError("CCQR-R12-QIM requires authenticated period side information")
         wm, conf, meta = extract_image(image, key, side_info, self.config)
         return ExtractionResult(watermark=wm, confidence=conf, metadata=meta)
+
+
+# Backward-compatible import name for experiment scripts written for v2.
+ProposedAdaptiveQR = ConvolutionCertifiedR12QIM

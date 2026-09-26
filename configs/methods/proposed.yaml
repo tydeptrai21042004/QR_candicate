@@ -1,21 +1,29 @@
-method: proposed_adaptive_qr_v2
+method: ccqr_r12_qim_v1
 parameters:
   block_size: 2
   channel: 0
   watermark_size: 64
   arnold_iterations: 10
   repetition: 5
-  q_angle_period: 0.12
-  r12_period: 8.0
-  distortion_scale: 1.0
-  lambda_distortion: 0.35
-  utility_imbalance_penalty: 0.15
-  selector_group_mean: true
-  perturb_plus_minus: 1.0
-  perturb_blur_sigma: 0.6
+
+  # One payload-independent period code is selected per repeated bit group.
+  # 3 periods require only 2 authenticated side-information bits per payload bit.
+  period_candidates: [48.0, 52.0, 56.0]
+  max_group_mse: 220.0
+
+  # Finite-torus convolution family used by the robustness certificate.
+  convolution_kernel_size: 3
+  convolution_gaussian_sigmas: [0.50, 0.75]
+  convolution_safety_factor: 1.10
+
+  # Additional R12-domain perturbation allowances.
+  additive_feature_budget: 4.0
+  rounding_feature_budget: 1.0
+
+  # Optional ablation only; the default proposal uses raw repeated soft evidence.
   nlm:
-    enabled: true
-    compare_always: true
+    enabled: false
+    compare_always: false
     mild_h: 4.0
     mild_template: 3
     mild_search: 11

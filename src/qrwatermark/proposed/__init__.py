@@ -1,3 +1,3 @@
-from .method import ProposedAdaptiveQR
+from .method import ConvolutionCertifiedR12QIM, ProposedAdaptiveQR
 
-__all__ = ["ProposedAdaptiveQR"]
+__all__ = ["ConvolutionCertifiedR12QIM", "ProposedAdaptiveQR"]

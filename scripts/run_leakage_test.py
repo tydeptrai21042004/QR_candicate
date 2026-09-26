@@ -8,21 +8,30 @@ import pandas as pd
 
 from _common import load_yaml, resolve
 from qrwatermark.core.factory import build_method
-from qrwatermark.proposed.side_info import unpack_modes
+from qrwatermark.proposed.side_info import unpack_period_indices
 from qrwatermark.utils.image_io import read_color
 from qrwatermark.utils.watermark import prepare_binary_watermark, arnold_transform, bits_from_watermark
 
 
-def mutual_information_binary(x: np.ndarray, y: np.ndarray) -> float:
-    x=np.asarray(x,dtype=np.uint8).ravel(); y=np.asarray(y,dtype=np.uint8).ravel()
-    n=len(x); mi=0.0
-    for a in (0,1):
+def mutual_information_discrete_binary(x: np.ndarray, y: np.ndarray) -> float:
+    x=np.asarray(x).ravel(); y=np.asarray(y,dtype=np.uint8).ravel()
+    mi=0.0
+    for a in np.unique(x):
         for b in (0,1):
             pxy=np.mean((x==a)&(y==b))
             if pxy<=0: continue
             px=np.mean(x==a); py=np.mean(y==b)
             mi += pxy*math.log2(pxy/(px*py))
     return float(mi)
+
+
+def best_code_only_ber(codes: np.ndarray, bits: np.ndarray) -> float:
+    pred=np.zeros_like(bits)
+    for code in np.unique(codes):
+        mask=codes==code
+        ones=float(np.mean(bits[mask])) if np.any(mask) else 0.5
+        pred[mask]=1 if ones>=0.5 else 0
+    return float(np.mean(pred!=bits))
 
 
 def main():
@@ -33,7 +42,7 @@ def main():
     args=ap.parse_args()
     cfg=load_yaml(args.config); m=cfg['method']
     method=build_method(m['name'],resolve(m['config']))
-    rows=[]; all_modes=[]; all_bits=[]
+    rows=[]; all_codes=[]; all_bits=[]
     key=args.key.encode()
     for wp in sorted(resolve(cfg['watermarks']).glob('*.png')):
         wm=prepare_binary_watermark(wp,64)
@@ -42,17 +51,21 @@ def main():
         for hp in sorted(resolve(cfg['hosts']).glob('*.bmp')):
             host=read_color(hp)
             emb=method.embed(host,wm,key=key)
-            modes,_=unpack_modes(emb.side_info,key)
-            all_modes.append(modes); all_bits.append(bits)
-            p_q0=float(np.mean(modes[bits==0]==0)) if np.any(bits==0) else float('nan')
-            p_q1=float(np.mean(modes[bits==1]==0)) if np.any(bits==1) else float('nan')
-            rows.append({'host':hp.stem,'watermark':wp.stem,'p_q_given_0':p_q0,'p_q_given_1':p_q1,'delta':abs(p_q1-p_q0),'mi_bits':mutual_information_binary(modes,bits)})
-    modes=np.concatenate(all_modes); bits=np.concatenate(all_bits)
-    # Best one-bit mapping fitted only as a leakage diagnostic, never used by extraction.
-    pred_a=(modes==0).astype(np.uint8)
-    pred_b=1-pred_a
-    ber_flag=min(float(np.mean(pred_a!=bits)),float(np.mean(pred_b!=bits)))
-    summary={'aggregate_p_q_given_0':float(np.mean(modes[bits==0]==0)),'aggregate_p_q_given_1':float(np.mean(modes[bits==1]==0)),'aggregate_delta':abs(float(np.mean(modes[bits==1]==0))-float(np.mean(modes[bits==0]==0))),'aggregate_mi_bits':mutual_information_binary(modes,bits),'best_flag_only_ber':ber_flag,'samples':int(len(bits))}
+            codes,_=unpack_period_indices(emb.side_info,key)
+            all_codes.append(codes); all_bits.append(bits)
+            rows.append({
+                'host':hp.stem,
+                'watermark':wp.stem,
+                'period_code_mi_bits':mutual_information_discrete_binary(codes,bits),
+                'best_period_code_only_ber':best_code_only_ber(codes,bits),
+                'certified_fraction':emb.metadata.get('certified_fraction'),
+            })
+    codes=np.concatenate(all_codes); bits=np.concatenate(all_bits)
+    summary={
+        'aggregate_period_code_mi_bits':mutual_information_discrete_binary(codes,bits),
+        'best_period_code_only_ber':best_code_only_ber(codes,bits),
+        'samples':int(len(bits)),
+    }
     rd=Path(args.run_dir); rd.mkdir(parents=True,exist_ok=True)
     pd.DataFrame(rows).to_csv(rd/'leakage_per_case.csv',index=False)
     pd.DataFrame([summary]).to_csv(rd/'leakage_summary.csv',index=False)

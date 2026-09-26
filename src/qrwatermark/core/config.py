@@ -9,8 +9,10 @@ import yaml
 
 @dataclass
 class NLMConfig:
-    enabled: bool = True
-    compare_always: bool = True
+    # Kept as an optional ablation.  The CCQR proposal itself uses raw repeated
+    # soft evidence and does not require denoising.
+    enabled: bool = False
+    compare_always: bool = False
     mild_h: float = 4.0
     mild_template: int = 3
     mild_search: int = 11
@@ -26,25 +28,46 @@ class ProposedConfig:
     watermark_size: int = 64
     arnold_iterations: int = 10
     repetition: int = 5
-    q_angle_period: float = 0.12
-    r12_period: float = 8.0
-    distortion_scale: float = 1.0
-    lambda_distortion: float = 0.35
-    utility_imbalance_penalty: float = 0.15
-    selector_group_mean: bool = True
-    perturb_plus_minus: float = 1.0
-    perturb_blur_sigma: float = 0.6
+
+    # Discrete R12-QIM periods.  The encoder chooses one period per repeated
+    # payload group without looking at the actual payload bit.
+    period_candidates: tuple[float, ...] = (48.0, 52.0, 56.0)
+    max_group_mse: float = 220.0
+
+    # Finite-torus convolution family used by the certificate/calibration.
+    convolution_kernel_size: int = 3
+    convolution_gaussian_sigmas: tuple[float, ...] = (0.50, 0.75)
+    convolution_safety_factor: float = 1.10
+
+    # Extra R12-domain margin budgets.  They make the certificate explicitly
+    # account for non-convolution perturbation and uint8 reconstruction.
+    additive_feature_budget: float = 4.0
+    rounding_feature_budget: float = 1.0
+
     nlm: NLMConfig = field(default_factory=NLMConfig)
 
     def validate(self) -> None:
         if self.block_size != 2:
-            raise ValueError("The revised dual-branch proposal is derived for 2x2 blocks.")
+            raise ValueError("CCQR-R12 is derived for 2x2 image blocks")
         if self.repetition < 1 or self.repetition % 2 == 0:
             raise ValueError("repetition must be a positive odd integer")
-        if self.q_angle_period <= 0 or self.r12_period <= 0:
-            raise ValueError("Q/R QIM periods must be positive")
-        if self.distortion_scale <= 0:
-            raise ValueError("distortion_scale must be positive")
+        periods = tuple(float(x) for x in self.period_candidates)
+        if not periods or any(x <= 0 for x in periods):
+            raise ValueError("period_candidates must contain positive values")
+        if sorted(set(periods)) != list(periods):
+            raise ValueError("period_candidates must be strictly increasing and unique")
+        if len(periods) > 256:
+            raise ValueError("at most 256 period candidates are supported")
+        if self.max_group_mse <= 0:
+            raise ValueError("max_group_mse must be positive")
+        if self.convolution_kernel_size < 1 or self.convolution_kernel_size % 2 == 0:
+            raise ValueError("convolution_kernel_size must be a positive odd integer")
+        if any(float(s) <= 0 for s in self.convolution_gaussian_sigmas):
+            raise ValueError("all convolution Gaussian sigmas must be positive")
+        if self.convolution_safety_factor < 1.0:
+            raise ValueError("convolution_safety_factor must be >= 1")
+        if self.additive_feature_budget < 0 or self.rounding_feature_budget < 0:
+            raise ValueError("feature budgets must be non-negative")
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -69,6 +92,10 @@ def load_yaml(path: str | Path) -> dict[str, Any]:
 def proposed_from_dict(data: dict[str, Any]) -> ProposedConfig:
     d = dict(data)
     nlm = d.pop("nlm", None)
+    if "period_candidates" in d:
+        d["period_candidates"] = tuple(float(x) for x in d["period_candidates"])
+    if "convolution_gaussian_sigmas" in d:
+        d["convolution_gaussian_sigmas"] = tuple(float(x) for x in d["convolution_gaussian_sigmas"])
     cfg = ProposedConfig(**d)
     if nlm is not None:
         cfg.nlm = NLMConfig(**nlm)
