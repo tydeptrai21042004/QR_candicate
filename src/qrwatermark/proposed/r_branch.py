@@ -33,7 +33,7 @@ def qim_displacement(value: float, bit: int, period: float) -> float:
     return qim_target(value, bit, period) - float(value)
 
 
-def _delta_interval_for_valid_pixels(block: np.ndarray, pixel_min: float, pixel_max: float) -> tuple[float, float]:
+def r12_displacement_interval(block: np.ndarray, pixel_min: float = 0.0, pixel_max: float = 255.0) -> tuple[float, float]:
     """Exact interval of R12 displacements that keep the reconstructed 2nd column in range.
 
     Changing only r12 by delta changes the second image-block column by
@@ -71,7 +71,7 @@ def qim_target_for_block(
     """Nearest same-bit QIM lattice point whose reconstructed block is range-feasible."""
     value = r12_value(block)
     offset = (0.25 if int(bit) == 0 else 0.75) * float(period)
-    dlo, dhi = _delta_interval_for_valid_pixels(block, pixel_min, pixel_max)
+    dlo, dhi = r12_displacement_interval(block, pixel_min, pixel_max)
     if dlo <= dhi:
         if not np.isfinite(dlo) and not np.isfinite(dhi):
             return qim_target(value, bit, period), True

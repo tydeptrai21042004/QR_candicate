@@ -12,7 +12,7 @@ from .extraction import extract_image
 
 
 class ConvolutionCertifiedR12QIM(WatermarkMethod):
-    """CCQR-R12-QIM: convolution-certified semi-blind QR watermarking."""
+    """MC-CCQR spread-QIM: minimum-energy QR embedding with convex-hull convolution certification."""
 
     name = "ccqr_r12_qim_v1"
 

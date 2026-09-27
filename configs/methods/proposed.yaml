@@ -5,22 +5,14 @@ parameters:
   watermark_size: 64
   arnold_iterations: 10
   repetition: 5
-
-  # One payload-independent period code is selected per repeated bit group.
-  # 3 periods require only 2 authenticated side-information bits per payload bit.
-  period_candidates: [48.0, 52.0, 56.0]
+  period_candidates: [24.0, 28.0, 32.0, 36.0]
   max_group_mse: 220.0
-
-  # Finite-torus convolution family used by the robustness certificate.
+  target_psnr_db: 50.0
   convolution_kernel_size: 3
   convolution_gaussian_sigmas: [0.50, 0.75]
-  convolution_safety_factor: 1.10
-
-  # Additional R12-domain perturbation allowances.
-  additive_feature_budget: 4.0
-  rounding_feature_budget: 1.0
-
-  # Optional ablation only; the default proposal uses raw repeated soft evidence.
+  convolution_safety_factor: 1.00
+  additive_feature_budget: 1.0
+  rounding_feature_budget: 0.5
   nlm:
     enabled: false
     compare_always: false

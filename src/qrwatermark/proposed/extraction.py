@@ -39,6 +39,7 @@ def extract_image(image: np.ndarray, key: bytes, side_info: dict, cfg: ProposedC
     recovered = inverse_arnold_transform(scrambled, arnold_iterations)
     return recovered, float(conf), {
         "method": "ccqr_r12_qim_v1",
+        "algorithm_revision": meta.get("algorithm_revision", "legacy_v1"),
         "selected_preprocess": name,
         "candidate_confidence": {n: float(c) for c, n, _, _ in candidates},
         "bit_confidence_mean": float(np.mean(bit_conf)),
