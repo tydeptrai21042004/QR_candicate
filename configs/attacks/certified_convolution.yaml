@@ -1,0 +1,10 @@
+# Exact real-valued convolution family covered by the proposal theorem.
+# alpha=0 and alpha=1 are the configured extremes; intermediate alpha values
+# are unseen convex mixtures used to validate the hull certificate.
+attacks:
+  - {name: clean}
+  - {name: certified_convex_gaussian, params: {sigma0: 0.50, sigma1: 0.75, alpha: 0.0, ksize: 3}}
+  - {name: certified_convex_gaussian, params: {sigma0: 0.50, sigma1: 0.75, alpha: 0.25, ksize: 3}}
+  - {name: certified_convex_gaussian, params: {sigma0: 0.50, sigma1: 0.75, alpha: 0.50, ksize: 3}}
+  - {name: certified_convex_gaussian, params: {sigma0: 0.50, sigma1: 0.75, alpha: 0.75, ksize: 3}}
+  - {name: certified_convex_gaussian, params: {sigma0: 0.50, sigma1: 0.75, alpha: 1.0, ksize: 3}}

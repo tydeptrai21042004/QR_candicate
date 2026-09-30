@@ -32,3 +32,20 @@ def motion_blur(image: np.ndarray, ksize: int = 7) -> np.ndarray:
     kernel = np.zeros((ksize, ksize), dtype=np.float32)
     kernel[ksize // 2, :] = 1.0 / ksize
     return cv2.filter2D(image, -1, kernel)
+
+
+def certified_convex_gaussian(image: np.ndarray, sigma0: float = 0.50, sigma1: float = 0.75, alpha: float = 0.0, ksize: int = 3) -> np.ndarray:
+    """Real-valued reflect-101 convolution from the proposal's certified hull.
+
+    alpha=0 gives sigma0, alpha=1 gives sigma1, and intermediate values use
+    the convex kernel mixture.  No output requantization is applied because the
+    theorem is stated for the real-valued convolution operator.
+    """
+    if not 0.0 <= float(alpha) <= 1.0: raise ValueError("alpha must be in [0,1]")
+    if int(ksize)<1 or int(ksize)%2==0: raise ValueError("ksize must be positive odd")
+    g0=cv2.getGaussianKernel(int(ksize),float(sigma0),cv2.CV_64F); k0=g0@g0.T; k0/=k0.sum()
+    g1=cv2.getGaussianKernel(int(ksize),float(sigma1),cv2.CV_64F); k1=g1@g1.T; k1/=k1.sum()
+    kernel=(1.0-float(alpha))*k0+float(alpha)*k1
+    x=np.asarray(image,dtype=np.float64)
+    if x.ndim==2: return cv2.filter2D(x,cv2.CV_64F,kernel,borderType=cv2.BORDER_REFLECT_101)
+    return np.stack([cv2.filter2D(x[:,:,c],cv2.CV_64F,kernel,borderType=cv2.BORDER_REFLECT_101) for c in range(x.shape[2])],axis=2)

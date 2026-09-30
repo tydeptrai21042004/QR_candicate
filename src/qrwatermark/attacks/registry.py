@@ -3,14 +3,15 @@ from __future__ import annotations
 from typing import Callable
 
 from .compression import jpeg, jpeg2000
-from .filtering import average_filter, gaussian_blur, lowpass_filter, median_filter, motion_blur, sharpen
-from .geometric import crop_resize, rotation_resample, rotation_unregistered, scaling_resample, translation
+from .filtering import average_filter, certified_convex_gaussian, gaussian_blur, lowpass_filter, median_filter, motion_blur, sharpen
+from .geometric import crop_resize, registered_rotation_resample, rotation_resample, rotation_unregistered, scaling_resample, translation
 from .noise import gaussian_noise, salt_pepper_noise, speckle_noise
-from .occlusion import random_occlusion
+from .occlusion import random_occlusion,random_pixel_dropout,rectangular_occlusion
 from .photometric import brightness_contrast, clahe, gamma_correction, histogram_equalization
 
 ATTACKS: dict[str, Callable] = {
     "gaussian_blur": gaussian_blur,
+    "certified_convex_gaussian": certified_convex_gaussian,
     "sharpen": sharpen,
     "gaussian_noise": gaussian_noise,
     "salt_pepper": salt_pepper_noise,
@@ -22,6 +23,7 @@ ATTACKS: dict[str, Callable] = {
     "average": average_filter,
     "motion_blur": motion_blur,
     "scale_resample": scaling_resample,
+    "registered_rotation_resample": registered_rotation_resample,
     "rotation_resample": rotation_resample,
     "rotation_unregistered": rotation_unregistered,
     "translation": translation,
@@ -30,6 +32,8 @@ ATTACKS: dict[str, Callable] = {
     "brightness_contrast": brightness_contrast,
     "histogram_equalization": histogram_equalization,
     "clahe": clahe,
+    "random_pixel_dropout": random_pixel_dropout,
+    "rectangular_occlusion": rectangular_occlusion,
     "occlusion": random_occlusion,
 }
 

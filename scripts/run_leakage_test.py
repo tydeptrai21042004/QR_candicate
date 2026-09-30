@@ -8,7 +8,7 @@ import pandas as pd
 
 from _common import load_yaml, resolve
 from qrwatermark.core.factory import build_method
-from qrwatermark.proposed.side_info import unpack_period_indices
+from qrwatermark.proposed.side_info import unpack_period_indices,unpack_certified_mask
 from qrwatermark.utils.image_io import read_color
 from qrwatermark.utils.watermark import prepare_binary_watermark, arnold_transform, bits_from_watermark
 
@@ -42,7 +42,7 @@ def main():
     args=ap.parse_args()
     cfg=load_yaml(args.config); m=cfg['method']
     method=build_method(m['name'],resolve(m['config']))
-    rows=[]; all_codes=[]; all_bits=[]
+    rows=[]; all_codes=[]; all_joint=[]; all_bits=[]
     key=args.key.encode()
     for wp in sorted(resolve(cfg['watermarks']).glob('*.png')):
         wm=prepare_binary_watermark(wp,64)
@@ -52,18 +52,24 @@ def main():
             host=read_color(hp)
             emb=method.embed(host,wm,key=key)
             codes,_=unpack_period_indices(emb.side_info,key)
-            all_codes.append(codes); all_bits.append(bits)
+            cert=unpack_certified_mask(emb.side_info,key).astype(np.uint8)
+            joint=codes.astype(np.uint16)*2+cert.astype(np.uint16)
+            all_codes.append(codes); all_joint.append(joint); all_bits.append(bits)
             rows.append({
                 'host':hp.stem,
                 'watermark':wp.stem,
                 'period_code_mi_bits':mutual_information_discrete_binary(codes,bits),
                 'best_period_code_only_ber':best_code_only_ber(codes,bits),
+                'joint_period_cert_mi_bits':mutual_information_discrete_binary(joint,bits),
+                'best_joint_side_code_ber':best_code_only_ber(joint,bits),
                 'certified_fraction':emb.metadata.get('certified_fraction'),
             })
-    codes=np.concatenate(all_codes); bits=np.concatenate(all_bits)
+    codes=np.concatenate(all_codes); joint=np.concatenate(all_joint); bits=np.concatenate(all_bits)
     summary={
         'aggregate_period_code_mi_bits':mutual_information_discrete_binary(codes,bits),
         'best_period_code_only_ber':best_code_only_ber(codes,bits),
+        'aggregate_joint_period_cert_mi_bits':mutual_information_discrete_binary(joint,bits),
+        'best_joint_side_code_ber':best_code_only_ber(joint,bits),
         'samples':int(len(bits)),
     }
     rd=Path(args.run_dir); rd.mkdir(parents=True,exist_ok=True)

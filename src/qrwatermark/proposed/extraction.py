@@ -5,12 +5,13 @@ import numpy as np
 from ..core.config import ProposedConfig
 from ..utils.permutation import selected_block_positions
 from ..utils.watermark import inverse_arnold_transform, watermark_from_bits
-from .side_info import unpack_period_indices
+from .side_info import unpack_period_indices,unpack_certified_mask
 from .soft_decoder import decode_groups, nlm_versions
 
 
 def extract_image(image: np.ndarray, key: bytes, side_info: dict, cfg: ProposedConfig):
     period_indices, meta = unpack_period_indices(side_info, key)
+    certified_mask = unpack_certified_mask(side_info, key)
     shape = tuple(int(x) for x in meta["watermark_shape"])
     repetition = int(meta["repetition"])
     block_size = int(meta["block_size"])
@@ -24,7 +25,7 @@ def extract_image(image: np.ndarray, key: bytes, side_info: dict, cfg: ProposedC
         raise ValueError("QIM period table does not match authenticated side information")
 
     periods = period_table[period_indices]
-    channel = np.asarray(image, dtype=np.uint8)[:, :, channel_index]
+    channel = np.asarray(image)[:, :, channel_index].astype(np.float64)
     h0 = (channel.shape[0] // block_size) * block_size
     w0 = (channel.shape[1] // block_size) * block_size
     positions = selected_block_positions((h0, w0), block_size, len(period_indices) * repetition, key)
@@ -40,6 +41,9 @@ def extract_image(image: np.ndarray, key: bytes, side_info: dict, cfg: ProposedC
     return recovered, float(conf), {
         "method": "ccqr_r12_qim_v1",
         "algorithm_revision": meta.get("algorithm_revision", "legacy_v1"),
+        "certified_fraction": float(certified_mask.mean()) if certified_mask.size else 0.0,
+        "certified_groups": int(certified_mask.sum()),
+        "uncertified_groups": int(certified_mask.size-certified_mask.sum()),
         "selected_preprocess": name,
         "candidate_confidence": {n: float(c) for c, n, _, _ in candidates},
         "bit_confidence_mean": float(np.mean(bit_conf)),

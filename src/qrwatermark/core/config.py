@@ -18,7 +18,8 @@ class ProposedConfig:
     convolution_gaussian_sigmas:tuple[float,...]=(0.50,0.75)
     convolution_safety_factor:float=1.0
     additive_feature_budget:float=1.0
-    rounding_feature_budget:float=0.5
+    rounding_feature_budget:float=0.0  # deprecated; deterministic rounding bound is computed per group
+    certificate_max_passes:int=4
     nlm:NLMConfig=field(default_factory=NLMConfig)
     def validate(self):
         if self.block_size!=2: raise ValueError("MC-CCQR spread-QIM is derived for 2x2 QR blocks")
@@ -32,6 +33,7 @@ class ProposedConfig:
         if any(float(s)<=0 for s in self.convolution_gaussian_sigmas): raise ValueError("all convolution sigmas must be positive")
         if self.convolution_safety_factor<1.0: raise ValueError("convolution_safety_factor must be >=1")
         if self.additive_feature_budget<0 or self.rounding_feature_budget<0: raise ValueError("feature budgets must be non-negative")
+        if self.certificate_max_passes<1: raise ValueError("certificate_max_passes must be positive")
     def as_dict(self)->dict[str,Any]: return asdict(self)
 
 @dataclass

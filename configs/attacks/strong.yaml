@@ -4,5 +4,5 @@ attacks:
   - {name: salt_pepper, params: {density: 0.2}, seeds: [0,1,2,3,4]}
   - {name: jpeg, params: {quality: 30}}
   - {name: scale_resample, params: {scale: 0.25}}
-  - {name: rotation_resample, params: {angle: 45.0}}
-  - {name: occlusion, params: {fraction: 0.5, value: 0}, seeds: [0,1,2,3,4]}
+  - {name: registered_rotation_resample, params: {angle: 45.0}}
+  - {name: random_pixel_dropout, params: {fraction: 0.5, value: 0}, seeds: [0,1,2,3,4]}

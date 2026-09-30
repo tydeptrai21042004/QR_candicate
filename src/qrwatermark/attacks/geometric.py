@@ -10,7 +10,7 @@ def scaling_resample(image: np.ndarray, scale: float = 0.2) -> np.ndarray:
     return cv2.resize(small, (w, h), interpolation=cv2.INTER_CUBIC)
 
 
-def rotation_resample(image: np.ndarray, angle: float = 45.0) -> np.ndarray:
+def registered_rotation_resample(image: np.ndarray, angle: float = 45.0) -> np.ndarray:
     """Rotate and inverse-rotate: a resampling attack, not unknown-rotation synchronization."""
     h, w = image.shape[:2]
     center = ((w - 1) / 2.0, (h - 1) / 2.0)
@@ -38,3 +38,8 @@ def crop_resize(image: np.ndarray, fraction: float = 0.1) -> np.ndarray:
     dy = int(round(h * fraction / 2)); dx = int(round(w * fraction / 2))
     crop = image[dy:h-dy, dx:w-dx]
     return cv2.resize(crop, (w, h), interpolation=cv2.INTER_CUBIC)
+
+
+# Backward-compatible alias; this operation rotates and inverse-rotates and therefore
+# measures registered resampling damage rather than synchronization robustness.
+rotation_resample = registered_rotation_resample

@@ -16,6 +16,9 @@ def read_color(path: str | Path) -> np.ndarray:
 def write_image(path: str | Path, image: np.ndarray) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    ok = cv2.imwrite(str(path), image)
+    arr=np.asarray(image)
+    if arr.dtype!=np.uint8:
+        arr=np.clip(np.rint(arr),0,255).astype(np.uint8)
+    ok = cv2.imwrite(str(path), arr)
     if not ok:
         raise IOError(f"Cannot write image: {path}")

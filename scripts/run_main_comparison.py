@@ -21,7 +21,7 @@ def main():
     hosts = sorted(resolve(cfg["hosts"]).glob("*.bmp"))
     watermarks = sorted(resolve(cfg["watermarks"]).glob("*.png"))
     attacks = load_yaml(cfg["attacks"])["attacks"]
-    df = run_benchmark(methods, hosts, watermarks, attacks, key=args.key.encode(), run_dir=Path(args.run_dir), save_images=args.save_images)
+    df = run_benchmark(methods, hosts, watermarks, attacks, key=args.key.encode(), run_dir=Path(args.run_dir), save_images=args.save_images, match_psnr_to_proposed=bool(cfg.get("match_psnr_to_proposed", True)))
     aggregate_records(df).to_csv(Path(args.run_dir) / "summary.csv", index=False)
     print(f"Completed {len(df)} evaluations -> {args.run_dir}")
 

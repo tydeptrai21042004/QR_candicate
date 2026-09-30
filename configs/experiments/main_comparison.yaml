@@ -1,3 +1,4 @@
+match_psnr_to_proposed: true
 methods:
   - {name: proposed, config: configs/methods/proposed.yaml}
   - {name: su2017_hessenberg, config: configs/methods/su2017_hessenberg.yaml}

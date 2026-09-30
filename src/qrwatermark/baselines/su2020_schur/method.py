@@ -85,7 +85,7 @@ class Su2020Schur(WatermarkMethod):
                 cand, flags[i] = cand_u, MODE_U
             channel[row : row + c.block_size, col : col + c.block_size] = np.clip(np.rint(cand), 0, 255)
         out[:h0, :w0, c.channel] = channel[:h0, :w0].astype(np.uint8)
-        return EmbeddingResult(image=out, side_info={"flags": flags}, metadata={"reference": "Su et al. 2020"})
+        return EmbeddingResult(image=out, side_info={"flags": flags}, metadata={"reference": "Su et al. 2020", "side_information_bits": int(flags.size)})
 
     def extract(self, image: np.ndarray, *, key: bytes, side_info: dict[str, Any] | None = None, watermark_shape=(64, 64)) -> ExtractionResult:
         if side_info is None or "flags" not in side_info:

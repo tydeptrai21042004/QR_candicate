@@ -18,10 +18,10 @@ attacks:
     params: {kx: 9, ky: 9}
   - name: scale_resample
     params: {scale: 0.2}
-  - name: rotation_resample
+  - name: registered_rotation_resample
     params: {angle: 45.0}
   - name: gamma
     params: {gamma: 1.5}
-  - name: occlusion
+  - name: random_pixel_dropout
     params: {fraction: 0.5, value: 0}
     seeds: [0, 1, 2, 3, 4]

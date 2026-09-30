@@ -12,5 +12,5 @@ variants:
     repetition: 3
   full_ccqr:
     repetition: 5
-    period_candidates: [48.0, 52.0, 56.0]
+    period_candidates: [24.0, 28.0, 32.0, 36.0]
     convolution_gaussian_sigmas: [0.50, 0.75]
