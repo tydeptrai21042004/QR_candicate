@@ -53,6 +53,54 @@ def minimum_energy_box_projection(displacement,weights,lower,upper,*,tol=1e-11,m
     delta=np.clip(.5*(left+right)*w,lo,hi)
     return delta.astype(np.float64),abs(float(w@delta-d))<=1e-6
 
+
+def minimum_energy_box_projection_batch(displacements,weights,lower,upper,*,tol=1e-11,max_iter=120):
+    """Batch wrapper with a vectorized unconstrained fast path.
+
+    The overwhelming majority of natural-image groups satisfy ``delta=d*w``
+    directly.  Only groups touching a pixel box boundary fall back to the exact
+    scalar clipped-KKT solver, preserving the reference result while mapping the
+    common case to a small SIMD/hardware lane.
+    """
+    d=np.asarray(displacements,dtype=np.float64).ravel()
+    w=np.asarray(weights,dtype=np.float64).ravel(); w=w/np.linalg.norm(w)
+    lo=np.asarray(lower,dtype=np.float64); hi=np.asarray(upper,dtype=np.float64)
+    if lo.shape!=hi.shape or lo.shape!=(d.size,w.size):
+        raise ValueError("batch lower/upper must have shape (groups,repetition)")
+    out=np.zeros_like(lo,dtype=np.float64)
+    valid_box=~np.any(lo>hi,axis=1)
+    low=np.where(w[None,:]>=0,w[None,:]*lo,w[None,:]*hi).sum(axis=1)
+    high=np.where(w[None,:]>=0,w[None,:]*hi,w[None,:]*lo).sum(axis=1)
+    range_ok=valid_box&(d>=low-tol)&(d<=high+tol)
+    uncon=d[:,None]*w[None,:]
+    fast=range_ok&np.all(uncon>=lo-tol,axis=1)&np.all(uncon<=hi+tol,axis=1)
+    out[fast]=uncon[fast]
+    slow=np.flatnonzero(range_ok&~fast)
+    ok=fast.copy()
+    if slow.size:
+        ds=d[slow]; los=lo[slow]; his=hi[slow]
+        left=np.full(slow.size,-1.0); right=np.full(slow.size,1.0)
+        def fb(lam):
+            return np.sum(w[None,:]*np.clip(lam[:,None]*w[None,:],los,his),axis=1)
+        # Same doubling brackets as the scalar KKT solver, evaluated in parallel.
+        for _ in range(64):
+            fl=fb(left); mask=(fl>ds)&(np.abs(left)<1e18)
+            if not np.any(mask): break
+            left[mask]*=2.0
+        for _ in range(64):
+            fr=fb(right); mask=(fr<ds)&(np.abs(right)<1e18)
+            if not np.any(mask): break
+            right[mask]*=2.0
+        for _ in range(int(max_iter)):
+            mid=.5*(left+right); fm=fb(mid); lower=fm<ds
+            left=np.where(lower,mid,left); right=np.where(lower,right,mid)
+            done=(right-left)<=tol*np.maximum.reduce([np.ones_like(left),np.abs(left),np.abs(right)])
+            if np.all(done): break
+        delta=np.clip(.5*(left+right)[:,None]*w[None,:],los,his)
+        residual=np.abs(np.sum(w[None,:]*delta,axis=1)-ds)
+        out[slow]=delta; ok[slow]=residual<=1e-6
+    return out,ok
+
 def spread_embedding_for_blocks(blocks,bit,period,weights=None,*,pixel_min=0.0,pixel_max=255.0):
     if not blocks: raise ValueError("blocks must be non-empty")
     w=unit_spread_weights(len(blocks)) if weights is None else np.asarray(weights,dtype=np.float64).ravel()

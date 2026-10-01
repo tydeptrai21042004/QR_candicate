@@ -41,3 +41,16 @@ The v4 revision was constrained to preserve the existing watermarking identity: 
 - With v4 final tightening disabled, the QR-free implementation produces the exact same full Girl uint8 watermarked image as the previous corrected v3 repository for the validation key: **0 changed pixels**, maximum difference **0**, SHA-256 `c4b1f12f27bab2c06e1640a9d38dca38f9fe800a95c16de5329ac993a0110892`.
 
 See `docs/v4_validation.md` for the host-diversity smoke test and rejected-idea record.
+
+## v5 edge-runtime refactor
+
+- cached keyed block permutations/positions per `(resolution,key)` session;
+- vectorized selected-block `r12` decoder;
+- batched all-period spread-QIM candidate bank with exact box-constrained fallback;
+- batched generic and two-extreme path certificate arithmetic;
+- final path tightening reuses the last extreme-filter outputs instead of rescanning the frame;
+- rare half-integer compatibility fallback preserves the v4 rounded image exactly;
+- added real-time benchmark script and edge deployment/cycle-budget documentation;
+- added four edge equivalence/regression tests.
+
+Validation in this development environment: 48 tests pass. A full 512x512 Girl equivalence run against v4 produced zero changed pixels, zero changed packed period-code bytes, and zero changed packed certificate-mask bytes. Warm extraction is approximately 13 ms; certified Python embedding is approximately 0.2 s and therefore is not yet a 30-fps CPU path. The 512x512/30-fps hardware stream budget is about 39.3 Mpixel/s for one base traversal plus four certificate traversals with both extreme kernels in parallel.

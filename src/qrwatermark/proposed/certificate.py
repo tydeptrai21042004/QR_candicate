@@ -129,3 +129,66 @@ def choose_period_for_group(r12_values,convolved_r12_values,cfg:ProposedConfig,b
         ds.append(PeriodDecision(idx,p,shift,required,residual,mse,residual>=0,mse<=float(cfg.max_group_mse),range_ok,status="legacy_diagnostic"))
     feasible=[d for d in ds if d.distortion_feasible and d.range_feasible]
     return min(feasible or ds,key=lambda d:(d.worst_case_mse,d.period))
+
+
+
+def certify_spread_groups_arrays(continuous_groups,rounded_groups,extreme_group_sets,period_indices,cfg:ProposedConfig,*,tighten_final=False,embedding_feasible=None):
+    """Vectorized certificate state for the edge frame loop."""
+    from .qr_sensitivity import (
+        group_pair_bound_batch,convex_hull_group_bound_batch,
+        tightened_two_extreme_convex_group_bound_batch,
+    )
+    cont=np.asarray(continuous_groups,dtype=np.float64)
+    rnd=np.asarray(rounded_groups,dtype=np.float64)
+    ext=np.asarray(extreme_group_sets,dtype=np.float64)
+    idx=np.asarray(period_indices,dtype=np.int64).ravel(); n=idx.size
+    if cont.shape!=rnd.shape or cont.shape[:1]!=(n,) or cont.shape[-2:]!=(2,2):
+        raise ValueError("group arrays must have shape (groups,repetition,2,2)")
+    if ext.ndim!=5 or ext.shape[1:]!=rnd.shape:
+        raise ValueError("extreme_group_sets has incompatible shape")
+    rep=rnd.shape[1]; w=unit_spread_weights(rep)
+    fallback=np.full(n,np.inf,dtype=np.float64); use_path=np.zeros(n,dtype=bool); intervals=np.empty((0,n),dtype=np.float64)
+    if tighten_final and ext.shape[0]==2:
+        conv,obs,extreme,fallback,use_path,intervals=tightened_two_extreme_convex_group_bound_batch(
+            rnd,ext,w,subdivisions=int(cfg.certificate_path_subdivisions)
+        )
+    else:
+        conv,obs,extreme=convex_hull_group_bound_batch(rnd,ext,w)
+    rb,robs,_=group_pair_bound_batch(cont,rnd,w)
+    periods=np.asarray(cfg.period_candidates,dtype=np.float64)[idx]
+    required=float(cfg.convolution_safety_factor)*conv+rb+float(cfg.additive_feature_budget)
+    margin=periods/4.0-required
+    mse=np.sum((cont-rnd)**2,axis=(1,2,3))/(4.0*float(rep))
+    finite=np.isfinite(conv)&np.isfinite(rb)
+    ef=np.ones(n,dtype=bool) if embedding_feasible is None else np.asarray(embedding_feasible,dtype=bool).ravel()
+    if ef.size!=n: raise ValueError("embedding_feasible length mismatch")
+    cert=finite&(margin>=0.0)&ef
+    return {
+        'periods':periods,'period_indices':idx,'convolution_bound':conv,
+        'convolution_shift':obs,'extreme_bounds':extreme,'fallback_bound':fallback,
+        'use_path':use_path,'path_interval_bounds':intervals,
+        'rounding_bound':rb,'rounding_shift':robs,'required_margin':required,
+        'certificate_margin':margin,'worst_case_mse':mse,'certified':cert,
+        'embedding_feasible':ef,
+    }
+
+
+def certify_spread_groups_batch(continuous_groups,rounded_groups,extreme_group_sets,bits,period_indices,cfg:ProposedConfig,*,tighten_final=False,embedding_feasible=None):
+    """Compatibility wrapper materializing ``PeriodDecision`` records."""
+    del bits
+    st=certify_spread_groups_arrays(continuous_groups,rounded_groups,extreme_group_sets,period_indices,cfg,tighten_final=tighten_final,embedding_feasible=embedding_feasible)
+    n=st['period_indices'].size; extreme=st['extreme_bounds']; intervals=st['path_interval_bounds']
+    out=[]
+    for k in range(n):
+        ex=tuple(float(x) for x in extreme[:,k]) if extreme.size else ()
+        ints=tuple(float(x) for x in intervals[:,k]) if intervals.size else ()
+        ef=bool(st['embedding_feasible'][k]); cert=bool(st['certified'][k])
+        out.append(PeriodDecision(
+            int(st['period_indices'][k]),float(st['periods'][k]),float(st['convolution_shift'][k]),
+            float(st['required_margin'][k]),float(st['certificate_margin'][k]),float(st['worst_case_mse'][k]),
+            cert,ef,ef,float(st['convolution_bound'][k]),ex,float(st['rounding_bound'][k]),
+            float(st['rounding_shift'][k]),'embedding_infeasible' if not ef else ('certified' if cert else 'uncertified'),
+            'two_extreme_piecewise_path' if bool(st['use_path'][k]) else 'generic',
+            float(st['fallback_bound'][k]),ints
+        ))
+    return out

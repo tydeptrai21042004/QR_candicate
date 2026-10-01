@@ -161,3 +161,15 @@ The control-plane operations (HMAC, keyed permutation, serialization) are intent
 ## Evaluation rule
 
 Ground truth is used only after extraction to calculate BER/NC or in theorem regression tests. It is not used by the production decoder to flip, align, or choose extracted bits.
+
+## v5 real-time edge execution path
+
+The v5 runtime refactor preserves the v4 mathematical method and output while moving session-invariant work out of the frame loop and batching the 2x2/5-carrier arithmetic. Key changes are cached HMAC block descriptors, vectorized `r12` extraction/QIM decoding, a batched four-period candidate bank, vectorized certificate bounds, and reuse of the last extreme-filter blocks for final path tightening.
+
+Use:
+
+```bash
+python scripts/run_edge_benchmark.py --repeat 10 --target-fps 30
+```
+
+The benchmark reports software embed/extract latency separately and the conservative hardware pixel-rate budget. Do not claim 30-fps certified embedding from Python timings alone; see `docs/edge_realtime_v5.md` for the ARM control-plane + FPGA/SIMD data-plane architecture.
