@@ -1,6 +1,6 @@
-# MC-CCQR spread-QIM: mathematical foundation (post-embedding certificate revision)
+# MC-CCQR spread-QIM: mathematical foundation (v4 hardware/path-certificate revision)
 
-This note describes the mathematics implemented by `mc_ccqr_spread_qim_v3_postembed_cert`. It separates the convolution theorem from empirical robustness outside the certified family.
+This note describes the mathematics implemented by `mc_ccqr_spread_qim_v4_hw_path_cert`. It separates the convolution theorem from empirical robustness outside the certified family and makes explicit the QR-free realization used by the hardware-oriented path.
 
 ## 1. Canonical QR carrier
 
@@ -19,6 +19,20 @@ If only `r12` changes by `delta` while the other canonical QR factors are fixed,
 \]
 
 This identity is exact before integer rounding.
+
+The same identity gives a QR-free reconstruction rule. Since
+
+\[
+q_1=\frac{a}{\|a\|_2},
+\]
+
+an `r12` displacement `delta` can be applied directly as
+
+\[
+\boxed{b'=b+\delta\frac{a}{\|a\|_2}}.
+\]
+
+Thus canonical QR remains the mathematical reference, but no general QR engine is required in the streaming implementation.
 
 ## 2. Minimum-energy spread QIM
 
@@ -128,6 +142,73 @@ Substituting these two maxima into the finite `r12` inequality produces a conser
 
 This avoids the incorrect shortcut of merely taking the maximum of already-combined nonlinear extreme bounds.
 
+### 5.1 Tighter two-extreme path theorem
+
+When the certified family has exactly two extreme kernels, every attacked block lies on one scalar affine path. For block `i`, write
+
+\[
+B_i(\alpha)=(1-\alpha)B_i^{(0)}+\alpha B_i^{(1)},
+\qquad 0\le\alpha\le1.
+\]
+
+Partition `[0,1]` into `J` equal intervals. For interval `j`, let `m_j` be the midpoint and `h=1/(2J)` the half-width. Define the midpoint block
+
+\[
+C_{i,j}=B_i(m_j).
+\]
+
+For every `alpha` in that interval,
+
+\[
+B_i(\alpha)-C_{i,j}=(\alpha-m_j)\bigl(B_i^{(1)}-B_i^{(0)}\bigr).
+\]
+
+Hence the first- and second-column perturbations obey
+
+\[
+\|e_{i,j}\|_2\le h\|a_i^{(1)}-a_i^{(0)}\|_2,
+\qquad
+\|f_{i,j}\|_2\le h\|b_i^{(1)}-b_i^{(0)}\|_2.
+\]
+
+Applying the finite `r12` inequality around `C_{i,j}` gives a rigorous local bound `L_{i,j}`. With spread weights `w_i`, define
+
+\[
+L_{g,j}=\sum_i |w_i|L_{i,j}.
+\]
+
+Let `S_Y` be the spread statistic of the final rounded watermarked blocks and `S(m_j)` the statistic at the interval midpoint. Then every `alpha` in interval `j` satisfies
+
+\[
+|S(\alpha)-S_Y|
+\le
+|S(m_j)-S_Y|+L_{g,j}.
+\]
+
+Therefore
+
+\[
+\boxed{
+\rho_{\rm path}
+=
+\max_j\left(|S(m_j)-S_Y|+L_{g,j}\right)
+}
+\]
+
+is a deterministic certificate for the complete two-kernel convex path. The implementation finally uses
+
+\[
+\boxed{
+\rho_{\mathcal H}^{\rm v4}
+=
+\min\{\rho_{\rm generic},\rho_{\rm path}\}
+}
+\]
+
+because both terms are independently valid bounds. Consequently the v4 final theorem can never be weaker than the previous generic certificate.
+
+Crucially, this tighter theorem is evaluated **only after period allocation and watermarked pixels are frozen**. It is used to refine the authenticated certificate mask, not to reduce periods during the same run. Thus the v4 theorem does not change PSNR or the embedded image.
+
 ## 6. QIM survival condition
 
 The continuous embedding statistic lies exactly on its intended binary QIM lattice point. The nearest decision boundary is `Delta/4` away. By triangle inequality, a sufficient survival condition is
@@ -145,6 +226,8 @@ The continuous embedding statistic lies exactly on its intended binary QIM latti
 where `gamma >= 1` is the configured safety factor.
 
 Only groups satisfying this inequality with finite component bounds are marked `certified=True`.
+
+For the final v4 mask, `rho_H` is the tighter valid bound described in Section 5.1 when two extremes are configured; otherwise the generic hull theorem remains in force.
 
 ## 7. Period selection and explicit failure
 
@@ -192,3 +275,23 @@ The theorem above covers real-valued reflect-101 convolution by kernels in the c
 - generative/regeneration attacks.
 
 The test suite therefore distinguishes **theorem regression** from general robustness experiments.
+
+## 11. Hardware QIM decision
+
+For statistic `s` and period `Delta`, let
+
+\[
+\phi=s\bmod\Delta.
+\]
+
+The two QIM cosets are separated by boundaries at `0`, `Delta/2`, and `Delta`. The hard decision is therefore exactly
+
+\[
+\hat b=
+\begin{cases}
+0,&0\le\phi<\Delta/2,\\
+1,&\Delta/2\le\phi<\Delta.
+\end{cases}
+\]
+
+The implementation uses the normalized distance to the nearest boundary as a triangular confidence. This has the same hard decision as the former sinusoidal score but needs only subtraction, comparison, `min`, and scaling in a hardware datapath.

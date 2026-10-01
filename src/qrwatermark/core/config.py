@@ -20,6 +20,8 @@ class ProposedConfig:
     additive_feature_budget:float=1.0
     rounding_feature_budget:float=0.0  # deprecated; deterministic rounding bound is computed per group
     certificate_max_passes:int=4
+    certificate_path_subdivisions:int=8
+    certificate_final_tighten:bool=True
     nlm:NLMConfig=field(default_factory=NLMConfig)
     def validate(self):
         if self.block_size!=2: raise ValueError("MC-CCQR spread-QIM is derived for 2x2 QR blocks")
@@ -34,6 +36,7 @@ class ProposedConfig:
         if self.convolution_safety_factor<1.0: raise ValueError("convolution_safety_factor must be >=1")
         if self.additive_feature_budget<0 or self.rounding_feature_budget<0: raise ValueError("feature budgets must be non-negative")
         if self.certificate_max_passes<1: raise ValueError("certificate_max_passes must be positive")
+        if self.certificate_path_subdivisions<1: raise ValueError("certificate_path_subdivisions must be positive")
     def as_dict(self)->dict[str,Any]: return asdict(self)
 
 @dataclass

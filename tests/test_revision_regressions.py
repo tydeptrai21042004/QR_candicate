@@ -155,7 +155,7 @@ def test_certificate_metadata_states_post_embedding_reference_and_family():
         nlm=NLMConfig(enabled=False),
     )
     emb = ConvolutionCertifiedR12QIM(cfg).embed(host, wm, key=b"metadata")
-    assert emb.metadata["algorithm_revision"] == "mc_ccqr_spread_qim_v3_postembed_cert"
+    assert emb.metadata["algorithm_revision"] == "mc_ccqr_spread_qim_v4_hw_path_cert"
     assert emb.metadata["certificate_reference_signal"] == "final_rounded_watermarked_image"
     assert "convex mixtures" in emb.metadata["certified_family"]
     assert "rounding_bound" in emb.metadata["certificate_condition"]

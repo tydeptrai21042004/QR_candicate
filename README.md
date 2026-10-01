@@ -2,7 +2,7 @@
 
 This repository implements **MC-CCQR spread-QIM**, a canonical-QR watermarking prototype that embeds a binary payload through the `R[0,1]` (`r12`) statistic of 2×2 blocks and attaches a conservative certificate for a configured family of reflect-101 convolution operators.
 
-The current implementation revision is **`mc_ccqr_spread_qim_v3_postembed_cert`**. The certificate is computed from the **final rounded watermarked image**, not from the original host.
+The current implementation revision is **`mc_ccqr_spread_qim_v4_hw_path_cert`**. The certificate is computed from the **final rounded watermarked image**, not from the original host. The v4 path keeps the existing 2×2 `r12` spread-QIM embedding law and PSNR target, while adding a tighter two-extreme convolution theorem and a QR-free hardware realization.
 
 ## Proposal path
 
@@ -11,7 +11,7 @@ The current implementation revision is **`mc_ccqr_spread_qim_v3_postembed_cert`*
 3. Choose an initial QIM period by the **minimum worst-bit continuous distortion** among range-feasible candidates; this initial choice is payload-independent.
 4. Solve the minimum-energy box-constrained spread embedding and round the resulting image to uint8.
 5. Convolve that final rounded watermarked image with every configured extreme kernel.
-6. Compute:
+6. Compute the original conservative post-embedding certificate used by the v3 escalation logic:
    - a deterministic finite `r12` bound for **continuous embedding → integer-rounded watermark**;
    - a conservative finite bound for **rounded watermark → every convex mixture of the configured convolution extremes**.
 7. Certify a bit only when
@@ -19,7 +19,9 @@ The current implementation revision is **`mc_ccqr_spread_qim_v3_postembed_cert`*
    `rounding_bound + safety_factor * convolution_bound + additive_budget < period / 4`.
 
 8. Uncertified groups may move to the next larger feasible period. The whole final image is re-convolved and re-certified after every escalation pass.
-9. If no feasible period obtains a certificate, that group is explicitly stored as **uncertified** in an authenticated certificate mask. It is never silently treated as certified.
+9. Freeze the final watermarked pixels and period allocation.
+10. If exactly two extreme kernels define the certified family, run the v4 **piecewise one-parameter path theorem** and take the tighter of that rigorous bound and the generic v3 hull bound. This final pass may only enlarge the certificate mask; it cannot change pixels, PSNR, payload, or periods.
+11. If no valid theorem certifies a group, it is explicitly stored as **uncertified** in the authenticated mask. It is never silently treated as certified.
 
 ## Important scope of the theorem
 
@@ -43,16 +45,18 @@ convolution_gaussian_sigmas: [0.50, 0.75]
 convolution_safety_factor: 1.00
 additive_feature_budget: 1.0
 certificate_max_passes: 4
+certificate_path_subdivisions: 8
+certificate_final_tighten: true
 ```
 
 ## Main source files
 
 ```text
 src/qrwatermark/proposed/
-├── qr.py                 # canonical QR normalization
-├── r_branch.py           # canonical r12 and binary QIM lattices
+├── qr.py                 # canonical QR reference/fallback
+├── r_branch.py           # closed-form r12, QR-free update, binary QIM
 ├── spread_qim.py         # minimum-energy box-constrained spread embedding
-├── qr_sensitivity.py     # finite deterministic r12 perturbation bounds
+├── qr_sensitivity.py     # generic + two-extreme path r12 bounds
 ├── convolution.py        # configured reflect-101 convolution family
 ├── certificate.py        # post-embedding certification logic
 ├── embedding.py          # embed -> round -> certify -> escalate
@@ -128,6 +132,27 @@ pytest -q
 ```
 
 In addition to unit tests, the theorem regression is non-vacuous: it requires certified groups and checks that every certified group decodes correctly under every configured extreme convolution kernel and several unseen convex mixtures.
+
+The v4 suite also verifies that the closed-form QR-free reconstruction matches the canonical `Q @ R_new` reference after rounding, that the comparator/triangular QIM decision matches the former sinusoidal hard decision, that the piecewise path theorem bounds dense convex-path samples, and that final certificate tightening leaves embedded pixels and period codes unchanged.
+
+## Hardware-oriented implementation
+
+For `A=[a,b]`, the carrier and reconstruction are implemented directly as
+
+```text
+r12 = (a^T b) / ||a||
+b'  = b + delta * a / ||a||
+```
+
+so a production datapath does not need a matrix QR engine. The decoder likewise uses a phase comparator and triangular confidence instead of a trigonometric soft score. The bounded spread projection already has a closed-form fast path (`delta = d w`) and uses the iterative controller only when a pixel-range bound becomes active.
+
+See `docs/hardware_deployment_v4.md` and run:
+
+```bash
+python scripts/run_hardware_sanity.py
+```
+
+The control-plane operations (HMAC, keyed permutation, serialization) are intentionally kept separate from the streaming arithmetic datapath.
 
 ## Baseline status
 

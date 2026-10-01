@@ -1,8 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
-from .qr import canonical_qr
-from .r_branch import qim_target, r12_displacement_interval, r12_value
+from .r_branch import apply_r12_delta, qim_phase_decision, qim_target, r12_displacement_interval, r12_value
 
 @dataclass(frozen=True)
 class SpreadEmbedding:
@@ -69,11 +68,14 @@ def spread_embedding_for_blocks(blocks,bit,period,weights=None,*,pixel_min=0.0,p
 def apply_spread_embedding(blocks,bit,period,weights=None):
     emb=spread_embedding_for_blocks(blocks,bit,period,weights)
     if not emb.feasible: return [np.asarray(b,dtype=np.float64).copy() for b in blocks],emb
-    out=[]
-    for block,delta in zip(blocks,emb.deltas):
-        q,r=canonical_qr(block); rr=r.copy(); rr[0,1]+=float(delta); out.append(q@rr)
-    return out,emb
+    return [apply_r12_delta(block,float(delta)) for block,delta in zip(blocks,emb.deltas)],emb
+
+def spread_decision(values,period,weights=None):
+    """Return hardware-friendly ``(bit, signed_score, confidence)`` for a group."""
+    stat=group_statistic(values,weights)
+    return qim_phase_decision(stat,float(period))
 
 def spread_llr(values,period,weights=None):
-    stat=group_statistic(values,weights); phase=stat%float(period)
-    return float(np.sin(2.0*np.pi*(phase-.5*float(period))/float(period)))
+    """Backward-compatible name for the signed triangular QIM score."""
+    _,score,_=spread_decision(values,period,weights)
+    return float(score)

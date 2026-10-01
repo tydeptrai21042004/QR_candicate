@@ -13,6 +13,10 @@ parameters:
   convolution_safety_factor: 1.00
   additive_feature_budget: 1.0
   certificate_max_passes: 4
+  # Final certificate only: a rigorous piecewise bound on the exact two-kernel
+  # convex path.  It does NOT change embedding periods or watermarked pixels.
+  certificate_path_subdivisions: 8
+  certificate_final_tighten: true
   nlm:
     enabled: false
     compare_always: false

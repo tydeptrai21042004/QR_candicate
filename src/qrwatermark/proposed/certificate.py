@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
 from ..core.config import ProposedConfig
-from .qr_sensitivity import convex_hull_group_bound,group_pair_bound
+from .qr_sensitivity import convex_hull_group_bound,group_pair_bound,tightened_two_extreme_convex_group_bound
 from .r_branch import qim_displacement,qim_displacement_for_block
 from .spread_qim import spread_embedding_for_blocks,unit_spread_weights
 
@@ -23,6 +23,9 @@ class PeriodDecision:
     rounding_bound:float=0.0
     rounding_shift:float=0.0
     status:str="uncertified"
+    bound_mode:str="generic"
+    fallback_bound:float=float("inf")
+    path_interval_bounds:tuple[float,...]=()
 
 
 def theoretical_group_mse(r12_values,period,blocks=None):
@@ -70,7 +73,7 @@ def choose_initial_spread_period_for_group(blocks,bit,cfg:ProposedConfig):
     return min(choices,key=lambda d:(not d.range_feasible,d.worst_case_mse,d.period))
 
 
-def certify_spread_group(continuous_blocks,rounded_blocks,convolved_block_sets,bit,period_index,cfg:ProposedConfig):
+def certify_spread_group(continuous_blocks,rounded_blocks,convolved_block_sets,bit,period_index,cfg:ProposedConfig,*,tighten_final=False):
     """Post-embedding certificate for the exact rounded watermarked image.
 
     The continuous spread embedding lands exactly on the intended QIM lattice.
@@ -81,7 +84,13 @@ def certify_spread_group(continuous_blocks,rounded_blocks,convolved_block_sets,b
     """
     p=float(cfg.period_candidates[int(period_index)])
     w=unit_spread_weights(len(rounded_blocks))
-    conv_bound,observed_conv,extreme=convex_hull_group_bound(rounded_blocks,convolved_block_sets,w)
+    fallback=float("inf"); mode="generic"; path_intervals=()
+    if tighten_final and len(convolved_block_sets)==2:
+        conv_bound,observed_conv,extreme,fallback,mode,path_intervals=tightened_two_extreme_convex_group_bound(
+            rounded_blocks,convolved_block_sets,w,subdivisions=int(cfg.certificate_path_subdivisions)
+        )
+    else:
+        conv_bound,observed_conv,extreme=convex_hull_group_bound(rounded_blocks,convolved_block_sets,w)
     round_bound,observed_round,_=group_pair_bound(continuous_blocks,rounded_blocks,w)
     required=float(cfg.convolution_safety_factor)*conv_bound + round_bound + float(cfg.additive_feature_budget)
     margin=p/4.0-required
@@ -91,7 +100,8 @@ def certify_spread_group(continuous_blocks,rounded_blocks,convolved_block_sets,b
     return PeriodDecision(
         int(period_index),p,float(observed_conv),float(required),float(margin),mse,
         certified,True,True,float(conv_bound),tuple(float(x) for x in extreme),
-        float(round_bound),float(observed_round),"certified" if certified else "uncertified"
+        float(round_bound),float(observed_round),"certified" if certified else "uncertified",
+        str(mode),float(fallback),tuple(float(x) for x in path_intervals)
     )
 
 

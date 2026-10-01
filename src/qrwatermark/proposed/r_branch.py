@@ -17,6 +17,70 @@ def r12_value(block: np.ndarray) -> float:
     return float(r[0, 1])
 
 
+def apply_r12_delta(block: np.ndarray, delta: float) -> np.ndarray:
+    """Apply an exact canonical-QR ``r12`` displacement without a QR solve.
+
+    For a 2x2 block ``A=[a,b]`` with ``||a||>0``, canonical QR gives
+    ``q1=a/||a||`` and changing only ``r12`` by ``delta`` changes the second
+    image column by ``delta*q1``.  This is algebraically identical to
+    reconstructing ``Q @ R_new`` but maps directly to a small hardware datapath
+    (dot/norm/reciprocal-sqrt plus two multiply-adds).
+
+    The degenerate zero-first-column case retains the old QR fallback so the
+    public behavior stays defined for every input.
+    """
+    a = np.asarray(block, dtype=np.float64)
+    if a.shape != (2, 2):
+        raise ValueError("apply_r12_delta is implemented for 2x2 blocks")
+    first = a[:, 0]
+    norm = float(np.linalg.norm(first))
+    if norm > 1e-12:
+        out = a.copy()
+        out[:, 1] = out[:, 1] + float(delta) * (first / norm)
+        # NumPy QR and the algebraic formula can differ by a few ulps.  That is
+        # irrelevant analytically, but at an exact k+0.5 pixel value it can
+        # change bankers-rounding by one code value.  Preserve legacy software
+        # bit-exactness only for this vanishingly rare boundary case; the normal
+        # (and hardware) path remains the closed-form update above.
+        frac = out[:, 1] - np.floor(out[:, 1])
+        if np.any(np.abs(frac - 0.5) <= 1e-10):
+            q, r = canonical_qr(a)
+            rr = r.copy()
+            rr[0, 1] += float(delta)
+            return q @ rr
+        return out
+
+    # Rare degenerate fallback: preserve the previous canonical-QR semantics.
+    q, r = canonical_qr(a)
+    rr = r.copy()
+    rr[0, 1] += float(delta)
+    return q @ rr
+
+
+def qim_phase_decision(statistic: float, period: float) -> tuple[int, float, float]:
+    """Hardware-friendly binary-QIM decision and triangular confidence.
+
+    Returns ``(bit, signed_score, confidence)``.  The hard decision is exactly
+    the two-coset QIM decision: phases in ``[0, Delta/2)`` decode to zero and
+    phases in ``[Delta/2, Delta)`` decode to one.  Confidence is the normalized
+    distance to the nearest decision boundary, so no trigonometric unit is
+    required in an implementation.
+    """
+    p = float(period)
+    if p <= 0:
+        raise ValueError("period must be positive")
+    phase = float(statistic) % p
+    half = 0.5 * p
+    quarter = 0.25 * p
+    bit = int(phase >= half)
+    distance = min(phase, abs(phase - half), p - phase)
+    confidence = float(min(1.0, max(0.0, distance / quarter)))
+    # Keep an unambiguous sign even exactly on a decision boundary.
+    eps = float(np.finfo(np.float64).eps)
+    signed = max(confidence, eps) if bit else -max(confidence, eps)
+    return bit, float(signed), confidence
+
+
 def _nearest_lattice(value: float, period: float, offset: float) -> float:
     k = round((value - offset) / period)
     return offset + k * period
@@ -93,14 +157,12 @@ def qim_displacement_for_block(block: np.ndarray, bit: int, period: float) -> tu
 
 def build_r_candidate(block: np.ndarray, bit: int, period: float) -> np.ndarray:
     """Range-aware R12-QIM embedding with canonical QR diagonal unchanged."""
-    q, r = canonical_qr(block)
-    r_new = r.copy()
+    value = r12_value(block)
     target, _ = qim_target_for_block(block, int(bit), float(period))
-    r_new[0, 1] = target
-    return q @ r_new
+    return apply_r12_delta(block, float(target - value))
 
 
 def r_llr(block: np.ndarray, period: float) -> float:
-    """Soft signed QIM evidence: negative favours bit 0, positive bit 1."""
-    phase = r12_value(block) % float(period)
-    return float(np.sin(2.0 * np.pi * (phase - 0.5 * period) / period))
+    """Signed triangular QIM evidence: negative favours 0, positive favours 1."""
+    _, score, _ = qim_phase_decision(r12_value(block), period)
+    return float(score)

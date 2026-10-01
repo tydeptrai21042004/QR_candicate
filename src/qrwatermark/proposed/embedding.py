@@ -84,7 +84,7 @@ def embed_image(host,watermark,key,cfg:ProposedConfig):
             continuous_groups[k]=base; rounded_groups[k]=base
             group_sses[k]=0.0
 
-    def certify_current():
+    def certify_current(*,tighten_final=False):
         work=working[:h0,:w0]
         conv_channels=[reflect_convolve(work,k.kernel) for k in bank]
         decisions=[]
@@ -94,10 +94,10 @@ def embed_image(host,watermark,key,cfg:ProposedConfig):
             extremes=[_blocks(ch,gp,cfg.block_size) for ch in conv_channels]
             if not embedding_feasible[k]:
                 # Still produce a diagnostic decision, but force uncertified.
-                d=certify_spread_group(continuous_groups[k],rounded,extremes,int(bits[k]),int(period_indices[k]),cfg)
+                d=certify_spread_group(continuous_groups[k],rounded,extremes,int(bits[k]),int(period_indices[k]),cfg,tighten_final=tighten_final)
                 d=d.__class__(**{**d.__dict__,"certified":False,"status":"embedding_infeasible"})
             else:
-                d=certify_spread_group(continuous_groups[k],rounded,extremes,int(bits[k]),int(period_indices[k]),cfg)
+                d=certify_spread_group(continuous_groups[k],rounded,extremes,int(bits[k]),int(period_indices[k]),cfg,tighten_final=tighten_final)
             decisions.append(d)
         return decisions
 
@@ -134,7 +134,17 @@ def embed_image(host,watermark,key,cfg:ProposedConfig):
         if changed==0: break
         decisions=certify_current(); passes_used=pass_no+1
 
+    # The adaptive embedding above intentionally keeps the original conservative
+    # generic certificate.  Only after the final pixels and periods are frozen do
+    # we optionally apply the tighter two-extreme path theorem.  Consequently
+    # this v4 certification pass can change only the certificate mask/metadata --
+    # never the watermarked image, PSNR, payload, or period allocation.
+    generic_decisions=decisions
+    if bool(cfg.certificate_final_tighten) and len(bank)==2:
+        decisions=certify_current(tighten_final=True)
+
     clipping_events=int(sum(np.any((np.rint(np.asarray(c))<0)|(np.rint(np.asarray(c))>255)) for group in continuous_groups for c in group))
+    generic_cert=np.asarray([bool(d.certified) for d in generic_decisions],dtype=bool)
     cert=np.asarray([bool(d.certified) for d in decisions],dtype=bool)
     bounds=np.asarray([float(d.theorem_bound) for d in decisions])
     round_bounds=np.asarray([float(d.rounding_bound) for d in decisions])
@@ -149,7 +159,7 @@ def embed_image(host,watermark,key,cfg:ProposedConfig):
 
     side_metadata={
         'method':'ccqr_r12_qim_v1',
-        'algorithm_revision':'mc_ccqr_spread_qim_v3_postembed_cert',
+        'algorithm_revision':'mc_ccqr_spread_qim_v4_hw_path_cert',
         'watermark_shape':[cfg.watermark_size,cfg.watermark_size],
         'repetition':cfg.repetition,
         'spread_weights':'equal_unit_norm',
@@ -164,6 +174,8 @@ def embed_image(host,watermark,key,cfg:ProposedConfig):
         'convolution_kernel_size':cfg.convolution_kernel_size,
         'convolution_gaussian_sigmas':[float(x) for x in cfg.convolution_gaussian_sigmas],
         'rounding_certificate':'deterministic_finite_r12_bound_continuous_to_uint8',
+        'final_certificate_bound':'piecewise_two_extreme_convex_path_with_generic_fallback' if bool(cfg.certificate_final_tighten) and len(bank)==2 else 'generic_convex_hull',
+        'certificate_path_subdivisions':int(cfg.certificate_path_subdivisions),
         'key_fingerprint':hashlib.sha256(key).hexdigest()[:16],
     }
     side=build_side_info(period_indices,side_metadata,key,certified_mask=cert)
@@ -178,13 +190,18 @@ def embed_image(host,watermark,key,cfg:ProposedConfig):
 
     meta={
         'method':'ccqr_r12_qim_v1',
-        'algorithm_revision':'mc_ccqr_spread_qim_v3_postembed_cert',
+        'algorithm_revision':'mc_ccqr_spread_qim_v4_hw_path_cert',
         'certificate_reference_signal':'final_rounded_watermarked_image',
         'certified_family':'all convex mixtures of configured extreme reflect-101 convolution kernels',
         'certificate_condition':'rounding_bound + safety_factor*convolution_bound + additive_budget < period/4',
         'certified_fraction':float(cert.mean()),
         'certified_groups':int(cert.sum()),
         'uncertified_groups':int((~cert).sum()),
+        'generic_certificate_fraction_before_tightening':float(generic_cert.mean()),
+        'generic_certified_groups_before_tightening':int(generic_cert.sum()),
+        'newly_certified_by_path_bound':int(np.sum(cert & ~generic_cert)),
+        'final_certificate_bound_modes':{m:int(sum(d.bound_mode==m for d in decisions)) for m in sorted(set(d.bound_mode for d in decisions))},
+        'certificate_path_subdivisions':int(cfg.certificate_path_subdivisions),
         'embedding_infeasible_groups':int((~embedding_feasible).sum()),
         'certificate_passes_used':int(passes_used),
         'mean_certificate_margin':float(finite_margin.mean()) if finite_margin.size else float('-inf'),

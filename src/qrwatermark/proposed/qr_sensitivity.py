@@ -96,3 +96,79 @@ def convex_hull_group_bound(base_blocks,extreme_block_sets,weights=None):
         bnd,_,_=group_pair_bound(base_blocks,blocks,w)
         extreme_pair_bounds.append(float(bnd))
     return theorem,float(max(observed)),extreme_pair_bounds
+
+
+def two_extreme_path_group_bound(base_blocks, extreme_block_sets, weights=None, *, subdivisions=8):
+    """Rigorous bound specialized to a two-kernel convex convolution path.
+
+    For two extreme attacked block sets ``B0`` and ``B1``, every point in the
+    certified family is affine in the scalar mixture parameter ``alpha``:
+
+        B(alpha) = (1-alpha) B0 + alpha B1,  alpha in [0,1].
+
+    We partition this one-dimensional path.  On each interval, the attacked
+    block is represented as a center block plus a perturbation whose two column
+    norms are bounded exactly from the endpoint difference.  Applying the finite
+    r12 perturbation inequality about that center and then triangle inequality
+    yields a deterministic bound for the whole interval.  Taking the maximum
+    over all intervals certifies the entire convex path.
+
+    This theorem is often much tighter than the generic hull bound because it
+    respects the fact that both attacked columns move with the *same* scalar
+    mixture parameter instead of maximizing their perturbations independently.
+    """
+    if not base_blocks:
+        raise ValueError("base_blocks must be non-empty")
+    if len(extreme_block_sets) != 2:
+        raise ValueError("two_extreme_path_group_bound requires exactly two extreme block sets")
+    if int(subdivisions) < 1:
+        raise ValueError("subdivisions must be positive")
+    if any(len(blocks) != len(base_blocks) for blocks in extreme_block_sets):
+        raise ValueError("each extreme set must match base_blocks")
+
+    w = unit_spread_weights(len(base_blocks)) if weights is None else np.asarray(weights,dtype=np.float64).ravel()
+    w = w / np.linalg.norm(w)
+    b0 = [np.asarray(x,dtype=np.float64) for x in extreme_block_sets[0]]
+    b1 = [np.asarray(x,dtype=np.float64) for x in extreme_block_sets[1]]
+    base_stat = float(w @ np.asarray([r12_value(b) for b in base_blocks],dtype=np.float64))
+
+    J = int(subdivisions)
+    half_width = 0.5 / float(J)
+    interval_bounds=[]
+    for j in range(J):
+        alpha = (float(j) + 0.5) / float(J)
+        centers=[(1.0-alpha)*x0 + alpha*x1 for x0,x1 in zip(b0,b1)]
+        center_stat=float(w @ np.asarray([r12_value(b) for b in centers],dtype=np.float64))
+        local=[]
+        for center,x0,x1 in zip(centers,b0,b1):
+            diff=x1-x0
+            ne=half_width*float(np.linalg.norm(diff[:,0]))
+            nf=half_width*float(np.linalg.norm(diff[:,1]))
+            local.append(_bound_from_column_norms(center,ne,nf))
+        local_bound=float(np.sum(np.abs(w)*np.asarray(local,dtype=np.float64)))
+        interval_bounds.append(abs(center_stat-base_stat)+local_bound)
+
+    theorem=float(max(interval_bounds))
+    observed=[]
+    for blocks in extreme_block_sets:
+        stat=float(w @ np.asarray([r12_value(b) for b in blocks],dtype=np.float64))
+        observed.append(abs(stat-base_stat))
+    return theorem,float(max(observed)),tuple(float(x) for x in interval_bounds)
+
+
+def tightened_two_extreme_convex_group_bound(base_blocks, extreme_block_sets, weights=None, *, subdivisions=8):
+    """Return the tighter of two independently valid convex-family bounds.
+
+    The generic hull theorem remains the fallback.  Therefore enabling this
+    helper can never weaken the previous certificate: the returned theorem bound
+    is ``min(generic_bound, path_bound)`` and both terms are valid upper bounds.
+    """
+    generic, observed, generic_extreme = convex_hull_group_bound(base_blocks,extreme_block_sets,weights)
+    if len(extreme_block_sets) != 2:
+        return generic, observed, tuple(float(x) for x in generic_extreme), float('inf'), "generic", ()
+    path, observed_path, intervals = two_extreme_path_group_bound(
+        base_blocks,extreme_block_sets,weights,subdivisions=int(subdivisions)
+    )
+    if np.isfinite(path) and path < generic:
+        return float(path),float(max(observed,observed_path)),tuple(float(x) for x in generic_extreme),float(generic),"two_extreme_piecewise_path",intervals
+    return float(generic),float(max(observed,observed_path)),tuple(float(x) for x in generic_extreme),float(path),"generic",intervals

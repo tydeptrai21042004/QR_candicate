@@ -3,19 +3,21 @@ import cv2
 import numpy as np
 from ..core.config import ProposedConfig
 from .r_branch import r12_value
-from .spread_qim import spread_llr,unit_spread_weights
+from .spread_qim import spread_decision,unit_spread_weights
+
 
 def decode_groups(channel,positions,periods,repetition,block_size):
     periods=np.asarray(periods,dtype=np.float64).ravel(); L=periods.size
     if len(positions)!=L*repetition: raise ValueError("positions count mismatch")
-    w=unit_spread_weights(repetition); llrs=np.zeros(L)
+    w=unit_spread_weights(repetition); bits=np.zeros(L,dtype=np.uint8); confs=np.zeros(L)
     for k,p in enumerate(periods):
         vals=[]
         for j in range(repetition):
             r,c=positions[k*repetition+j]; vals.append(r12_value(channel[r:r+block_size,c:c+block_size].astype(np.float64)))
-        llrs[k]=spread_llr(np.asarray(vals),float(p),w)
-    bits=(llrs>=0).astype(np.uint8); conf=np.abs(llrs)
-    return bits,float(conf.mean()),conf
+        bit,_,confidence=spread_decision(np.asarray(vals),float(p),w)
+        bits[k]=bit; confs[k]=confidence
+    return bits,float(confs.mean()),confs
+
 
 def nlm_versions(channel,cfg:ProposedConfig):
     raw=np.asarray(channel,dtype=np.float64); versions=[('raw',raw)]
