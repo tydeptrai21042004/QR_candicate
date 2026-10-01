@@ -1,6 +1,6 @@
 methods:
   - {name: proposed, config: configs/methods/proposed.yaml}
-  - {name: su2017_hessenberg, config: configs/methods/su2017_hessenberg.yaml}
+  - {name: su2016_hessenberg, config: configs/methods/su2016_hessenberg.yaml}
   - {name: su2020_schur, config: configs/methods/su2020_schur.yaml}
   - {name: nha2022_improved_qr, config: configs/methods/nha2022_improved_qr.yaml}
 repeats: 3

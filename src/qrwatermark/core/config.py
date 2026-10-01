@@ -41,7 +41,7 @@ class ProposedConfig:
 
 @dataclass
 class BaselineConfig:
-    block_size:int=4; channel:int=0; watermark_size:int=64; arnold_iterations:int=10; quant_step:float=8.0; threshold:float=0.04
+    block_size:int=4; channel:int=0; watermark_size:int=64; arnold_iterations:int=10; quant_step:float=8.0; threshold:float=0.04; gamma:float=3.25
 
 def load_yaml(path:str|Path)->dict[str,Any]:
     with open(path,'r',encoding='utf-8') as f: obj=yaml.safe_load(f)

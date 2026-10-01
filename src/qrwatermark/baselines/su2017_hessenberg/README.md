@@ -1,5 +1,7 @@
-# Su & Chen (2017) Hessenberg baseline
+# Deprecated compatibility alias
 
-Reference: Q. Su and B. Chen, *A novel blind color image watermarking using upper Hessenberg matrix*, AEU—International Journal of Electronics and Communications 78 (2017), 64–71, DOI 10.1016/j.aeue.2017.05.025.
+`su2017_hessenberg` existed in the original repository but did **not** faithfully implement a paper: it embedded QIM into a selected Hessenberg-`H` coefficient.
 
-The public article description states that 4x4 image blocks are Hessenberg-transformed and watermark information is quantized into the largest-energy element of the upper Hessenberg matrix, with Arnold scrambling and keyed pseudo-random block selection. The authors' original source code and the complete equation-level implementation were not included in the uploaded project. This module is therefore a transparent reconstructed reference implementation of those stated mechanisms, adapted to the common 64x64 binary benchmark. It must not be described as the authors' official code.
+It now delegates to the audited Su (2016) Hessenberg implementation, whose paper modifies `q22/q32` in the orthogonal matrix `Q` with `T=0.042`.
+
+Use `su2016_hessenberg` in new experiment configurations. The alias is retained only so old commands do not break.

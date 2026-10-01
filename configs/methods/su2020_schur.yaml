@@ -4,5 +4,5 @@ parameters:
   channel: 0
   watermark_size: 64
   arnold_iterations: 10
-  quant_step: 8.0
-  threshold: 0.04
+  quant_step: 25.0   # Delta in Su-Zhang-Wang 2020
+  threshold: 0.03    # T in Su-Zhang-Wang 2020

@@ -1,8 +1,8 @@
-method: nha2022_improved_qr
+method: su2016_hessenberg
 parameters:
   block_size: 4
   channel: 0
   watermark_size: 64
   arnold_iterations: 10
-  quant_step: 10.0
-  threshold: 0.04
+  quant_step: 8.0
+  threshold: 0.042

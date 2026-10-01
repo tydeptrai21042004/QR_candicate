@@ -1,0 +1,11 @@
+method: zareian2013_aqim
+parameters:
+  block_size: 16
+  channel: 0
+  watermark_size: 16
+  arnold_iterations: 10
+  # Paper Sec. 4 reports average Delta_0 ~= 0.21 and average optimum gamma ~= 3.25
+  # for its 41 dB, 128-bit image experiment. PSNR matching tunes Delta_0 only.
+  quant_step: 0.21
+  threshold: 0.04
+  gamma: 3.25

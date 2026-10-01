@@ -4,7 +4,16 @@ from pathlib import Path
 
 from .config import baseline_from_dict, load_yaml, proposed_from_dict
 from ..proposed import ConvolutionCertifiedR12QIM
-from ..baselines import Nha2022ImprovedQR, Su2017Hessenberg, Su2020Schur
+from ..baselines import (
+    Chen2021QuaternionQR,
+    Nha2022ImprovedQR,
+    Su2014QR,
+    Su2016Hessenberg,
+    Su2017Hessenberg,
+    Su2017ImprovedQR,
+    Su2020Schur,
+    Zareian2013AdaptiveQIM,
+)
 
 
 def build_method(name: str, config_path: str | Path | None = None):
@@ -15,10 +24,20 @@ def build_method(name: str, config_path: str | Path | None = None):
     if name in {"proposed", "ccqr", "ccqr_r12_qim_v1", "proposed_adaptive_qr_v2"}:
         return ConvolutionCertifiedR12QIM(proposed_from_dict(data))
     cfg = baseline_from_dict(data)
-    if name in {"su2017", "su2017_hessenberg"}:
+    if name in {"su2014", "su2014_qr"}:
+        return Su2014QR(cfg)
+    if name in {"su2016", "su2016_hessenberg"}:
+        return Su2016Hessenberg(cfg)
+    if name in {"su2017_hessenberg"}:  # deprecated historical alias
         return Su2017Hessenberg(cfg)
+    if name in {"su2017", "su2017_improved_qr"}:
+        return Su2017ImprovedQR(cfg)
+    if name in {"chen2021", "chen2021_qqrd", "chen2021_quaternion_qr"}:
+        return Chen2021QuaternionQR(cfg)
     if name in {"su2020", "su2020_schur"}:
         return Su2020Schur(cfg)
     if name in {"nha2022", "nha2022_improved_qr"}:
         return Nha2022ImprovedQR(cfg)
+    if name in {"zareian2013", "zareian2013_aqim", "adaptive_qim"}:
+        return Zareian2013AdaptiveQIM(cfg)
     raise ValueError(f"Unknown method: {name}")

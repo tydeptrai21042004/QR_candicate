@@ -1,7 +1,7 @@
-# Audited paper-baseline comparison.
-# All methods share the same binary payload, keyed block selector, attacks and metrics.
-# PSNR matching scales each paper's actual strength parameter(s); residual mismatch
-# remains in metrics.csv when an exact match is not attainable.
+# Small-payload control comparison including Zareian & Tohidypour (2013).
+# Their published method carries one bit per 16x16 host block, hence a 16x16
+# payload is used here so all methods can be evaluated on the identical bits.
+watermark_size: 16
 match_psnr_to_proposed: true
 methods:
   - {name: proposed, config: configs/methods/proposed.yaml}
@@ -11,6 +11,7 @@ methods:
   - {name: su2020_schur, config: configs/methods/su2020_schur.yaml}
   - {name: chen2021_qqrd, config: configs/methods/chen2021_qqrd.yaml}
   - {name: nha2022_improved_qr, config: configs/methods/nha2022_improved_qr.yaml}
+  - {name: zareian2013_aqim, config: configs/methods/zareian2013_aqim.yaml}
 hosts: data/hosts/classical
 watermarks: data/watermarks
 attacks: configs/attacks/standard.yaml

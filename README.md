@@ -123,7 +123,18 @@ Old attack names remain aliases for compatibility but new configs use the precis
 
 ## Side information
 
-The proposed method authenticates both period codes and a one-bit-per-payload certificate mask. Metadata reports period-code bits, certificate-mask bits, HMAC bits, metadata bits, and total serialized side-information size. The Su-2020 reconstruction reports its mode-flag cost; the blind baselines report zero side-information bits.
+The proposed method authenticates both period codes and a one-bit-per-payload certificate mask. Metadata reports period-code bits, certificate-mask bits, HMAC bits, metadata bits, and total serialized side-information size. Su-2020 reports its one-bit-per-payload U/D mode flag. Zareian-2013 reports its published block-selection map plus the nominal `Delta0`, `gamma`, and `xi` words. Baselines that are blind under the standardized protocol report zero side-information bits.
+
+For the adaptive-QIM control, use the capacity-compatible profile:
+
+```bash
+python scripts/run_main_comparison.py \
+  --config configs/experiments/qim_control_comparison.yaml \
+  --key "replace-with-your-experiment-key" \
+  --run-dir runs/qim_control
+```
+
+This profile uses a common 16x16 watermark because Zareian-2013 has one native bit per 16x16 host block; forcing the 64x64/4096-bit main payload would exceed the paper method's native capacity on a 512x512 host.
 
 ## Tests
 
