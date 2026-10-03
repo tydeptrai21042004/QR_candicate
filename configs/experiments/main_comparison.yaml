@@ -1,5 +1,5 @@
 # Audited paper-baseline comparison.
-# All methods share the same binary payload, keyed block selector, attacks and metrics.
+# All methods share the same binary payload, keyed carrier mapping, attacks and metrics.
 # PSNR matching scales each paper's actual strength parameter(s); residual mismatch
 # remains in metrics.csv when an exact match is not attainable.
 match_psnr_to_proposed: true

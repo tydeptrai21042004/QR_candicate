@@ -1,0 +1,9 @@
+attacks:
+  - name: clean
+  - name: gaussian_blur
+    params: {sigma: 1.0}
+  - name: gaussian_noise
+    params: {mean: 0.0, variance: 0.003}
+    seeds: [0]
+  - name: jpeg
+    params: {quality: 50}

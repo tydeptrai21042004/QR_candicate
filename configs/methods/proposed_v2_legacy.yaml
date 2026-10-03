@@ -1,0 +1,26 @@
+method: mecqr_qim_v2
+parameters:
+  design: elegant_v2
+  block_size: 2
+  channel: 0
+  watermark_size: 64
+  arnold_iterations: 10
+  qim_period: 64.0
+  carrier_pool: 4
+  carrier_selector_policy: min_energy
+  blind_margin_ratio: 0.125
+  blind_projection: safe_set
+  compute_certificate: true
+  store_certificate_mask: false
+  convolution_kernel_size: 3
+  convolution_gaussian_sigmas: [0.50, 0.75]
+  convolution_safety_factor: 1.00
+  additive_feature_budget: 1.0
+  certificate_path_subdivisions: 8
+  certificate_final_tighten: true
+  repetition: 5
+  period_candidates: [24.0, 28.0, 32.0, 36.0]
+  max_group_mse: 220.0
+  target_psnr_db: 50.0
+  certificate_max_passes: 4
+  nlm: {enabled: false, compare_always: false, mild_h: 4.0, mild_template: 3, mild_search: 11, strong_h: 8.0, strong_template: 5, strong_search: 17}

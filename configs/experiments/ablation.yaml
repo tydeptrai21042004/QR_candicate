@@ -1,16 +1,53 @@
+# Ablations for the fully blind v3 proposal.
+# All blind_v3 variants use exactly one key-determined carrier per payload bit
+# and transmit/save ZERO side-information bits.
 base_config: configs/methods/proposed.yaml
+hosts: data/hosts/classical
+watermarks: data/watermarks
+attacks: configs/attacks/standard.yaml
+watermark_size: 64
 variants:
-  fixed_period_48:
-    period_candidates: [48.0]
-  fixed_period_56:
-    period_candidates: [56.0]
-  adaptive_no_convolution_bank:
-    convolution_gaussian_sigmas: []
-  repeat_1:
-    repetition: 1
-  repeat_3:
-    repetition: 3
-  full_ccqr:
+  full_blind_v3: {}
+
+  # Projection ablation: same deterministic carriers and decoder, but force the
+  # feature to the old QIM center instead of projecting onto a safe interval.
+  blind_center_qim:
+    blind_projection: center
+
+  # One-parameter QIM-strength sensitivity.
+  period_40:
+    qim_period: 40.0
+  period_56:
+    qim_period: 56.0
+  period_64:
+    qim_period: 64.0
+
+  # Safe-margin geometry sensitivity. Still zero side information.
+  margin_1_16:
+    blind_margin_ratio: 0.0625
+  margin_3_16:
+    blind_margin_ratio: 0.1875
+
+  # Certificate is report-only. This must change only runtime/certificate
+  # columns, never watermarked pixels or decoding behavior.
+  no_certificate:
+    compute_certificate: false
+
+  # Public scrambling ablation. It remains fully blind because the iteration
+  # count is fixed in the method config rather than transmitted per image.
+  no_arnold_scramble:
+    arnold_iterations: 0
+
+  # Historical comparisons. These are NOT fully blind and are explicitly kept
+  # only to quantify what is lost/gained by removing side information.
+  side_selector_v2:
+    design: elegant_v2
+    qim_period: 64.0
+    carrier_pool: 4
+    carrier_selector_policy: min_energy
+    compute_certificate: false
+  legacy_spread_qim_v1:
+    design: legacy_v1
     repetition: 5
     period_candidates: [24.0, 28.0, 32.0, 36.0]
-    convolution_gaussian_sigmas: [0.50, 0.75]
+    certificate_max_passes: 4

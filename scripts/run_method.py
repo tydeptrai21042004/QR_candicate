@@ -35,7 +35,7 @@ def main():
         out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
         write_image(out, emb.image)
         side_path = Path(args.side_info) if args.side_info else out.with_suffix(".side.npz")
-        if method.name == "ccqr_r12_qim_v1":
+        if emb.side_info is not None:
             save_side_info(side_path, emb.side_info)
         if args.mode == "roundtrip":
             ext = method.extract(emb.image, key=key, side_info=emb.side_info, watermark_shape=wm.shape)
@@ -46,19 +46,25 @@ def main():
         print(f"Watermarked: {out}")
         if emb.side_info is not None:
             print(f"Side info: {side_path}")
+        elif getattr(method.config, "design", None) == "blind_v3":
+            print("Side info: none (fully blind v3)")
         return
 
-    if not args.image or not args.watermark:
-        ap.error("extract requires --image and --watermark (watermark is used only for shape/output metric, never by the decoder)")
-    image = read_color(args.image)
-    wm = prepare_binary_watermark(args.watermark, 64)
+    if not args.image:
+        ap.error("extract requires --image; --watermark is optional and used only to print NC/BER")
+    image = read_color(resolve(args.image))
+    wm = prepare_binary_watermark(resolve(args.watermark), 64) if args.watermark else None
     side = None
     if args.side_info:
-        side = load_side_info(args.side_info) if method.name == "ccqr_r12_qim_v1" else None
-    ext = method.extract(image, key=key, side_info=side, watermark_shape=wm.shape)
+        side = load_side_info(args.side_info)
+    shape = wm.shape if wm is not None else (int(method.config.watermark_size), int(method.config.watermark_size))
+    ext = method.extract(image, key=key, side_info=side, watermark_shape=shape)
     write_image(args.out, ext.watermark)
     print(f"Extracted: {args.out}")
-    print(f"NC={nc(wm, ext.watermark):.6f} BER={ber(wm, ext.watermark):.6f}")
+    if wm is not None:
+        print(f"NC={nc(wm, ext.watermark):.6f} BER={ber(wm, ext.watermark):.6f}")
+    elif getattr(method.config, "design", None) == "blind_v3":
+        print("Fully blind extraction: no side information or reference watermark was used.")
 
 
 if __name__ == "__main__":
