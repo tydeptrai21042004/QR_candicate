@@ -72,13 +72,15 @@ def test_batch_certificate_matches_scalar_generic_and_tight_path():
             assert np.isclose(st['certificate_margin'][k],scalar.certificate_margin,rtol=1e-12,atol=1e-12)
 
 
-def test_edge_fast_path_preserves_known_v4_output_hash():
+def test_elegant_v2_preserves_known_output_hash():
     root=Path(__file__).resolve().parents[1]
-    method=build_method("proposed",root/"configs/methods/proposed.yaml")
+    method=build_method("proposed",root/"configs/methods/proposed_v2_legacy.yaml")
     method.config.watermark_size=16
     host=read_color(root/"data/hosts/classical/girl.bmp")
     wm=prepare_binary_watermark(root/"data/watermarks/watermark_1.png",16)
     res=method.embed(host,wm,key=b"edge-eq-2026")
     digest=hashlib.sha256(res.image.tobytes()).hexdigest()
-    assert digest=="ca2d672a72e9a5c9a27867bbdde1d4e49dd819160dd451f2dc3cbee29ff0d5b7"
-    assert res.metadata['certified_fraction']==0.8203125
+    assert digest=="5089b752ae02c60d6fe865b7d06a0726da22bb4990638d2ae12ab3c925fc62dd"
+    assert res.metadata['certified_fraction']==0.9765625
+    assert res.metadata['payload_embeddings_per_bit']==1
+    assert res.metadata['repetition_used'] is False

@@ -10,7 +10,19 @@ class NLMConfig:
 
 @dataclass
 class ProposedConfig:
+    # ``design`` keeps the legacy research implementation reproducible while
+    # allowing the default YAML to use the cleaner single-carrier formulation.
+    design:str="legacy_v1"
     block_size:int=2; channel:int=0; watermark_size:int=64; arnold_iterations:int=10; repetition:int=5
+    qim_period:float=64.0
+    carrier_pool:int=4
+    carrier_selector_policy:str="min_energy"
+    # v3 fully-blind parameters.  The default 1/8 margin is symmetric inside
+    # each half-period and leaves a nonzero safe interval.
+    blind_margin_ratio:float=0.125
+    blind_projection:str="safe_set"
+    compute_certificate:bool=True
+    store_certificate_mask:bool=False
     period_candidates:tuple[float,...]=(24.0,28.0,32.0,36.0)
     max_group_mse:float=220.0
     target_psnr_db:float=50.0
@@ -24,7 +36,14 @@ class ProposedConfig:
     certificate_final_tighten:bool=True
     nlm:NLMConfig=field(default_factory=NLMConfig)
     def validate(self):
-        if self.block_size!=2: raise ValueError("MC-CCQR spread-QIM is derived for 2x2 QR blocks")
+        if self.block_size!=2: raise ValueError("proposal is derived for 2x2 QR blocks")
+        if self.design not in {"legacy_v1","elegant_v2","blind_v3"}: raise ValueError("design must be legacy_v1, elegant_v2, or blind_v3")
+        if self.qim_period<=0: raise ValueError("qim_period must be positive")
+        if self.carrier_pool<1 or self.carrier_pool>255: raise ValueError("carrier_pool must be in [1,255]")
+        if self.carrier_selector_policy not in {"min_energy","min_rounded_sse","first"}: raise ValueError("unsupported carrier_selector_policy")
+        if not (0.0 < float(self.blind_margin_ratio) < 0.25): raise ValueError("blind_margin_ratio must lie in (0,0.25)")
+        if self.blind_projection not in {"safe_set","center"}: raise ValueError("blind_projection must be safe_set or center")
+        if self.design=="blind_v3" and self.store_certificate_mask: raise ValueError("blind_v3 never stores a certificate mask or any other side information")
         if self.repetition<1: raise ValueError("repetition must be positive")
         periods=tuple(float(x) for x in self.period_candidates)
         if not periods or any(x<=0 for x in periods): raise ValueError("period_candidates must contain positive values")

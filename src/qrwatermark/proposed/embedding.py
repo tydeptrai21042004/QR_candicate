@@ -192,7 +192,14 @@ def embed_image(host,watermark,key,cfg:ProposedConfig):
             work=working[:h0,:w0]
             conv_channels=[reflect_convolve(work,k.kernel) for k in bank]
             rounded=_gather_selected_blocks(work)
-            extremes=np.stack([_gather_selected_blocks(ch) for ch in conv_channels],axis=0)
+            # An empty bank is a valid ablation: it removes the convolution-family
+            # term while retaining deterministic rounding/additive-budget checks.
+            # Keep the kernel axis explicitly empty so the vectorized certificate
+            # can return a zero convolution bound instead of np.stack() failing.
+            if conv_channels:
+                extremes=np.stack([_gather_selected_blocks(ch) for ch in conv_channels],axis=0)
+            else:
+                extremes=np.empty((0,n,cfg.repetition,2,2),dtype=np.float64)
             _cert_cache['rounded']=rounded; _cert_cache['extremes']=extremes
         continuous=np.asarray(continuous_groups,dtype=np.float64)
         return certify_spread_groups_arrays(

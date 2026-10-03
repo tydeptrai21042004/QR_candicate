@@ -32,7 +32,7 @@ def evaluate_embedded(method:WatermarkMethod,host:np.ndarray,watermark:np.ndarra
         if mask.size==truth.size:
             if np.any(mask): certified_ber=float(np.mean(truth[mask]!=recovered[mask]))
             if np.any(~mask): uncertified_ber=float(np.mean(truth[~mask]!=recovered[~mask]))
-    logical_side_bits=(int(overhead.get("period_code_bits",0))+int(overhead.get("certificate_mask_bits",0))+int(overhead.get("authentication_bits",0)) if overhead else (int(emb.metadata.get("side_information_bits",0)) if emb.metadata else 0))
+    logical_side_bits=(int(overhead.get("period_code_bits",0))+int(overhead.get("selector_code_bits",0))+int(overhead.get("certificate_mask_bits",0))+int(overhead.get("authentication_bits",0)) if overhead else (int(emb.metadata.get("side_information_bits",0)) if emb.metadata else 0))
     serialized_side_bits=(int(overhead.get("total_serialized_bits",logical_side_bits)) if overhead else logical_side_bits)
     record=BenchmarkRecord(
         method=method.name,host=host_name,watermark=watermark_name,attack=attack_name,

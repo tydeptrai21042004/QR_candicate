@@ -77,3 +77,28 @@ def test_deterministic_rounding_bound_dominates_observed_shift():
     theorem,observed,_=group_pair_bound(cands,rounded)
     assert np.isfinite(theorem)
     assert observed <= theorem + 1e-12
+
+
+def test_empty_convolution_bank_ablation_runs_end_to_end():
+    """Removing the convolution bank must be a runnable ablation, not a crash."""
+    from qrwatermark.core.config import ProposedConfig
+    from qrwatermark.proposed import ConvolutionCertifiedR12QIM
+
+    h = w = 96
+    yy, xx = np.mgrid[0:h, 0:w]
+    base = 60.0 + 0.5 * xx + 0.25 * yy
+    host = np.stack([base, base + 4, base + 8], axis=2).clip(0, 255).astype(np.uint8)
+    rng = np.random.default_rng(21)
+    wm = (rng.integers(0, 2, size=(8, 8), dtype=np.uint8) * 255).astype(np.uint8)
+    cfg = ProposedConfig(
+        watermark_size=8,
+        repetition=3,
+        period_candidates=(24.0, 28.0, 32.0),
+        convolution_gaussian_sigmas=(),
+        target_psnr_db=45.0,
+    )
+    method = ConvolutionCertifiedR12QIM(cfg)
+    emb = method.embed(host, wm, key=b"empty-bank-ablation")
+    ext = method.extract(emb.image, key=b"empty-bank-ablation", side_info=emb.side_info, watermark_shape=wm.shape)
+    assert ext.watermark.shape == wm.shape
+    assert 0.0 <= float(emb.metadata["certified_fraction"]) <= 1.0
