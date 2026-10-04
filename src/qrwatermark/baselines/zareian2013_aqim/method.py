@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import cv2
 import numpy as np
 
 from ...core.config import BaselineConfig
@@ -107,6 +108,68 @@ def _candidate_level_at_decoder(s_over_t: float, bit: int, delta_hat: float) -> 
     return qim_vector_level(float(s_over_t), int(bit), float(delta_hat))
 
 
+def _rotate_same_size(channel: np.ndarray, angle_deg: float) -> np.ndarray:
+    """Rotate about the image centre while retaining the original canvas size."""
+    arr = np.asarray(channel, dtype=np.float64)
+    angle = float(angle_deg)
+    if abs(angle) <= 1e-12:
+        return arr.copy()
+    h, w = arr.shape
+    center = ((w - 1) / 2.0, (h - 1) / 2.0)
+    matrix = cv2.getRotationMatrix2D(center, angle, 1.0)
+    return cv2.warpAffine(
+        arr, matrix, (w, h), flags=cv2.INTER_LINEAR,
+        borderMode=cv2.BORDER_CONSTANT, borderValue=0,
+    )
+
+
+def _top_entropy_mask(channel: np.ndarray, count: int) -> np.ndarray:
+    positions = Zareian2013AdaptiveQIM._all_positions(channel.shape)
+    if count > len(positions):
+        raise ValueError("Zareian2013 entropy-mask count exceeds available 16x16 blocks")
+    scores = [
+        (_block_entropy(channel[r:r + 16, c:c + 16]), idx)
+        for idx, (r, c) in enumerate(positions)
+    ]
+    chosen = [idx for _, idx in sorted(scores, key=lambda item: (-item[0], item[1]))[:count]]
+    mask = np.zeros(len(positions), dtype=np.uint8)
+    mask[chosen] = 1
+    return mask
+
+
+def estimate_rotation_angle(
+    channel: np.ndarray, reference_mask: np.ndarray, *, min_angle: float = -10.0,
+    max_angle: float = 10.0, step: float = 0.5,
+) -> float:
+    """Paper Sec. 4.1.5 entropy-block registration over [-10,10] degrees.
+
+    For each candidate attack angle theta_s, rotate the received image by
+    -theta_s, select the same number of highest-entropy 16x16 blocks, and
+    count overlaps with the transmitted original-image block-position map.
+    """
+    ref = np.asarray(reference_mask, dtype=np.uint8).ravel()
+    selected_count = int(np.count_nonzero(ref))
+    if selected_count <= 0:
+        raise ValueError("Zareian2013 reference entropy mask selects no blocks")
+
+    angles = np.arange(float(min_angle), float(max_angle) + 0.5 * float(step), float(step))
+    best_angle = 0.0
+    best_matches = -1
+    for theta in angles:
+        corrected = _rotate_same_size(channel, -float(theta))
+        candidate_mask = _top_entropy_mask(corrected, selected_count)
+        if candidate_mask.size != ref.size:
+            raise ValueError("Zareian2013 rotation-search mask size mismatch")
+        matches = int(np.count_nonzero((candidate_mask == 1) & (ref == 1)))
+        # The paper specifies maximum block matches but no tie rule. Prefer the
+        # smallest correction magnitude so clean/non-rotated images remain
+        # unchanged when several candidates tie.
+        if matches > best_matches or (matches == best_matches and abs(float(theta)) < abs(best_angle)):
+            best_matches = matches
+            best_angle = float(theta)
+    return best_angle
+
+
 class Zareian2013AdaptiveQIM(WatermarkMethod):
     """Zareian & Tohidypour, IET Image Processing 7(5), 432-441 (2013).
 
@@ -115,7 +178,8 @@ class Zareian2013AdaptiveQIM(WatermarkMethod):
       * two-level orthonormal Haar DWT;
       * one bit per selected block in the 4x4 level-2 LL vector;
       * adaptive power-law step, Eqs. (1)-(4);
-      * decoder gain estimate and minimum-distance decision, Eqs. (5)-(8).
+      * decoder gain estimate and minimum-distance decision, Eqs. (5)-(8);
+      * semi-blind entropy-map rotation synchronization over [-10,10] deg in 0.5-deg steps.
 
     The paper is a scalar-image method.  In this color-image repository it is
     applied to ``config.channel`` so that it can serve as a QIM control without
@@ -223,7 +287,8 @@ class Zareian2013AdaptiveQIM(WatermarkMethod):
                 "gamma": float(c.gamma),
                 "side_information_bits": logical_side_bits,
                 "native_capacity_bits": len(all_positions),
-                "implementation_status": "published Eqs. (1)-(8); scalar method adapted to configured color channel",
+                "implementation_status": "published Eqs. (1)-(8) plus Sec. 4.1.5 rotation synchronization; scalar method adapted to configured color channel",
+                "information_model": "semi-blind (published block map + Delta0/gamma/xi side information)",
             },
         )
 
@@ -250,10 +315,14 @@ class Zareian2013AdaptiveQIM(WatermarkMethod):
         if mask.size != len(all_positions):
             raise ValueError("Zareian2013 block-position side information has the wrong length")
         count = int(watermark_shape[0] * watermark_shape[1])
-        positions = self._positions_from_mask(channel.shape, mask)
-        if len(positions) < count:
+        if int(np.count_nonzero(mask)) < count:
             raise ValueError("Insufficient Zareian2013 selected blocks in side information")
-        positions = positions[:count]
+
+        # Paper Sec. 4.1.5: estimate unknown rotation from the transmitted
+        # original high-entropy block map, then inverse-rotate before decoding.
+        estimated_rotation = estimate_rotation_angle(channel, mask)
+        channel = _rotate_same_size(channel, -estimated_rotation)
+        positions = self._positions_from_mask(channel.shape, mask)[:count]
 
         delta0 = float(side_info["delta0"])
         gamma = float(side_info["gamma"])
@@ -292,5 +361,5 @@ class Zareian2013AdaptiveQIM(WatermarkMethod):
 
         return ExtractionResult(
             watermark=finish_payload(bits, watermark_shape, c.arnold_iterations),
-            metadata={"estimated_gain": gain},
+            metadata={"estimated_gain": gain, "estimated_rotation_deg": estimated_rotation},
         )

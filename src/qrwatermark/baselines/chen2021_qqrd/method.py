@@ -180,6 +180,7 @@ class Chen2021QuaternionQR(WatermarkMethod):
                 "threshold": float(c.threshold),
                 "factorization": "direct quaternion QR reference implementation",
                 "side_information_bits": 0,
+                "information_model": "blind",
             },
         )
 

@@ -179,7 +179,7 @@ The control-plane operations (HMAC, keyed permutation, serialization) are intent
 
 ## Baseline status
 
-`Nha2022ImprovedQR` is implemented from the published rule. `Su2017Hessenberg` and `Su2020Schur` are transparent literature reconstructions, not claimed to be the authors' original source code. This distinction should also be retained in any manuscript table.
+`Nha2022ImprovedQR` is implemented from the published rule. `Su2020Schur` preserves the paper's required mode-flag side information, while `Zareian2013AdaptiveQIM` preserves its published entropy-map/parameter side information and rotation-registration stage. These are protocol-faithful reimplementations, not claims of author-source identity.
 
 ## Evaluation rule
 

@@ -7,7 +7,7 @@ import numpy as np
 from ...core.config import BaselineConfig
 from ...core.interfaces import WatermarkMethod
 from ...core.types import EmbeddingResult, ExtractionResult
-from ..common import finish_payload, keyed_positions, prepare_payload, qim_decode_phase, qim_embed_phase
+from ..common import finish_payload, prepare_payload, qim_decode_phase, qim_embed_phase
 
 
 def improved_qr_r_first(block: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -49,6 +49,21 @@ def improved_qr_r_first(block: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     return q, r
 
 
+def _raster_positions(shape: tuple[int, int], block_size: int, count: int) -> list[tuple[int, int]]:
+    """First ``count`` non-overlapping blocks in the paper's scan order."""
+    h, w = shape
+    positions = [
+        (row, col)
+        for row in range(0, h - block_size + 1, block_size)
+        for col in range(0, w - block_size + 1, block_size)
+    ]
+    if count > len(positions):
+        raise ValueError(
+            f"Nha2022 capacity exceeded: payload={count} bits, carriers={len(positions)}"
+        )
+    return positions[:count]
+
+
 class Nha2022ImprovedQR(WatermarkMethod):
     """Nha, Thanh & Phong, Soft Computing 26 (2022), 5069-5093."""
 
@@ -63,13 +78,14 @@ class Nha2022ImprovedQR(WatermarkMethod):
             raise ValueError("quant_step q must be positive")
 
     def embed(self, host: np.ndarray, watermark: np.ndarray, *, key: bytes) -> EmbeddingResult:
+        del key  # the published embedding traverses non-overlapping blocks; it does not key-select them
         c = self.config
         out = np.asarray(host, dtype=np.uint8).copy()
         bits = prepare_payload(watermark, c.arnold_iterations)
         channel = out[:, :, c.channel].astype(np.float64)
         h0 = (channel.shape[0] // 4) * 4
         w0 = (channel.shape[1] // 4) * 4
-        positions = keyed_positions((h0, w0), 4, len(bits), key)
+        positions = _raster_positions((h0, w0), 4, len(bits))
 
         for bit, (row, col) in zip(bits, positions):
             block = channel[row : row + 4, col : col + 4]
@@ -90,6 +106,8 @@ class Nha2022ImprovedQR(WatermarkMethod):
                 "carrier": "R[0,0]",
                 "quant_step": float(c.quant_step),
                 "side_information_bits": 0,
+                "block_order": "paper raster order (no keyed block selector)",
+                "information_model": "blind",
             },
         )
 
@@ -101,12 +119,13 @@ class Nha2022ImprovedQR(WatermarkMethod):
         side_info: dict[str, Any] | None = None,
         watermark_shape: tuple[int, int] = (64, 64),
     ) -> ExtractionResult:
+        del key
         c = self.config
         channel = np.asarray(image, dtype=np.uint8)[:, :, c.channel].astype(np.float64)
         h0 = (channel.shape[0] // 4) * 4
         w0 = (channel.shape[1] // 4) * 4
         count = int(watermark_shape[0] * watermark_shape[1])
-        positions = keyed_positions((h0, w0), 4, count, key)
+        positions = _raster_positions((h0, w0), 4, count)
         bits = np.zeros(count, dtype=np.uint8)
 
         for i, (row, col) in enumerate(positions):

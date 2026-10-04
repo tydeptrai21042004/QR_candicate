@@ -9,8 +9,6 @@ from ..baselines import (
     Nha2022ImprovedQR,
     Su2014QR,
     Su2016Hessenberg,
-    Su2017Hessenberg,
-    Su2017ImprovedQR,
     Su2020Schur,
     Zareian2013AdaptiveQIM,
 )
@@ -28,10 +26,6 @@ def build_method(name: str, config_path: str | Path | None = None):
         return Su2014QR(cfg)
     if name in {"su2016", "su2016_hessenberg"}:
         return Su2016Hessenberg(cfg)
-    if name in {"su2017_hessenberg"}:  # deprecated historical alias
-        return Su2017Hessenberg(cfg)
-    if name in {"su2017", "su2017_improved_qr"}:
-        return Su2017ImprovedQR(cfg)
     if name in {"chen2021", "chen2021_qqrd", "chen2021_quaternion_qr"}:
         return Chen2021QuaternionQR(cfg)
     if name in {"su2020", "su2020_schur"}:

@@ -171,6 +171,7 @@ class Su2020Schur(WatermarkMethod):
                 "quant_step": float(c.quant_step),
                 "side_information_bits": int(flags.size),
                 "implementation_status": "published Eqs. (5)-(17), standardized binary protocol",
+                "information_model": "side-information-assisted/semi-blind: published mode flags required",
             },
         )
 

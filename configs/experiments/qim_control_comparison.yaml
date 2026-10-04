@@ -7,7 +7,6 @@ methods:
   - {name: proposed, config: configs/methods/proposed.yaml}
   - {name: su2014_qr, config: configs/methods/su2014_qr.yaml}
   - {name: su2016_hessenberg, config: configs/methods/su2016_hessenberg.yaml}
-  - {name: su2017_improved_qr, config: configs/methods/su2017_improved_qr.yaml}
   - {name: su2020_schur, config: configs/methods/su2020_schur.yaml}
   - {name: chen2021_qqrd, config: configs/methods/chen2021_qqrd.yaml}
   - {name: nha2022_improved_qr, config: configs/methods/nha2022_improved_qr.yaml}

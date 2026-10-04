@@ -103,6 +103,7 @@ class Su2016Hessenberg(WatermarkMethod):
                 "carrier": "Q[1,1],Q[2,1]",
                 "threshold": float(c.threshold),
                 "side_information_bits": 0,
+                "information_model": "blind",
             },
         )
 

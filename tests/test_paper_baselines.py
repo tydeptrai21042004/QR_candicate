@@ -1,3 +1,4 @@
+import cv2
 import numpy as np
 import pytest
 
@@ -6,7 +7,6 @@ from qrwatermark.baselines import (
     Nha2022ImprovedQR,
     Su2014QR,
     Su2016Hessenberg,
-    Su2017ImprovedQR,
     Su2020Schur,
     Zareian2013AdaptiveQIM,
 )
@@ -15,12 +15,13 @@ from qrwatermark.baselines.chen2021_qqrd.method import (
     quaternion_matmul,
     quaternion_qr,
 )
-from qrwatermark.baselines.nha2022_improved_qr.method import improved_qr_r_first
+from qrwatermark.baselines.nha2022_improved_qr.method import _raster_positions, improved_qr_r_first
 from qrwatermark.baselines.su2016_hessenberg.method import canonical_hessenberg
 from qrwatermark.baselines.su2020_schur.method import _d_decode, _d_embed, _u_candidate, canonical_schur
 from qrwatermark.baselines.zareian2013_aqim.method import (
-    adaptive_step, haar2_levels, inverse_haar2_levels, normalized_magnitude, qim_vector_level,
+    adaptive_step, estimate_rotation_angle, haar2_levels, inverse_haar2_levels, normalized_magnitude, qim_vector_level,
 )
+from qrwatermark.attacks.geometric import rotation_unregistered
 from qrwatermark.core.factory import build_method
 from qrwatermark.evaluation.metrics import ber
 
@@ -60,6 +61,12 @@ def test_su2016_hessenberg_uses_stable_equivalent_sign_convention():
         marked = np.rint(q2 @ h @ q2.T)
         _, qe = canonical_hessenberg(marked)
         assert Su2016Hessenberg._decode_q(qe) == bit
+
+
+def test_nha2022_uses_published_raster_block_traversal_without_key_selection():
+    assert _raster_positions((8, 12), 4, 5) == [
+        (0, 0), (0, 4), (0, 8), (4, 0), (4, 4)
+    ]
 
 
 def test_nha2022_r_first_factorization_reconstructs_regular_block():
@@ -150,6 +157,50 @@ def test_zareian2013_clean_roundtrip_uses_only_published_position_map_side_info(
     assert ber(wm, ext.watermark) == 0.0
 
 
+def test_zareian2013_published_entropy_map_rotation_search_recovers_plus_five_degrees():
+    # Entropy-map registration needs a natural/structured image; white-noise
+    # blocks all have nearly the same entropy and are an invalid sync fixture.
+    host = cv2.imread("data/lenna.bmp", cv2.IMREAD_COLOR)
+    assert host is not None
+    host = cv2.resize(host, (256, 256), interpolation=cv2.INTER_AREA)
+    wm = _binary_watermark(np.random.default_rng(31), 8)
+    method = Zareian2013AdaptiveQIM()
+    emb = method.embed(host, wm, key=b"unused")
+    attacked = rotation_unregistered(emb.image, angle=5.0)
+    angle = estimate_rotation_angle(
+        attacked[:, :, method.config.channel].astype(np.float64),
+        emb.side_info["selected_mask"],
+    )
+    assert angle == pytest.approx(5.0, abs=0.5)
+    ext = method.extract(attacked, key=b"unused", side_info=emb.side_info, watermark_shape=wm.shape)
+    assert ext.metadata["estimated_rotation_deg"] == pytest.approx(5.0, abs=0.5)
+
+
+def test_published_side_information_models_are_enforced():
+    rng = np.random.default_rng(37)
+    host = rng.integers(30, 226, size=(128, 128, 3), dtype=np.uint8)
+    wm8 = _binary_watermark(rng, 8)
+
+    schur = Su2020Schur()
+    schur_emb = schur.embed(host, wm8, key=b"side-model")
+    assert schur_emb.side_info is not None and "flags" in schur_emb.side_info
+    with pytest.raises(ValueError, match="mode flags"):
+        schur.extract(schur_emb.image, key=b"side-model", side_info=None, watermark_shape=wm8.shape)
+
+    zareian = Zareian2013AdaptiveQIM()
+    z_emb = zareian.embed(host, wm8, key=b"unused")
+    assert set(z_emb.side_info) == {"selected_mask", "delta0", "gamma", "xi"}
+    with pytest.raises(ValueError, match="side information"):
+        zareian.extract(z_emb.image, key=b"unused", side_info=None, watermark_shape=wm8.shape)
+
+
+def test_removed_su2017_baselines_are_not_factory_registered():
+    with pytest.raises(ValueError, match="Unknown method"):
+        build_method("su2017_improved_qr")
+    with pytest.raises(ValueError, match="Unknown method"):
+        build_method("su2017_hessenberg")
+
+
 def test_decomposition_paper_baselines_have_error_free_clean_smoke_roundtrip():
     rng = np.random.default_rng(5)
     host = rng.integers(30, 226, size=(64, 64, 3), dtype=np.uint8)
@@ -157,7 +208,6 @@ def test_decomposition_paper_baselines_have_error_free_clean_smoke_roundtrip():
     methods = (
         Su2014QR(),
         Su2016Hessenberg(),
-        Su2017ImprovedQR(),
         Su2020Schur(),
         Chen2021QuaternionQR(),
         Nha2022ImprovedQR(),
@@ -179,7 +229,6 @@ def test_decomposition_paper_baselines_have_error_free_clean_smoke_roundtrip():
     [
         ("su2014_qr", "configs/methods/su2014_qr.yaml"),
         ("su2016_hessenberg", "configs/methods/su2016_hessenberg.yaml"),
-        ("su2017_improved_qr", "configs/methods/su2017_improved_qr.yaml"),
         ("chen2021_qqrd", "configs/methods/chen2021_qqrd.yaml"),
         ("nha2022_improved_qr", "configs/methods/nha2022_improved_qr.yaml"),
         ("su2020_schur", "configs/methods/su2020_schur.yaml"),

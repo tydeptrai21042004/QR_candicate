@@ -8,3 +8,5 @@ This replaces the old repository approximation that incorrectly embedded QIM in 
 
 
 Implementation note: Householder-based Hessenberg factors are not unique with respect to paired column/row sign flips. SciPy/LAPACK may return the opposite sign convention from another implementation even though `A = Q H Q^T` is identical. Before applying the paper's `sign(.)` equations, this module uses an equivalent diagonal sign transform `(Q,H) -> (Q D, D H D)` so the result is deterministic while preserving the input block exactly. Extraction still follows Eq. (14), which compares absolute values.
+
+**Information model:** blind. The benchmark keeps key-based block reproducibility but does not provide the original host or watermark to the decoder.

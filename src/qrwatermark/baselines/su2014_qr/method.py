@@ -79,6 +79,7 @@ class Su2014QR(WatermarkMethod):
                 "carrier": "R[0,3]",
                 "quant_step": float(c.quant_step),
                 "side_information_bits": 0,
+                "information_model": "blind",
             },
         )
 

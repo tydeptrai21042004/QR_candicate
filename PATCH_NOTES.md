@@ -1,47 +1,30 @@
-# Corrected paper-baseline patch
+# Paper-baseline fidelity patch
 
-This patch is intended to be extracted over the uploaded `QR_candicate-main (1)` repository.
-It changes only the files needed to audit/reimplement the paper baselines and comparison harness.
+This patch removes the unverifiable Su-2017 baseline and keeps each remaining literature baseline faithful to its published carrier equations and decoder information model while adapting only the surrounding benchmark protocol (common host loading, binary payload, attacks and metrics).
 
-## Main 64x64-payload comparison
+## Active baselines
 
-`configs/experiments/main_comparison.yaml` contains the proposal plus six decomposition/QR papers:
+- `su2014_qr` — blind; 4x4 QR, `R(1,4)` paper quantizer, `Delta=42`.
+- `su2016_hessenberg` — blind; 4x4 Hessenberg, `Q(2,2)/Q(3,2)`, `T=0.042`.
+- `su2020_schur` — retains the published per-block embedding-mode flag; both Schur candidates, minimum-distortion selection, `T=0.03`, `Delta=25`.
+- `chen2021_qqrd` — blind; whole-color quaternion 4x4 QR and the three published `q21/q31` imaginary-component relations.
+- `nha2022_improved_qr` — blind; paper's blue-channel 4x4 raster traversal, R-first factorization, `R(1,1)` QIM, `q=10`, and direct extraction from the first column norm.
+- `zareian2013_aqim` — side-information-assisted/semi-blind; preserves the selected entropy-block map, `Delta0`, `gamma`, `xi`, two-level Haar adaptive QIM, gain estimation, and the published `[-10,10]` degree / `0.5` degree rotation search.
 
-1. `su2014_qr` — Su et al. (2014), QR `r14`, published candidate quantizer, `Delta=42`.
-2. `su2016_hessenberg` — Su (2016), Hessenberg-Q `q22/q32`, `T=0.042`.
-3. `su2017_improved_qr` — Su et al. (2017), 3x3 QR `q21/q31`; explicitly paper-aligned reconstruction because author source/full numerical rule is not public here.
-4. `su2020_schur` — Su, Zhang & Wang (2020), both U and D candidates, minimum-distortion selection, mode flag, `T=0.03`, `Delta=25`.
-5. `chen2021_qqrd` — Chen et al. (2021), quaternion QR carrier, three bits per selected 4x4 quaternion block.
-6. `nha2022_improved_qr` — Nha et al. (2022), R-first improved QR and direct `R11` extraction, `q=10`.
+## Removed
 
-## QIM control comparison
+`su2017_improved_qr` is removed because the exact published numerical embedding rule was not sufficiently verifiable for a defensible reproduction. The historical `su2017_hessenberg` compatibility alias is also removed because it was not a separate faithful paper baseline.
 
-`configs/experiments/qim_control_comparison.yaml` adds:
+The previous baseline-audit CSVs are removed as stale because they contain Su-2017 and/or were generated before the fidelity corrections. Re-run experiments to produce new result tables.
 
-7. `zareian2013_aqim` — Zareian & Tohidypour (2013), high-entropy 16x16 blocks, two-level Haar DWT, adaptive QIM and gain-aware extraction.
-
-This control profile uses a 16x16 (256-bit) common payload because the paper method has one native bit per 16x16 host block and therefore cannot carry the repository's 4096-bit main payload on a 512x512 image without inventing a different method.
-
-## Validation performed
-
-- `pytest -q`: **65 passed**.
-- Native 64x64 clean/default-strength audit on Lenna + watermark_1: all six decomposition/QR paper baselines and the proposal achieved clean BER 0 in `validation/main64_clean_default_strength.csv`.
-- Capacity-compatible 16x16 PSNR-matched diagnostic includes all seven paper baselines plus proposal and four representative conditions (clean, JPEG-50, Gaussian blur sigma=1, Gaussian noise variance=0.003). See `validation/baseline_audit_comparison.csv` and `validation/baseline_audit_summary.csv`.
-
-The validation CSVs are smoke/audit evidence, not a replacement for the full multi-host, multi-watermark, multi-seed manuscript experiment.
-
-## Run
+## Validation
 
 ```bash
 pytest -q
-
-python scripts/run_main_comparison.py \
-  --config configs/experiments/main_comparison.yaml \
-  --key "your-experiment-key" \
-  --run-dir runs/main_comparison
-
-python scripts/run_main_comparison.py \
-  --config configs/experiments/qim_control_comparison.yaml \
-  --key "your-experiment-key" \
-  --run-dir runs/qim_control
 ```
+
+Current repository result: **77 passed**.
+
+The baseline-specific tests additionally check required side information, Nha-2022 paper block order, removal of Su-2017 factory registrations, and Zareian-2013 entropy-map synchronization on an unknown +5 degree rotation.
+
+See `docs/PAPER_BASELINES.md` for the exact paper-vs-pipeline boundary for every method.
