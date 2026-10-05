@@ -290,3 +290,105 @@ def tightened_two_extreme_convex_group_bound_batch(base_blocks, extreme_block_se
     chosen=np.where(use,path,generic)
     fallback=np.where(use,generic,path)
     return chosen,np.maximum(observed,observed_path),extreme,fallback,use,interval
+
+
+# ---------------------------------------------------------------------------
+# Blind-v3 single-carrier certificate kernel.
+#
+# The general certificate routines above support repeated carriers.  Blind-v3
+# deliberately uses exactly one 2x2 carrier per bit, so carrying a singleton
+# repetition dimension through the full theorem creates avoidable reductions
+# and temporary arrays.  This specialization is algebraically the same theorem
+# for repetition=1 and is therefore an implementation optimization only.
+# ---------------------------------------------------------------------------
+
+def _r12_single_blocks(blocks):
+    x=np.asarray(blocks,dtype=np.float64)
+    if x.shape[-2:]!=(2,2):
+        raise ValueError("expected (...,2,2) blocks")
+    a0=x[...,0,0]; a1=x[...,1,0]
+    b0=x[...,0,1]; b1=x[...,1,1]
+    norm=np.sqrt(a0*a0+a1*a1)
+    out=np.empty_like(norm,dtype=np.float64)
+    good=norm>1e-12
+    out[good]=(a0[good]*b0[good]+a1[good]*b1[good])/norm[good]
+    # Canonical 2x2 QR convention for a zero first column: q1=[1,0].
+    out[~good]=b0[~good]
+    return out
+
+
+def _single_column_bound(base, ne, nf):
+    x=np.asarray(base,dtype=np.float64)
+    a0=x[...,0,0]; a1=x[...,1,0]
+    b0=x[...,0,1]; b1=x[...,1,1]
+    na=np.sqrt(a0*a0+a1*a1)
+    nb=np.sqrt(b0*b0+b1*b1)
+    ne=np.asarray(ne,dtype=np.float64)
+    nf=np.asarray(nf,dtype=np.float64)
+    valid=(na>1e-15)&(ne<na)
+    out=np.full(np.broadcast_shapes(na.shape,ne.shape,nf.shape),np.inf,dtype=np.float64)
+    out[valid]=nf[valid]+nb[valid]*ne[valid]/(na[valid]-ne[valid])
+    return out
+
+
+def tightened_two_extreme_single_carrier_bound_batch(base_blocks, extreme_block_sets, *, subdivisions=8):
+    """Exact blind-v3 specialization of the two-extreme convex certificate.
+
+    Parameters
+    ----------
+    base_blocks : ndarray, shape (groups,2,2)
+        Rounded embedded 2x2 blocks, one carrier per payload bit.
+    extreme_block_sets : ndarray, shape (2,groups,2,2)
+        The two configured convolution extremes evaluated on the same blocks.
+
+    Returns the same quantities as
+    :func:`tightened_two_extreme_convex_group_bound_batch` with repetition=1,
+    but avoids singleton-axis reductions and repeated generic ``r12`` passes.
+    The theorem and path subdivision are unchanged.
+    """
+    base=np.asarray(base_blocks,dtype=np.float64)
+    ext=np.asarray(extreme_block_sets,dtype=np.float64)
+    if base.ndim!=3 or base.shape[-2:]!=(2,2):
+        raise ValueError("base_blocks must have shape (groups,2,2)")
+    if ext.shape!=(2,)+base.shape:
+        raise ValueError("extreme_block_sets must have shape (2,groups,2,2)")
+    J=int(subdivisions)
+    if J<1:
+        raise ValueError("subdivisions must be positive")
+
+    base_r=_r12_single_blocks(base)
+    ext_r=_r12_single_blocks(ext)
+    observed=np.max(np.abs(ext_r-base_r[None,:]),axis=0)
+
+    d=ext-base[None,...]
+    ne_each=np.sqrt(d[...,0,0]*d[...,0,0]+d[...,1,0]*d[...,1,0])
+    nf_each=np.sqrt(d[...,0,1]*d[...,0,1]+d[...,1,1]*d[...,1,1])
+    ne=np.maximum(ne_each[0],ne_each[1])
+    nf=np.maximum(nf_each[0],nf_each[1])
+    generic=_single_column_bound(base,ne,nf)
+    extreme=np.stack((
+        _single_column_bound(base,ne_each[0],nf_each[0]),
+        _single_column_bound(base,ne_each[1],nf_each[1]),
+    ),axis=0)
+
+    b0=ext[0]; b1=ext[1]; diff=b1-b0
+    half=0.5/float(J)
+    path_ne=half*np.sqrt(diff[...,0,0]*diff[...,0,0]+diff[...,1,0]*diff[...,1,0])
+    path_nf=half*np.sqrt(diff[...,0,1]*diff[...,0,1]+diff[...,1,1]*diff[...,1,1])
+
+    # Evaluate all interval centers in one batch: (J,groups,2,2).
+    alpha=((np.arange(J,dtype=np.float64)+0.5)/float(J))[:,None,None,None]
+    centers=(1.0-alpha)*b0[None,...]+alpha*b1[None,...]
+    center_r=_r12_single_blocks(centers)
+    local=_single_column_bound(
+        centers,
+        np.broadcast_to(path_ne,(J,path_ne.size)),
+        np.broadcast_to(path_nf,(J,path_nf.size)),
+    )
+    interval=np.abs(center_r-base_r[None,:])+local
+    path=np.max(interval,axis=0)
+
+    use=np.isfinite(path)&(path<generic)
+    chosen=np.where(use,path,generic)
+    fallback=np.where(use,generic,path)
+    return chosen,observed,extreme,fallback,use,interval

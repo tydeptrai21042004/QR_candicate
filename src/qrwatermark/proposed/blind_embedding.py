@@ -28,15 +28,17 @@ from dataclasses import replace
 import numpy as np
 
 from ..core.config import ProposedConfig
-from ..utils.permutation import selected_block_positions
-from ..utils.watermark import arnold_transform, bits_from_watermark
+from ..utils.permutation import selected_block_arrays
+from ..utils.watermark import scrambled_bits_from_watermark
 from .convolution import convolution_bank, reflect_convolve
 from .elegant_embedding import _candidate_geometry, _gather_blocks
 from .qr_sensitivity import (
     convex_hull_group_bound_batch,
     tightened_two_extreme_convex_group_bound_batch,
+    tightened_two_extreme_single_carrier_bound_batch,
 )
 from .spread_qim import unit_spread_weights
+from .streaming_datapath import project_safe_selected_pixels, selected_r12_float
 
 
 def _safe_geometry(period: float, margin_ratio: float) -> tuple[float, float]:
@@ -175,8 +177,11 @@ def _blind_certificate(
     """
     work = out[:, :, cfg.channel].astype(np.float64)
     rounded = _gather_fixed(work, chosen_positions)
-    _, vals, _, _ = _candidate_geometry(rounded)
-    vals = vals[:, 0]
+    rr = chosen_positions[:, 0]
+    cc = chosen_positions[:, 1]
+    # Closed-form canonical r12 is exact for 2x2 blocks and avoids thousands
+    # of scalar np.linalg.qr fallbacks on dark/degenerate first columns.
+    vals = selected_r12_float(work, rr, cc)
     phase = np.mod(vals, float(period))
     decision_margin = np.minimum(
         np.minimum(phase, np.abs(phase - 0.5 * float(period))),
@@ -192,11 +197,13 @@ def _blind_certificate(
         ext = np.stack(extremes, axis=0)
         w = unit_spread_weights(1)
         if bool(cfg.certificate_final_tighten) and ext.shape[0] == 2:
+            # blind-v3 has exactly one carrier per bit.  Use the algebraically
+            # identical repetition=1 theorem kernel to avoid generic singleton
+            # reductions in the per-frame certificate path.
             conv, observed, extreme, fallback, use_path, intervals = (
-                tightened_two_extreme_convex_group_bound_batch(
-                    rounded,
-                    ext,
-                    w,
+                tightened_two_extreme_single_carrier_bound_batch(
+                    rounded[:, 0],
+                    ext[:, :, 0],
                     subdivisions=int(cfg.certificate_path_subdivisions),
                 )
             )
@@ -234,6 +241,14 @@ def _blind_certificate(
 
 
 def embed_blind_image(host, watermark, key: bytes, cfg: ProposedConfig):
+    """Embed one blind-v3 payload using the RT100 selected-pixel datapath.
+
+    The mathematical embedding is unchanged.  Runtime is reduced by keeping
+    geometry/key descriptors in the session cache and touching only the 4096
+    selected 2x2 blocks instead of repeatedly converting/scanning the complete
+    RGB frame.  The optional robustness certificate remains an offline audit
+    and is executed only when ``compute_certificate`` is enabled.
+    """
     cfg.validate()
     host = np.asarray(host, dtype=np.uint8)
     wm = np.asarray(watermark, dtype=np.uint8)
@@ -242,51 +257,69 @@ def embed_blind_image(host, watermark, key: bytes, cfg: ProposedConfig):
     if wm.shape != (cfg.watermark_size, cfg.watermark_size):
         raise ValueError(f"watermark must be {cfg.watermark_size}x{cfg.watermark_size}")
 
-    bits = bits_from_watermark(arnold_transform(wm, cfg.arnold_iterations)).astype(np.uint8)
+    # Arnold scrambling is a fixed index permutation.  Apply it directly in
+    # the bit domain so the online datapath does not allocate/permutate a 2-D
+    # image.  The result is bit-for-bit identical to the original path.
+    bits = scrambled_bits_from_watermark(wm, cfg.arnold_iterations)
     n = int(bits.size)
     period = float(cfg.qim_period)
-    channel = host[:, :, cfg.channel].astype(np.float64).copy()
+    channel = host[:, :, cfg.channel]
     h0 = (channel.shape[0] // 2) * 2
     w0 = (channel.shape[1] // 2) * 2
     capacity = (h0 // 2) * (w0 // 2)
     if n > capacity:
         raise ValueError(f"payload needs {n} blocks but only {capacity} are available")
 
-    positions = selected_block_positions((h0, w0), 2, n, key)
-    chosen_pos = np.asarray(positions, dtype=np.int64)
-    base = _gather_blocks(channel, positions)
+    # Key-only carrier geometry is a control-plane object.  The cached row and
+    # column vectors are identical to the legacy HMAC permutation but avoid
+    # rebuilding thousands of Python tuples for every video frame.
+    rr, cc = selected_block_arrays((h0, w0), 2, n, key)
 
     if cfg.blind_projection == "safe_set":
-        continuous, rounded, delta, nominal_margin = _project_safe_intervals(
-            base, bits, period, cfg.blind_margin_ratio
+        # FPGA-oriented hot path: four selected samples enter the scalar 2x2
+        # datapath and only the second column is written back.  This is the
+        # exact same QR safe-set projection as the matrix reference path.
+        y0, y1, delta, nominal_margin, sse, changed_samples = project_safe_selected_pixels(
+            channel, rr, cc, bits, period, cfg.blind_margin_ratio
         )
         mathematical_core = (
             "Euclidean projection of r12 onto the nearest pixel-feasible blind safe-decision interval"
         )
+        out = host.copy()
+        out_channel = out[:, :, cfg.channel]
+        out_channel[rr, cc + 1] = y0
+        out_channel[rr + 1, cc + 1] = y1
     elif cfg.blind_projection == "center":
-        continuous, rounded, delta, nominal_margin = _project_center_lattice(base, bits, period)
+        # The center-QIM branch is an ablation only; keep the existing generic
+        # reference implementation rather than complicating the FPGA datapath.
+        base = np.empty((n, 2, 2), dtype=np.float64)
+        base[:, 0, 0] = channel[rr, cc]
+        base[:, 0, 1] = channel[rr, cc + 1]
+        base[:, 1, 0] = channel[rr + 1, cc]
+        base[:, 1, 1] = channel[rr + 1, cc + 1]
+        _continuous, rounded, delta, nominal_margin = _project_center_lattice(base, bits, period)
         mathematical_core = "fixed-carrier quarter-coset QIM center projection"
+        out = host.copy()
+        out_channel = out[:, :, cfg.channel]
+        out_channel[rr, cc + 1] = rounded[:, 0, 1].astype(np.uint8, copy=False)
+        out_channel[rr + 1, cc + 1] = rounded[:, 1, 1].astype(np.uint8, copy=False)
+        diff = rounded - base
+        sse = float(np.sum(diff * diff))
+        changed_samples = int(np.count_nonzero(rounded != base))
     else:
         raise ValueError(f"unknown blind_projection={cfg.blind_projection!r}")
 
-    rr, cc = chosen_pos[:, 0], chosen_pos[:, 1]
-    working = channel.copy()
-    working[rr, cc] = rounded[:, 0, 0]
-    working[rr, cc + 1] = rounded[:, 0, 1]
-    working[rr + 1, cc] = rounded[:, 1, 0]
-    working[rr + 1, cc + 1] = rounded[:, 1, 1]
-
-    out = host.copy()
-    out[:h0, :w0, cfg.channel] = working[:h0, :w0].astype(np.uint8)
-
     cert_state = None
     if bool(cfg.compute_certificate):
+        # Certificate analysis is deliberately outside the online RT path.  It
+        # is report-only and never affects image formation or decoding.
+        chosen_pos = np.column_stack((rr, cc)).astype(np.int64, copy=False)
         cert_state = _blind_certificate(out[:h0, :w0], chosen_pos, period, cfg)
 
-    sse = float(np.sum((out.astype(np.float64) - host.astype(np.float64)) ** 2))
+    # Only the selected second-column samples can differ.  ``sse`` and
+    # ``changed_samples`` above are exact, so no full-frame scan is required.
     total_samples = float(host.size)
     psnr_db = float("inf") if sse == 0 else 10.0 * np.log10(total_samples * 255.0**2 / sse)
-    changed = np.abs(out.astype(np.int16) - host.astype(np.int16)) > 0
 
     zero_overhead = {
         "period_code_bits": 0,
@@ -298,7 +331,7 @@ def embed_blind_image(host, watermark, key: bytes, cfg: ProposedConfig):
     }
     meta = {
         "method": "blind_mecqr_qim_v3",
-        "algorithm_revision": "fully_blind_safe_projection_v3",
+        "algorithm_revision": "fully_blind_safe_projection_v3_streaming_exact",
         "mathematical_core": mathematical_core,
         "fully_blind": True,
         "requires_original_host": False,
@@ -315,9 +348,10 @@ def embed_blind_image(host, watermark, key: bytes, cfg: ProposedConfig):
         "continuous_embedding_energy": float(np.sum(delta * delta)),
         "actual_rgb_sse": sse,
         "actual_psnr_db": psnr_db,
-        "changed_samples": int(np.sum(changed)),
+        "changed_samples": changed_samples,
         "certificate_computed": bool(cfg.compute_certificate),
-        "certificate_mode": "report_only_no_side_info" if cfg.compute_certificate else "disabled",
+        "certificate_mode": "offline_report_only_no_side_info" if cfg.compute_certificate else "disabled_online_rt_path",
+        "runtime_path": "unified_streaming_2x2_second_column_only",
     }
     if cert_state is not None:
         cert = np.asarray(cert_state["certified"], dtype=bool)
@@ -333,6 +367,4 @@ def embed_blind_image(host, watermark, key: bytes, cfg: ProposedConfig):
             }
         )
 
-    # Fully blind means exactly this: nothing outside the image is returned for
-    # the decoder to save, authenticate, or transmit.
     return out, None, meta

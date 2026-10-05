@@ -9,13 +9,7 @@ import numpy as np
 
 @lru_cache(maxsize=32)
 def _keyed_permutation_cached(length: int, key: bytes, domain: bytes) -> tuple[int, ...]:
-    """Session-cacheable deterministic HMAC-SHA256 permutation.
-
-    The permutation is a control-plane object: for a fixed image geometry,
-    key, and domain it never changes between video frames.  Caching it removes
-    the 65k HMAC+sort operation from the edge per-frame datapath without
-    changing a single selected block.
-    """
+    """Session-cacheable deterministic HMAC-SHA256 permutation."""
     if not key:
         raise ValueError("A non-empty key is required")
     records: list[tuple[bytes, int]] = []
@@ -27,12 +21,6 @@ def _keyed_permutation_cached(length: int, key: bytes, domain: bytes) -> tuple[i
 
 
 def keyed_permutation(length: int, key: bytes, domain: bytes = b"qrwatermark:block-order:v2") -> np.ndarray:
-    """Deterministic HMAC-SHA256 permutation; identical to the legacy result.
-
-    A fresh NumPy array is returned so callers cannot mutate the cached session
-    state.  On an edge deployment the cached tuple maps naturally to descriptor
-    ROM/BRAM generated once when the key/session is established.
-    """
     cached = _keyed_permutation_cached(int(length), bytes(key), bytes(domain))
     return np.fromiter(cached, dtype=np.int64, count=int(length))
 
@@ -52,12 +40,48 @@ def _selected_block_positions_cached(
     return tuple(((idx // cols) * bs, (idx % cols) * bs) for idx in perm)
 
 
+@lru_cache(maxsize=64)
+def _selected_block_arrays_cached(
+    shape: tuple[int, int], block_size: int, count: int, key: bytes
+) -> tuple[np.ndarray, np.ndarray]:
+    """Cached row/column arrays for the real-time datapath.
+
+    This is the same HMAC permutation as ``selected_block_positions`` but
+    avoids rebuilding 4096 Python tuples and converting them back to NumPy on
+    every frame.  Arrays are read-only so cached session state cannot be
+    accidentally mutated by callers.
+    """
+    h, w = int(shape[0]), int(shape[1])
+    bs = int(block_size)
+    rows = h // bs
+    cols = w // bs
+    total = rows * cols
+    if int(count) > total:
+        raise ValueError(f"Capacity insufficient: requested {count} blocks, available {total}")
+    perm = np.fromiter(
+        _keyed_permutation_cached(total, bytes(key), b"qrwatermark:block-order:v2")[: int(count)],
+        dtype=np.int64,
+        count=int(count),
+    )
+    rr = ((perm // cols) * bs).astype(np.intp, copy=False)
+    cc = ((perm % cols) * bs).astype(np.intp, copy=False)
+    rr.flags.writeable = False
+    cc.flags.writeable = False
+    return rr, cc
+
+
 def selected_block_positions(shape: tuple[int, int], block_size: int, count: int, key: bytes) -> list[tuple[int, int]]:
-    """Selected positions with a session cache for real-time edge reuse."""
     return list(_selected_block_positions_cached(tuple(map(int, shape)), int(block_size), int(count), bytes(key)))
 
 
+def selected_block_arrays(
+    shape: tuple[int, int], block_size: int, count: int, key: bytes
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return cached read-only row/column vectors for selected blocks."""
+    return _selected_block_arrays_cached(tuple(map(int, shape)), int(block_size), int(count), bytes(key))
+
+
 def clear_permutation_cache() -> None:
-    """Clear cached control-plane descriptors (useful when rotating keys)."""
+    _selected_block_arrays_cached.cache_clear()
     _selected_block_positions_cached.cache_clear()
     _keyed_permutation_cached.cache_clear()
