@@ -21,6 +21,15 @@ class ProposedConfig:
     # each half-period and leaves a nonzero safe interval.
     blind_margin_ratio:float=0.125
     blind_projection:str="safe_set"
+    # v4 fully-blind coupled Q/R parameters. One 2x2 block carries one payload
+    # bit through two observations inside the same QR factorization.
+    coupled_q_period:float=0.20
+    coupled_r_period:float=0.48
+    coupled_q_margin_ratio:float=0.08
+    coupled_r_margin_ratio:float=0.08
+    coupled_q_weight:float=0.5
+    coupled_r_weight:float=1.0
+    coupled_energy_tau:float=16.0
     compute_certificate:bool=True
     store_certificate_mask:bool=False
     period_candidates:tuple[float,...]=(24.0,28.0,32.0,36.0)
@@ -37,13 +46,18 @@ class ProposedConfig:
     nlm:NLMConfig=field(default_factory=NLMConfig)
     def validate(self):
         if self.block_size!=2: raise ValueError("proposal is derived for 2x2 QR blocks")
-        if self.design not in {"legacy_v1","elegant_v2","blind_v3"}: raise ValueError("design must be legacy_v1, elegant_v2, or blind_v3")
+        if self.design not in {"legacy_v1","elegant_v2","blind_v3","blind_v4"}: raise ValueError("design must be legacy_v1, elegant_v2, blind_v3, or blind_v4")
         if self.qim_period<=0: raise ValueError("qim_period must be positive")
         if self.carrier_pool<1 or self.carrier_pool>255: raise ValueError("carrier_pool must be in [1,255]")
         if self.carrier_selector_policy not in {"min_energy","min_rounded_sse","first"}: raise ValueError("unsupported carrier_selector_policy")
         if not (0.0 < float(self.blind_margin_ratio) < 0.25): raise ValueError("blind_margin_ratio must lie in (0,0.25)")
         if self.blind_projection not in {"safe_set","center"}: raise ValueError("blind_projection must be safe_set or center")
-        if self.design=="blind_v3" and self.store_certificate_mask: raise ValueError("blind_v3 never stores a certificate mask or any other side information")
+        if self.coupled_q_period<=0 or self.coupled_r_period<=0: raise ValueError("coupled Q/R periods must be positive")
+        if not (0.0<float(self.coupled_q_margin_ratio)<0.25): raise ValueError("coupled_q_margin_ratio must lie in (0,0.25)")
+        if not (0.0<float(self.coupled_r_margin_ratio)<0.25): raise ValueError("coupled_r_margin_ratio must lie in (0,0.25)")
+        if self.coupled_q_weight<0 or self.coupled_r_weight<=0: raise ValueError("coupled fusion weights must be non-negative with positive R weight")
+        if self.coupled_energy_tau<0: raise ValueError("coupled_energy_tau must be non-negative")
+        if self.design in {"blind_v3","blind_v4"} and self.store_certificate_mask: raise ValueError("fully blind designs never store a certificate mask or any other side information")
         if self.repetition<1: raise ValueError("repetition must be positive")
         periods=tuple(float(x) for x in self.period_candidates)
         if not periods or any(x<=0 for x in periods): raise ValueError("period_candidates must contain positive values")

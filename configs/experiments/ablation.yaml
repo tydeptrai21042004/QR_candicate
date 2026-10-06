@@ -1,7 +1,7 @@
 # Ablations for the fully blind v3 proposal.
 # All blind_v3 variants use exactly one key-determined carrier per payload bit
 # and transmit/save ZERO side-information bits.
-base_config: configs/methods/proposed.yaml
+base_config: configs/methods/proposed_v3.yaml
 hosts: data/hosts/classical
 watermarks: data/watermarks
 attacks: configs/attacks/standard.yaml

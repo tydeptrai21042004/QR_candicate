@@ -1,0 +1,28 @@
+# Fully blind v4 ablation. Every variant uses one keyed 2x2 block per payload
+# bit and zero side-information bits.
+base_config: configs/methods/proposed.yaml
+hosts: data/hosts/classical
+watermarks: data/watermarks
+attacks: configs/attacks/standard.yaml
+watermark_size: 64
+variants:
+  full_coupled_v4: {}
+  r_only:
+    coupled_q_weight: 0.0
+  equal_fusion:
+    coupled_q_weight: 1.0
+    coupled_r_weight: 1.0
+  q_period_016:
+    coupled_q_period: 0.16
+  q_period_024:
+    coupled_q_period: 0.24
+  r_period_032:
+    coupled_r_period: 0.32
+  r_period_040:
+    coupled_r_period: 0.40
+  r_period_056:
+    coupled_r_period: 0.56
+  no_energy_weight:
+    coupled_energy_tau: 0.0
+  no_arnold_scramble:
+    arnold_iterations: 0

@@ -19,7 +19,7 @@ def build_method(name: str, config_path: str | Path | None = None):
     if "method" in data:
         data = dict(data.get("parameters", {}))
     name = name.lower()
-    if name in {"proposed", "ccqr", "mecqr_qim_v2", "ccqr_r12_qim_v1", "proposed_adaptive_qr_v2", "blind_mecqr_qim_v3", "blind_v3"}:
+    if name in {"proposed", "ccqr", "mecqr_qim_v2", "ccqr_r12_qim_v1", "proposed_adaptive_qr_v2", "blind_mecqr_qim_v3", "blind_v3", "blind_cqr_qim_v4", "blind_v4"}:
         return ConvolutionCertifiedR12QIM(proposed_from_dict(data))
     cfg = baseline_from_dict(data)
     if name in {"su2014", "su2014_qr"}:

@@ -1,47 +1,45 @@
-method: blind_mecqr_qim_v3
+method: blind_cqr_qim_v4
 parameters:
-  # Fully blind default.  Extraction needs only the received image, this public
-  # configuration and the secret key.  No selector, period map, original host,
-  # reference watermark or certificate mask is saved/transmitted.
-  design: blind_v3
+  # Fully blind v4. Extraction receives only the attacked image, public fixed
+  # parameters, and the secret key. There is no selector stream, period map,
+  # certificate mask, original host, or reference watermark.
+  design: blind_v4
   block_size: 2
   channel: 0
   watermark_size: 64
   arnold_iterations: 10
 
-  # One global period and one symmetric safe-set geometry.  Each payload bit is
-  # assigned exactly one key-determined carrier.  With ratio=1/8, the safe
-  # decision margin is Delta/8; Delta=48 therefore gives margin 6 in r12 units.
+  # Same-block coupled QR carriers. The Q branch quantizes q1 direction. The R
+  # branch quantizes asinh(r12/sqrt(r11^2+r22^2+1)), making the triangular
+  # carrier invariant to a positive common block gain. One keyed 2x2 block is
+  # used per bit; the payload is NOT repeated into additional blocks.
+  coupled_q_period: 0.20
+  coupled_r_period: 0.48
+  coupled_q_margin_ratio: 0.08
+  coupled_r_margin_ratio: 0.08
+  coupled_q_weight: 0.5
+  coupled_r_weight: 1.0
+  coupled_energy_tau: 16.0
+
+  # v4 has no online/report certificate path. Keep this false for timing.
+  compute_certificate: false
+  store_certificate_mask: false
+
+  # Historical fields retained so v3/v2/v1 ablations remain constructible.
   qim_period: 48.0
   blind_margin_ratio: 0.125
   blind_projection: safe_set
-
-  # Report-only theorem audit. It never modifies the image and never emits a
-  # mask, so it is not side information and is not required for extraction.
-  compute_certificate: true
-  store_certificate_mask: false
-  convolution_kernel_size: 3
-  convolution_gaussian_sigmas: [0.50, 0.75]
-  convolution_safety_factor: 1.00
-  additive_feature_budget: 1.0
-  certificate_path_subdivisions: 8
-  certificate_final_tighten: true
-
-  nlm:
-    enabled: false
-    compare_always: false
-    mild_h: 4.0
-    mild_template: 3
-    mild_search: 11
-    strong_h: 8.0
-    strong_template: 5
-    strong_search: 17
-
-  # Historical fields are retained only for v2/v1 ablations.
   carrier_pool: 4
   carrier_selector_policy: min_energy
   repetition: 5
   period_candidates: [24.0, 28.0, 32.0, 36.0]
   max_group_mse: 220.0
   target_psnr_db: 50.0
+  convolution_kernel_size: 3
+  convolution_gaussian_sigmas: [0.50, 0.75]
+  convolution_safety_factor: 1.0
+  additive_feature_budget: 1.0
   certificate_max_passes: 4
+  certificate_path_subdivisions: 8
+  certificate_final_tighten: true
+  nlm: {enabled: false, compare_always: false, mild_h: 4.0, mild_template: 3, mild_search: 11, strong_h: 8.0, strong_template: 5, strong_search: 17}
