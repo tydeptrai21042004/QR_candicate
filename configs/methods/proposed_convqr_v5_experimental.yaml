@@ -1,0 +1,11 @@
+method: blind_convqr_v5_experimental
+parameters:
+  design: convqr_v5
+  block_size: 2
+  channel: 0
+  watermark_size: 64
+  arnold_iterations: 10
+  convqr_qr_period: 24.0
+  convqr_conv_period: 24.0
+  compute_certificate: false
+  store_certificate_mask: false

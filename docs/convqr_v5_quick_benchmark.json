@@ -1,0 +1,40 @@
+{
+  "v4": {
+    "psnr_db": 38.92449186082316,
+    "clean_ber": 0.0,
+    "attack_ber": {
+      "gaussian3_sigma0.5": 0.047607421875,
+      "gaussian3_sigma1.0": 0.340576171875,
+      "jpeg90": 0.34130859375
+    },
+    "embed": {
+      "median_ms": 2.116084499959925,
+      "max_ms": 5.668248000006315,
+      "peak_python_allocation_mib": 2.0147705078125
+    },
+    "extract": {
+      "median_ms": 0.675867999973434,
+      "max_ms": 8.534690000033152,
+      "peak_python_allocation_mib": 0.73565673828125
+    }
+  },
+  "convqr_v5_experimental": {
+    "psnr_db": 51.31920079336412,
+    "clean_ber": 0.0,
+    "attack_ber": {
+      "gaussian3_sigma0.5": 0.0244140625,
+      "gaussian3_sigma1.0": 0.302001953125,
+      "jpeg90": 0.470458984375
+    },
+    "embed": {
+      "median_ms": 1.0118965000174285,
+      "max_ms": 1.6186990000051082,
+      "peak_python_allocation_mib": 1.46710205078125
+    },
+    "extract": {
+      "median_ms": 0.4850530000339859,
+      "max_ms": 1.9041310000602607,
+      "peak_python_allocation_mib": 0.453521728515625
+    }
+  }
+}

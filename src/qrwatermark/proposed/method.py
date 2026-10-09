@@ -15,6 +15,7 @@ from .blind_embedding import embed_blind_image
 from .blind_extraction import extract_blind_image
 from .blind_v4_embedding import embed_blind_v4_image
 from .blind_v4_extraction import extract_blind_v4_image
+from .convolution_qr_v5 import embed_convqr_v5_image, extract_convqr_v5_image
 
 
 class ConvolutionCertifiedR12QIM(WatermarkMethod):
@@ -25,7 +26,9 @@ class ConvolutionCertifiedR12QIM(WatermarkMethod):
     def __init__(self, config: ProposedConfig | None = None):
         self.config = config or ProposedConfig()
         self.config.validate()
-        if self.config.design == "blind_v4":
+        if self.config.design == "convqr_v5":
+            self.name = "blind_convqr_v5_experimental"
+        elif self.config.design == "blind_v4":
             self.name = "blind_cqr_qim_v4"
         elif self.config.design == "blind_v3":
             self.name = "blind_mecqr_qim_v3"
@@ -35,7 +38,9 @@ class ConvolutionCertifiedR12QIM(WatermarkMethod):
             self.name = "ccqr_r12_qim_v1"
 
     def embed(self, host: np.ndarray, watermark: np.ndarray, *, key: bytes) -> EmbeddingResult:
-        if self.config.design == "blind_v4":
+        if self.config.design == "convqr_v5":
+            image, side, meta = embed_convqr_v5_image(host, watermark, key, self.config)
+        elif self.config.design == "blind_v4":
             image, side, meta = embed_blind_v4_image(host, watermark, key, self.config)
         elif self.config.design == "blind_v3":
             image, side, meta = embed_blind_image(host, watermark, key, self.config)
@@ -53,7 +58,9 @@ class ConvolutionCertifiedR12QIM(WatermarkMethod):
         side_info: dict[str, Any] | None = None,
         watermark_shape: tuple[int, int] = (64, 64),
     ) -> ExtractionResult:
-        if self.config.design == "blind_v4":
+        if self.config.design == "convqr_v5":
+            wm, conf, meta = extract_convqr_v5_image(image, key, self.config, watermark_shape)
+        elif self.config.design == "blind_v4":
             wm, conf, meta = extract_blind_v4_image(image, key, self.config, watermark_shape)
         elif self.config.design == "blind_v3":
             wm, conf, meta = extract_blind_image(image, key, self.config, watermark_shape)

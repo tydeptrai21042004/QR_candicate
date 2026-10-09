@@ -1,0 +1,13 @@
+# Experimental comparison. The original main_comparison.yaml is unchanged.
+# Same 5 paper baselines, matched to the v5 PSNR by existing benchmark engine.
+match_psnr_to_proposed: true
+methods:
+  - {name: proposed, config: configs/methods/proposed_convqr_v5_experimental.yaml}
+  - {name: su2014_qr, config: configs/methods/su2014_qr.yaml}
+  - {name: su2016_hessenberg, config: configs/methods/su2016_hessenberg.yaml}
+  - {name: su2020_schur, config: configs/methods/su2020_schur.yaml}
+  - {name: chen2021_qqrd, config: configs/methods/chen2021_qqrd.yaml}
+  - {name: nha2022_improved_qr, config: configs/methods/nha2022_improved_qr.yaml}
+hosts: data/hosts/classical
+watermarks: data/watermarks
+attacks: configs/attacks/standard.yaml
