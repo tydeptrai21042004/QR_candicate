@@ -1,0 +1,19 @@
+Changed / added files (paths relative to repository root):
+src/qrwatermark/proposed/block_carrier.py
+src/qrwatermark/proposed/integer_convolution_v7.py
+src/qrwatermark/proposed/integer_convolution_pair_v8.py
+src/qrwatermark/proposed/integer_convolution_quad_v9.py
+src/qrwatermark/proposed/method.py
+scripts/benchmark_integer_carriers.py
+tests/test_recovered_block_carrier.py
+README_GITHUB_KAGGLE_FIX.md
+kaggle/QR_KAGGLE_GITHUB_ONE_CELL.py
+kaggle/QR_KAGGLE_GITHUB_ONE_CELL.ipynb
+kaggle/QR_KAGGLE_CLONE_AND_RUN_ONE_CELL.py
+kaggle/QR_KAGGLE_CLONE_AND_RUN_ONE_CELL.ipynb
+
+Independent tests: 538 passed
+Carrier script clean smoke: 4 methods passed
+Ablations clean smoke: 12 variants passed
+Kaggle pipeline local smoke: 6 completed / 0 failed
+Note: original FCQR-v6 absent, not recreated.

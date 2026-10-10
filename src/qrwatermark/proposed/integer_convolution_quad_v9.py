@@ -5,7 +5,7 @@ normalization, or pixels.  One fully blind decoder is used for all attacks.
 """
 from __future__ import annotations
 import numpy as np
-from .fused_convqr_v6 import _gather_blocks, keyed_blocks_v6
+from .block_carrier import _gather_blocks, keyed_blocks_v6
 from .integer_convolution_v7 import _check_image_and_shape, _distribute_exact, _lattice_centres
 from ..utils.watermark import scrambled_bits_from_watermark, watermark_from_scrambled_bits
 

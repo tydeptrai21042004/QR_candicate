@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .fused_convqr_v6 import _gather_blocks, keyed_blocks_v6
+from .block_carrier import _gather_blocks, keyed_blocks_v6
 from ..utils.watermark import scrambled_bits_from_watermark, watermark_from_scrambled_bits
 
 

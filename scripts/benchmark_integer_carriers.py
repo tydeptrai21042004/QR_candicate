@@ -1,10 +1,17 @@
-"""Run FCQR-v6 versus experimental 8-pixel integer convolution on real images.
+"""Run reproducible integer-carrier comparisons without the absent FCQR-v6 script.
 
-Usage: PYTHONPATH=src python scripts/benchmark_integer_conv_v7.py --out evidence_integer_v7
+Usage (from repository root, after ``pip install -e .``)::
+
+    python scripts/benchmark_integer_carriers.py --out evidence_integer_carriers
+    python scripts/benchmark_integer_carriers.py --out /tmp/qr-smoke --smoke
+
+Compares the available proposal-family methods v5, v7, v8 and v9.
+FCQR-v6 is optional only if its authentic source is supplied.
+For comparisons against published baselines use scripts/run_main_comparison.py.
 """
 from __future__ import annotations
+
 import argparse
-import csv
 import json
 import statistics
 import time
@@ -12,97 +19,140 @@ import tracemalloc
 from pathlib import Path
 
 import cv2
-import numpy as np
+import pandas as pd
 
-from benchmark_fcqr_v6 import ATTACKS
-from qrwatermark.attacks.registry import apply_attack
-from qrwatermark.core.config import ProposedConfig
+from _common import load_yaml
 from qrwatermark.core.factory import build_method
-from qrwatermark.evaluation.metrics import ber, nc, psnr
+from qrwatermark.evaluation.benchmark import run_benchmark
+from qrwatermark.utils.image_io import read_color
 from qrwatermark.utils.watermark import prepare_binary_watermark
 
-
-def speed(method, host, watermark, key, n=60):
-    embedded=method.embed(host,watermark,key=key).image
-    fn={'embed': lambda: method.embed(host,watermark,key=key),
-        'extract':lambda: method.extract(embedded,key=key)}
-    output={}
-    for name,call in fn.items():
-        for _ in range(8):call()
-        data=[]
-        for _ in range(n):
-            t=time.perf_counter();call();data.append((time.perf_counter()-t)*1000)
-        tracemalloc.start();call();_,peak=tracemalloc.get_traced_memory();tracemalloc.stop()
-        output[name]={'median_ms':statistics.median(data),
-                      'peak_python_alloc_mib':peak/1048576}
-    output['fps']=1000/(output['embed']['median_ms']+output['extract']['median_ms'])
-    return output
+ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(root,out,n=60):
+def attacks_26():
+    items = [
+        {"name": "clean"},
+        {"name": "gaussian_blur", "params": {"sigma": 0.7}},
+        {"name": "gaussian_blur", "params": {"sigma": 1.0}},
+        {"name": "lowpass", "params": {"kx": 5, "ky": 5}},
+        {"name": "average", "params": {"ksize": 3}},
+        {"name": "motion_blur", "params": {"ksize": 5}},
+        {"name": "jpeg", "params": {"quality": 90}},
+        {"name": "jpeg", "params": {"quality": 70}},
+        {"name": "jpeg", "params": {"quality": 50}},
+    ]
+    for v in (0.001, 0.003):
+        for seed in (0, 1, 2):
+            items.append({"name": "gaussian_noise", "params": {"variance": v}, "seeds": [seed]})
+    for density in (0.02, 0.05):
+        for seed in (0, 1, 2):
+            items.append({"name": "salt_pepper", "params": {"density": density}, "seeds": [seed]})
+    items.extend([
+        {"name": "scale_resample", "params": {"scale": 0.8}},
+        {"name": "registered_rotation_resample", "params": {"angle": 5}},
+        {"name": "rotation_unregistered", "params": {"angle": 2}},
+        {"name": "translation", "params": {"dx": 2, "dy": 2}},
+        {"name": "crop_resize", "params": {"fraction": 0.05}},
+    ])
+    assert len(items) == 26
+    return items
+
+
+def timing(method, host, wm, key, repeats):
+    image = method.embed(host, wm, key=key).image
+    results = {}
+    for name, fn in (
+        ("embed", lambda: method.embed(host, wm, key=key)),
+        ("extract", lambda: method.extract(image, key=key)),
+    ):
+        fn()  # warm-up
+        times = []
+        for _ in range(repeats):
+            start = time.perf_counter()
+            fn()
+            times.append(time.perf_counter() - start)
+        tracemalloc.start()
+        fn()
+        _, peak = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        results[name + "_median_ms"] = statistics.median(times) * 1000
+        # Python allocations only, not a full native/OpenCV resident-set-size measurement.
+        results[name + "_python_peak_mib"] = peak / (1024 * 1024)
+    results["fps_embed_plus_extract"] = 1000 / (
+        results["embed_median_ms"] + results["extract_median_ms"]
+    )
+    return results
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", type=Path, default=Path("evidence_integer_carriers"))
+    ap.add_argument("--repeats", type=int, default=15)
+    ap.add_argument("--smoke", action="store_true", help="One image/watermark and clean attack only")
+    ap.add_argument("--include-v6", action="store_true", help="Require authentic FCQR-v6 implementation")
+    ap.add_argument("--attack-config", type=Path, default=None, help="Optional attack YAML override")
+    ap.add_argument("--key", default="fixed-reproducibility-key-20261010")
+    args = ap.parse_args()
+    if args.repeats < 1:
+        ap.error("--repeats must be >= 1")
     cv2.setNumThreads(1)
-    hosts=sorted((root/'data/hosts/classical').glob('*.bmp'))
-    wms=sorted((root/'data/watermarks').glob('*.png'))
-    if len(hosts)!=6 or len(wms)!=2: raise RuntimeError('expected six host images and two watermark images')
-    assert len(ATTACKS)==26
-    out.mkdir(parents=True,exist_ok=True)
-    methods={
-      'FCQR_v6': build_method('proposed','configs/methods/proposed_fcqr_v6_experimental.yaml'),
-      'IntegerConv8_v7': build_method('proposed','configs/methods/proposed_integer_conv8_v7_experimental.yaml'),
-      'IntegerConvPair_v8': build_method('proposed','configs/methods/proposed_integer_conv_pair_v8_experimental.yaml'),
-      'IntegerConvQuad_v9': build_method('proposed','configs/methods/proposed_integer_conv_quad_v9_experimental.yaml'),
-    }
-    key=b'fcqr_v6_same_fixed_key_for_both_methods'
-    rows=[];summary={}
-    for name,method in methods.items():
-        clean_psnr=[];clean_ber=[];attacked_nc=[];attacked_ber=[]
-        for hp in hosts:
-            host=cv2.imread(str(hp))
-            for wp in wms:
-                watermark=prepare_binary_watermark(wp,64)
-                embedded=method.embed(host,watermark,key=key)
-                stego=embedded.image
-                p=psnr(host,stego)
-                clean_psnr.append(float(p))
-                for attack,params in ATTACKS:
-                    result=method.extract(apply_attack(attack,stego,**params),key=key).watermark
-                    a_ber=float(ber(watermark,result));a_nc=float(nc(watermark,result))
-                    rows.append({'method':name,'host':hp.stem,'watermark':wp.stem,'attack':attack,
-                         'parameters':json.dumps(params,sort_keys=True),
-                         'clean_psnr_db':p,'nc':a_nc,'ber':a_ber})
-                    if attack=='clean':clean_ber.append(a_ber)
-                    else:attacked_nc.append(a_nc);attacked_ber.append(a_ber)
-        summary[name]={
-            'host_count':len(hosts),'watermarks':len(wms),'attacks_per_pair':25,
-            'mean_psnr_db':float(np.mean(clean_psnr)),
-            'min_psnr_db':float(min(clean_psnr)),
-            'max_clean_ber':float(max(clean_ber)),
-            'mean_attacked_nc':float(np.mean(attacked_nc)),
-            'mean_attacked_ber':float(np.mean(attacked_ber)),
+    methods = [
+        ("ConvQR-v5", "proposed_convqr_v5_experimental.yaml"),
+        ("IntegerConv8-v7", "proposed_integer_conv8_v7_experimental.yaml"),
+        ("IntegerConvPair-v8", "proposed_integer_conv_pair_v8_experimental.yaml"),
+        ("IntegerConvQuad-v9", "proposed_integer_conv_quad_v9_experimental.yaml"),
+    ]
+    if args.include_v6:
+        if not (ROOT / "src/qrwatermark/proposed/fused_convqr_v6.py").is_file():
+            ap.error("FCQR-v6 is unavailable. Restore its authentic source before --include-v6")
+        methods.insert(1, ("FCQR-v6", "proposed_fcqr_v6_experimental.yaml"))
+    paths = [(label, ROOT / "configs/methods" / cfg) for label, cfg in methods]
+    missing = [str(p) for _, p in paths if not p.is_file()]
+    if missing:
+        ap.error("missing method configuration(s): " + ", ".join(missing))
+    methods = [(label, build_method("proposed", str(p))) for label, p in paths]
+    hosts = sorted((ROOT / "data/hosts/classical").glob("*.bmp"))
+    wms = sorted((ROOT / "data/watermarks").glob("*.png"))
+    if not hosts or not wms:
+        ap.error("host/watermark images are missing")
+    if args.smoke:
+        hosts, wms = hosts[:1], wms[:1]
+    attacks = ([{"name": "clean"}] if args.smoke else (
+        load_yaml(str(args.attack_config))["attacks"] if args.attack_config else attacks_26()
+    ))
+    out = args.out.resolve()
+    out.mkdir(parents=True, exist_ok=True)
+    df = run_benchmark([m for _, m in methods], hosts, wms, attacks,
+                       key=args.key.encode(), run_dir=out,
+                       watermark_size=64, match_psnr_to_proposed=False)
+    summary = {}
+    for label, method in methods:
+        d = df[df["method"] == method.name]
+        if d.empty:
+            raise RuntimeError(f"no rows for {label}")
+        clean = d[d.attack == "clean"]
+        attacked = d[d.attack != "clean"]
+        summary[label] = {
+            "method_id": method.name,
+            "host_count": len(hosts), "watermark_count": len(wms),
+            "attacks_per_pair": len(attacks) - 1,
+            "mean_clean_psnr_db": float(clean.embedding_psnr.mean()),
+            "max_clean_ber": float(clean.ber.max()),
+            "mean_attacked_nc": float(attacked.nc.mean()) if not attacked.empty else None,
+            "mean_attacked_ber": float(attacked.ber.mean()) if not attacked.empty else None,
         }
-    host=cv2.imread(str(hosts[0]));wm=prepare_binary_watermark(wms[0],64)
-    # Interleaved measurement to reduce systematic scheduling bias.
-    speeds={name:[] for name in methods}
-    for trial in range(5):
-        for name,method in methods.items():
-            speeds[name].append(speed(method,host,wm,key,n=n))
-    for name in methods:
-        summary[name]['runtime']={}
-        for key_name in ('embed','extract'):
-            summary[name]['runtime'][key_name]={k:float(statistics.median(item[key_name][k] for item in speeds[name]))
-                for k in ('median_ms','peak_python_alloc_mib')}
-        e=summary[name]['runtime']['embed']['median_ms'];x=summary[name]['runtime']['extract']['median_ms']
-        summary[name]['runtime']['fps']=1000/(e+x)
-    with (out/'per_image_25_attacks.csv').open('w',newline='',encoding='utf-8') as file:
-        writer=csv.DictWriter(file,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
-    (out/'summary.json').write_text(json.dumps(summary,indent=2))
-    print(json.dumps(summary,indent=2))
-    return summary
+    host = read_color(hosts[0]); wm = prepare_binary_watermark(wms[0], 64)
+    runtimes = []
+    for label, method in methods:
+        row = {"method": label, **timing(method, host, wm, args.key.encode(), args.repeats)}
+        runtimes.append(row)
+        summary[label]["runtime"] = row
+    pd.DataFrame(runtimes).to_csv(out / "runtime_carriers.csv", index=False)
+    (out / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    print(f"Saved {len(df)} evaluations and runtimes to {out}")
+    print(json.dumps(summary, indent=2))
 
-if __name__=='__main__':
-    parser=argparse.ArgumentParser()
-    parser.add_argument('--out',type=Path,default=Path('evidence_integer_v7'))
-    parser.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1])
-    parser.add_argument('--repeats',type=int,default=60)
-    args=parser.parse_args()
-    run(args.root,args.out,args.repeats)
+
+if __name__ == "__main__":
+    main()
