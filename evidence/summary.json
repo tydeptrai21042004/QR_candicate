@@ -1,0 +1,86 @@
+{
+  "FCQR_v6": {
+    "host_count": 6,
+    "watermarks": 2,
+    "attacks_per_pair": 25,
+    "mean_psnr_db": 50.62552510419996,
+    "min_psnr_db": 50.10890848377059,
+    "max_clean_ber": 0.0,
+    "mean_attacked_nc": 0.7756426754646571,
+    "mean_attacked_ber": 0.24603352864583333,
+    "runtime": {
+      "embed": {
+        "median_ms": 2.707719999989422,
+        "peak_python_alloc_mib": 1.5456018447875977
+      },
+      "extract": {
+        "median_ms": 1.0444450001614314,
+        "peak_python_alloc_mib": 0.40767669677734375
+      },
+      "fps": 266.51279993278433
+    }
+  },
+  "IntegerConv8_v7": {
+    "host_count": 6,
+    "watermarks": 2,
+    "attacks_per_pair": 25,
+    "mean_psnr_db": 50.54277677914007,
+    "min_psnr_db": 50.03942638089402,
+    "max_clean_ber": 0.0,
+    "mean_attacked_nc": 0.7777452987715682,
+    "mean_attacked_ber": 0.24393229166666666,
+    "runtime": {
+      "embed": {
+        "median_ms": 3.306105500087142,
+        "peak_python_alloc_mib": 1.0401411056518555
+      },
+      "extract": {
+        "median_ms": 1.0419939999337657,
+        "peak_python_alloc_mib": 0.22344970703125
+      },
+      "fps": 229.98553735837726
+    }
+  },
+  "IntegerConvPair_v8": {
+    "host_count": 6,
+    "watermarks": 2,
+    "attacks_per_pair": 25,
+    "mean_psnr_db": 50.572203805301534,
+    "min_psnr_db": 49.95355170412263,
+    "max_clean_ber": 0.0,
+    "mean_attacked_nc": 0.7778640830960641,
+    "mean_attacked_ber": 0.24484375,
+    "runtime": {
+      "embed": {
+        "median_ms": 2.817592999917906,
+        "peak_python_alloc_mib": 0.9465742111206055
+      },
+      "extract": {
+        "median_ms": 0.781684999992649,
+        "peak_python_alloc_mib": 0.22357177734375
+      },
+      "fps": 277.83349883639187
+    }
+  },
+  "IntegerConvQuad_v9": {
+    "host_count": 6,
+    "watermarks": 2,
+    "attacks_per_pair": 25,
+    "mean_psnr_db": 50.660152531468384,
+    "min_psnr_db": 50.03771270092362,
+    "max_clean_ber": 0.0,
+    "mean_attacked_nc": 0.7801263088786116,
+    "mean_attacked_ber": 0.24099283854166667,
+    "runtime": {
+      "embed": {
+        "median_ms": 2.2089244998824142,
+        "peak_python_alloc_mib": 0.8684492111206055
+      },
+      "extract": {
+        "median_ms": 0.4975155000011,
+        "peak_python_alloc_mib": 0.20794677734375
+      },
+      "fps": 369.4890705291971
+    }
+  }
+}

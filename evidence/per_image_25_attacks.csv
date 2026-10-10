@@ -1,0 +1,1249 @@
+method,host,watermark,attack,parameters,clean_psnr_db,nc,ber
+FCQR_v6,airplane,watermark_1,clean,{},50.81646174937387,1.0,0.0
+FCQR_v6,airplane,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.81646174937387,0.9159438688487342,0.10791015625
+FCQR_v6,airplane,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.81646174937387,0.8312377817940039,0.210205078125
+FCQR_v6,airplane,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.81646174937387,0.8219929828306141,0.22119140625
+FCQR_v6,airplane,watermark_1,average,"{""ksize"": 3}",50.81646174937387,0.86410115426603,0.171630859375
+FCQR_v6,airplane,watermark_1,motion_blur,"{""ksize"": 5}",50.81646174937387,0.7576552262152387,0.29638671875
+FCQR_v6,airplane,watermark_1,jpeg,"{""quality"": 90}",50.81646174937387,0.9546495065809425,0.058837890625
+FCQR_v6,airplane,watermark_1,jpeg,"{""quality"": 70}",50.81646174937387,0.8391086291861537,0.201416015625
+FCQR_v6,airplane,watermark_1,jpeg,"{""quality"": 50}",50.81646174937387,0.7614718595459385,0.29296875
+FCQR_v6,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.81646174937387,0.7648754602409037,0.289306640625
+FCQR_v6,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.81646174937387,0.7712031791387122,0.280029296875
+FCQR_v6,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.81646174937387,0.7678260376741801,0.285888671875
+FCQR_v6,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.81646174937387,0.5939607363473348,0.477783203125
+FCQR_v6,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.81646174937387,0.5957525646860206,0.477294921875
+FCQR_v6,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.81646174937387,0.5853503116718449,0.486572265625
+FCQR_v6,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.81646174937387,0.9387366768454554,0.079345703125
+FCQR_v6,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.81646174937387,0.9381789292403103,0.080078125
+FCQR_v6,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.81646174937387,0.9440409082156045,0.072509765625
+FCQR_v6,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.81646174937387,0.8742087194002668,0.159912109375
+FCQR_v6,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.81646174937387,0.8689139467557642,0.166748046875
+FCQR_v6,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.81646174937387,0.8684984197789544,0.16845703125
+FCQR_v6,airplane,watermark_1,scale_resample,"{""scale"": 0.8}",50.81646174937387,0.9671422618226958,0.042724609375
+FCQR_v6,airplane,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.81646174937387,0.9347401378858973,0.084228515625
+FCQR_v6,airplane,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.81646174937387,0.5836504093730925,0.4892578125
+FCQR_v6,airplane,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.81646174937387,0.575998309597204,0.497314453125
+FCQR_v6,airplane,watermark_1,crop_resize,"{""fraction"": 0.05}",50.81646174937387,0.577702851733749,0.49560546875
+FCQR_v6,airplane,watermark_2,clean,{},50.78961009582123,1.0,0.0
+FCQR_v6,airplane,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.78961009582123,0.8897525397453662,0.111083984375
+FCQR_v6,airplane,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.78961009582123,0.7916035521632571,0.20703125
+FCQR_v6,airplane,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.78961009582123,0.7817810821343442,0.217041015625
+FCQR_v6,airplane,watermark_2,average,"{""ksize"": 3}",50.78961009582123,0.8267507582856427,0.1728515625
+FCQR_v6,airplane,watermark_2,motion_blur,"{""ksize"": 5}",50.78961009582123,0.704650818365467,0.2919921875
+FCQR_v6,airplane,watermark_2,jpeg,"{""quality"": 90}",50.78961009582123,0.9364236969561666,0.063720703125
+FCQR_v6,airplane,watermark_2,jpeg,"{""quality"": 70}",50.78961009582123,0.7957233376689001,0.203369140625
+FCQR_v6,airplane,watermark_2,jpeg,"{""quality"": 50}",50.78961009582123,0.7000395298960622,0.297607421875
+FCQR_v6,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.78961009582123,0.7135586134728402,0.288330078125
+FCQR_v6,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.78961009582123,0.720388434393967,0.28125
+FCQR_v6,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.78961009582123,0.7109910669682173,0.287841796875
+FCQR_v6,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.78961009582123,0.527187263932525,0.477783203125
+FCQR_v6,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.78961009582123,0.5302685821819028,0.4736328125
+FCQR_v6,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.78961009582123,0.5118204781602451,0.4853515625
+FCQR_v6,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.78961009582123,0.9208675458758386,0.080078125
+FCQR_v6,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.78961009582123,0.9196164726606698,0.0810546875
+FCQR_v6,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.78961009582123,0.9259545058573424,0.074951171875
+FCQR_v6,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.78961009582123,0.8430542832287384,0.158447265625
+FCQR_v6,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.78961009582123,0.8329574304243814,0.16650390625
+FCQR_v6,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.78961009582123,0.8364014296891831,0.166748046875
+FCQR_v6,airplane,watermark_2,scale_resample,"{""scale"": 0.8}",50.78961009582123,0.9579618900411012,0.04248046875
+FCQR_v6,airplane,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.78961009582123,0.9150322607957744,0.0859375
+FCQR_v6,airplane,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.78961009582123,0.49575683931043507,0.497802734375
+FCQR_v6,airplane,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.78961009582123,0.4973288003885381,0.50537109375
+FCQR_v6,airplane,watermark_2,crop_resize,"{""fraction"": 0.05}",50.78961009582123,0.49364643376864553,0.501953125
+FCQR_v6,girl,watermark_1,clean,{},50.362779174671424,1.0,0.0
+FCQR_v6,girl,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.362779174671424,0.9824300635136168,0.02294921875
+FCQR_v6,girl,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.362779174671424,0.8851844180343915,0.144775390625
+FCQR_v6,girl,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.362779174671424,0.8762844046429428,0.1552734375
+FCQR_v6,girl,watermark_1,average,"{""ksize"": 3}",50.362779174671424,0.9207501058772161,0.10107421875
+FCQR_v6,girl,watermark_1,motion_blur,"{""ksize"": 5}",50.362779174671424,0.7882870544125298,0.258056640625
+FCQR_v6,girl,watermark_1,jpeg,"{""quality"": 90}",50.362779174671424,0.9470063861041332,0.068359375
+FCQR_v6,girl,watermark_1,jpeg,"{""quality"": 70}",50.362779174671424,0.8510335258058657,0.1865234375
+FCQR_v6,girl,watermark_1,jpeg,"{""quality"": 50}",50.362779174671424,0.7597942862813141,0.294189453125
+FCQR_v6,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.362779174671424,0.7755470266890593,0.27734375
+FCQR_v6,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.362779174671424,0.7744850327846838,0.27783203125
+FCQR_v6,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.362779174671424,0.7732472623170534,0.280029296875
+FCQR_v6,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.362779174671424,0.5931134314452702,0.478759765625
+FCQR_v6,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.362779174671424,0.6039689324088082,0.469482421875
+FCQR_v6,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.362779174671424,0.595927708605663,0.475830078125
+FCQR_v6,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.362779174671424,0.9359832555866664,0.082763671875
+FCQR_v6,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.362779174671424,0.9401721875930821,0.07763671875
+FCQR_v6,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.362779174671424,0.9401172122660355,0.0771484375
+FCQR_v6,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.362779174671424,0.8621067335755972,0.174560546875
+FCQR_v6,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.362779174671424,0.8694437186658915,0.1669921875
+FCQR_v6,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.362779174671424,0.8614324590095506,0.17578125
+FCQR_v6,girl,watermark_1,scale_resample,"{""scale"": 0.8}",50.362779174671424,0.9977668174284573,0.0029296875
+FCQR_v6,girl,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.362779174671424,0.976803758687957,0.0302734375
+FCQR_v6,girl,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.362779174671424,0.556129254862331,0.507568359375
+FCQR_v6,girl,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.362779174671424,0.5503868995602804,0.513671875
+FCQR_v6,girl,watermark_1,crop_resize,"{""fraction"": 0.05}",50.362779174671424,0.555612387090867,0.5107421875
+FCQR_v6,girl,watermark_2,clean,{},50.51989031459278,1.0,0.0
+FCQR_v6,girl,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.51989031459278,0.9781239431308223,0.02197265625
+FCQR_v6,girl,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.51989031459278,0.8616531724658189,0.135498046875
+FCQR_v6,girl,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.51989031459278,0.8490585661042553,0.1474609375
+FCQR_v6,girl,watermark_2,average,"{""ksize"": 3}",50.51989031459278,0.9084051847041127,0.09033203125
+FCQR_v6,girl,watermark_2,motion_blur,"{""ksize"": 5}",50.51989031459278,0.7372215547390758,0.25634765625
+FCQR_v6,girl,watermark_2,jpeg,"{""quality"": 90}",50.51989031459278,0.9389230081914988,0.060791015625
+FCQR_v6,girl,watermark_2,jpeg,"{""quality"": 70}",50.51989031459278,0.810312986082221,0.188232421875
+FCQR_v6,girl,watermark_2,jpeg,"{""quality"": 50}",50.51989031459278,0.7041298586617273,0.291748046875
+FCQR_v6,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.51989031459278,0.7226957106533052,0.279541015625
+FCQR_v6,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.51989031459278,0.7274130396124406,0.275390625
+FCQR_v6,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.51989031459278,0.7212517599716171,0.279296875
+FCQR_v6,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.51989031459278,0.5266993040377828,0.48095703125
+FCQR_v6,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.51989031459278,0.542899451514045,0.46630859375
+FCQR_v6,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.51989031459278,0.5182879708864867,0.479736328125
+FCQR_v6,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.51989031459278,0.9169322924039589,0.083740234375
+FCQR_v6,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.51989031459278,0.9238989736999345,0.07666015625
+FCQR_v6,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.51989031459278,0.9243147019805652,0.075927734375
+FCQR_v6,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.51989031459278,0.8249594565751384,0.1767578125
+FCQR_v6,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.51989031459278,0.8351972834486843,0.16552734375
+FCQR_v6,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.51989031459278,0.829395099474242,0.173095703125
+FCQR_v6,girl,watermark_2,scale_resample,"{""scale"": 0.8}",50.51989031459278,0.9975729330725082,0.00244140625
+FCQR_v6,girl,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.51989031459278,0.9687447314547859,0.031494140625
+FCQR_v6,girl,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.51989031459278,0.48418139591818465,0.493408203125
+FCQR_v6,girl,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.51989031459278,0.4876201201534986,0.496826171875
+FCQR_v6,girl,watermark_2,crop_resize,"{""fraction"": 0.05}",50.51989031459278,0.491947689419302,0.490966796875
+FCQR_v6,lenna,watermark_1,clean,{},50.74441648908554,1.0,0.0
+FCQR_v6,lenna,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.74441648908554,0.9292926458912757,0.091552734375
+FCQR_v6,lenna,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.74441648908554,0.816338795844576,0.230224609375
+FCQR_v6,lenna,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.74441648908554,0.8070724828296901,0.2412109375
+FCQR_v6,lenna,watermark_1,average,"{""ksize"": 3}",50.74441648908554,0.848215647511195,0.192138671875
+FCQR_v6,lenna,watermark_1,motion_blur,"{""ksize"": 5}",50.74441648908554,0.7245105290060972,0.336669921875
+FCQR_v6,lenna,watermark_1,jpeg,"{""quality"": 90}",50.74441648908554,0.9536213680388689,0.060302734375
+FCQR_v6,lenna,watermark_1,jpeg,"{""quality"": 70}",50.74441648908554,0.8375929315180315,0.205322265625
+FCQR_v6,lenna,watermark_1,jpeg,"{""quality"": 50}",50.74441648908554,0.7598829870293027,0.29638671875
+FCQR_v6,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.74441648908554,0.7719757829642327,0.281005859375
+FCQR_v6,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.74441648908554,0.7657281315409291,0.286865234375
+FCQR_v6,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.74441648908554,0.7700009250248445,0.283203125
+FCQR_v6,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.74441648908554,0.5936934880604111,0.4775390625
+FCQR_v6,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.74441648908554,0.6020305381064451,0.47119140625
+FCQR_v6,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.74441648908554,0.5937954834391121,0.47900390625
+FCQR_v6,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.74441648908554,0.9398682883693208,0.078125
+FCQR_v6,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.74441648908554,0.9395979407294033,0.078369140625
+FCQR_v6,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.74441648908554,0.9434044235344611,0.0732421875
+FCQR_v6,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.74441648908554,0.8660273177125266,0.169677734375
+FCQR_v6,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.74441648908554,0.8635814015010834,0.173095703125
+FCQR_v6,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.74441648908554,0.8722580896285601,0.163330078125
+FCQR_v6,lenna,watermark_1,scale_resample,"{""scale"": 0.8}",50.74441648908554,0.9735887668950861,0.034423828125
+FCQR_v6,lenna,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.74441648908554,0.9430416454308592,0.07373046875
+FCQR_v6,lenna,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.74441648908554,0.5637887114237824,0.5078125
+FCQR_v6,lenna,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.74441648908554,0.5777073295639608,0.495849609375
+FCQR_v6,lenna,watermark_1,crop_resize,"{""fraction"": 0.05}",50.74441648908554,0.5950203354970458,0.47998046875
+FCQR_v6,lenna,watermark_2,clean,{},50.79098542392144,1.0,0.0
+FCQR_v6,lenna,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.79098542392144,0.9071986679756674,0.093505859375
+FCQR_v6,lenna,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.79098542392144,0.7754272915233316,0.224853515625
+FCQR_v6,lenna,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.79098542392144,0.7627799263835989,0.237060546875
+FCQR_v6,lenna,watermark_2,average,"{""ksize"": 3}",50.79098542392144,0.8110286703165411,0.189208984375
+FCQR_v6,lenna,watermark_2,motion_blur,"{""ksize"": 5}",50.79098542392144,0.6652093243005184,0.335205078125
+FCQR_v6,lenna,watermark_2,jpeg,"{""quality"": 90}",50.79098542392144,0.9415899253571294,0.05908203125
+FCQR_v6,lenna,watermark_2,jpeg,"{""quality"": 70}",50.79098542392144,0.7966966472569691,0.204345703125
+FCQR_v6,lenna,watermark_2,jpeg,"{""quality"": 50}",50.79098542392144,0.7113055265662195,0.29052734375
+FCQR_v6,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.79098542392144,0.7208738713443672,0.28076171875
+FCQR_v6,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.79098542392144,0.7205632647410122,0.281005859375
+FCQR_v6,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.79098542392144,0.7151668270532547,0.284912109375
+FCQR_v6,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.79098542392144,0.5324740922163355,0.472900390625
+FCQR_v6,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.79098542392144,0.5359504761552044,0.4697265625
+FCQR_v6,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.79098542392144,0.5186049627959458,0.48046875
+FCQR_v6,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.79098542392144,0.9221954017146423,0.07861328125
+FCQR_v6,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.79098542392144,0.922368216918406,0.078125
+FCQR_v6,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.79098542392144,0.927848952931987,0.07275390625
+FCQR_v6,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.79098542392144,0.8296478510984072,0.171142578125
+FCQR_v6,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.79098542392144,0.8256505033966722,0.174072265625
+FCQR_v6,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.79098542392144,0.8432971927994939,0.160888671875
+FCQR_v6,lenna,watermark_2,scale_resample,"{""scale"": 0.8}",50.79098542392144,0.9661741355615703,0.033935546875
+FCQR_v6,lenna,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.79098542392144,0.9248684374708682,0.07568359375
+FCQR_v6,lenna,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.79098542392144,0.47946600809267304,0.515380859375
+FCQR_v6,lenna,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.79098542392144,0.5013347603595177,0.501708984375
+FCQR_v6,lenna,watermark_2,crop_resize,"{""fraction"": 0.05}",50.79098542392144,0.5149843120097128,0.486083984375
+FCQR_v6,manhattan,watermark_1,clean,{},50.8354745309842,1.0,0.0
+FCQR_v6,manhattan,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.8354745309842,0.9294861625732123,0.091064453125
+FCQR_v6,manhattan,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.8354745309842,0.8437518461844619,0.197265625
+FCQR_v6,manhattan,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.8354745309842,0.8349426361210548,0.2080078125
+FCQR_v6,manhattan,watermark_1,average,"{""ksize"": 3}",50.8354745309842,0.8644334505305081,0.172119140625
+FCQR_v6,manhattan,watermark_1,motion_blur,"{""ksize"": 5}",50.8354745309842,0.759197062631948,0.295166015625
+FCQR_v6,manhattan,watermark_1,jpeg,"{""quality"": 90}",50.8354745309842,0.9734184597302484,0.03466796875
+FCQR_v6,manhattan,watermark_1,jpeg,"{""quality"": 70}",50.8354745309842,0.8763917903348818,0.158447265625
+FCQR_v6,manhattan,watermark_1,jpeg,"{""quality"": 50}",50.8354745309842,0.7802466912918918,0.274169921875
+FCQR_v6,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.8354745309842,0.773647286767295,0.279541015625
+FCQR_v6,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.8354745309842,0.7686004863050254,0.283203125
+FCQR_v6,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.8354745309842,0.7654027336308852,0.288330078125
+FCQR_v6,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.8354745309842,0.5950812203832119,0.476806640625
+FCQR_v6,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.8354745309842,0.5984108531796338,0.474609375
+FCQR_v6,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.8354745309842,0.587490707672473,0.483154296875
+FCQR_v6,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.8354745309842,0.942382750351035,0.07470703125
+FCQR_v6,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.8354745309842,0.9358572864640643,0.0830078125
+FCQR_v6,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.8354745309842,0.9406087307274555,0.076904296875
+FCQR_v6,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.8354745309842,0.8590802578178343,0.178466796875
+FCQR_v6,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.8354745309842,0.86156937439258,0.1767578125
+FCQR_v6,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.8354745309842,0.8629336035659017,0.175048828125
+FCQR_v6,manhattan,watermark_1,scale_resample,"{""scale"": 0.8}",50.8354745309842,0.9686517650877238,0.041015625
+FCQR_v6,manhattan,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.8354745309842,0.9399670660712692,0.07763671875
+FCQR_v6,manhattan,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.8354745309842,0.6042424634932937,0.4765625
+FCQR_v6,manhattan,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.8354745309842,0.5841906047757005,0.495361328125
+FCQR_v6,manhattan,watermark_1,crop_resize,"{""fraction"": 0.05}",50.8354745309842,0.5986312286338261,0.483154296875
+FCQR_v6,manhattan,watermark_2,clean,{},50.82945662826401,1.0,0.0
+FCQR_v6,manhattan,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.82945662826401,0.9098918546696556,0.09033203125
+FCQR_v6,manhattan,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.82945662826401,0.8011671036352174,0.20068359375
+FCQR_v6,manhattan,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.82945662826401,0.7908491063575739,0.211669921875
+FCQR_v6,manhattan,watermark_2,average,"{""ksize"": 3}",50.82945662826401,0.8306199048196707,0.170166015625
+FCQR_v6,manhattan,watermark_2,motion_blur,"{""ksize"": 5}",50.82945662826401,0.7075376063566927,0.28955078125
+FCQR_v6,manhattan,watermark_2,jpeg,"{""quality"": 90}",50.82945662826401,0.966440717541509,0.03369140625
+FCQR_v6,manhattan,watermark_2,jpeg,"{""quality"": 70}",50.82945662826401,0.8484208864486763,0.153564453125
+FCQR_v6,manhattan,watermark_2,jpeg,"{""quality"": 50}",50.82945662826401,0.7330338405519112,0.2705078125
+FCQR_v6,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.82945662826401,0.7241087061890379,0.2783203125
+FCQR_v6,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.82945662826401,0.7185610027618605,0.282470703125
+FCQR_v6,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.82945662826401,0.7121868905933797,0.286376953125
+FCQR_v6,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.82945662826401,0.5280822142458148,0.478271484375
+FCQR_v6,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.82945662826401,0.5295523743734278,0.476318359375
+FCQR_v6,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.82945662826401,0.5122790591347696,0.482666015625
+FCQR_v6,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.82945662826401,0.9268435646371439,0.073974609375
+FCQR_v6,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.82945662826401,0.9160675227661399,0.083984375
+FCQR_v6,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.82945662826401,0.9214104472465557,0.079345703125
+FCQR_v6,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.82945662826401,0.8223042143011353,0.178955078125
+FCQR_v6,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.82945662826401,0.8245625552018763,0.17724609375
+FCQR_v6,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.82945662826401,0.8302139280829145,0.173583984375
+FCQR_v6,manhattan,watermark_2,scale_resample,"{""scale"": 0.8}",50.82945662826401,0.9594761096135204,0.040771484375
+FCQR_v6,manhattan,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.82945662826401,0.926592562429099,0.07373046875
+FCQR_v6,manhattan,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.82945662826401,0.5103378821865042,0.5009765625
+FCQR_v6,manhattan,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.82945662826401,0.5141401245550459,0.4990234375
+FCQR_v6,manhattan,watermark_2,crop_resize,"{""fraction"": 0.05}",50.82945662826401,0.5244689315480322,0.489013671875
+FCQR_v6,pepper,watermark_1,clean,{},50.10890848377059,1.0,0.0
+FCQR_v6,pepper,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.10890848377059,0.9300257846775623,0.08984375
+FCQR_v6,pepper,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.10890848377059,0.8078551542753875,0.23681640625
+FCQR_v6,pepper,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.10890848377059,0.797244451305992,0.2490234375
+FCQR_v6,pepper,watermark_1,average,"{""ksize"": 3}",50.10890848377059,0.8470083733957643,0.19140625
+FCQR_v6,pepper,watermark_1,motion_blur,"{""ksize"": 5}",50.10890848377059,0.7129672208520021,0.345947265625
+FCQR_v6,pepper,watermark_1,jpeg,"{""quality"": 90}",50.10890848377059,0.9176411549212896,0.10546875
+FCQR_v6,pepper,watermark_1,jpeg,"{""quality"": 70}",50.10890848377059,0.7801130772905874,0.270263671875
+FCQR_v6,pepper,watermark_1,jpeg,"{""quality"": 50}",50.10890848377059,0.7093148796531874,0.3525390625
+FCQR_v6,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.10890848377059,0.7711109374602466,0.28369140625
+FCQR_v6,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.10890848377059,0.7685894394468469,0.2841796875
+FCQR_v6,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.10890848377059,0.7727448703060952,0.2802734375
+FCQR_v6,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.10890848377059,0.604551252152948,0.46826171875
+FCQR_v6,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.10890848377059,0.6004925784126616,0.472900390625
+FCQR_v6,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.10890848377059,0.5918527200680489,0.479736328125
+FCQR_v6,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.10890848377059,0.9463514863736012,0.069580078125
+FCQR_v6,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.10890848377059,0.9433419962766554,0.07373046875
+FCQR_v6,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.10890848377059,0.9441165680273667,0.072265625
+FCQR_v6,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.10890848377059,0.8717085357466698,0.16259765625
+FCQR_v6,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.10890848377059,0.8804853717750175,0.153076171875
+FCQR_v6,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.10890848377059,0.8699906051817649,0.165771484375
+FCQR_v6,pepper,watermark_1,scale_resample,"{""scale"": 0.8}",50.10890848377059,0.9672293658111694,0.04248046875
+FCQR_v6,pepper,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.10890848377059,0.936430759101627,0.081787109375
+FCQR_v6,pepper,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.10890848377059,0.5613575668825402,0.5068359375
+FCQR_v6,pepper,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.10890848377059,0.5624047987125153,0.5068359375
+FCQR_v6,pepper,watermark_1,crop_resize,"{""fraction"": 0.05}",50.10890848377059,0.5776801356344861,0.490478515625
+FCQR_v6,pepper,watermark_2,clean,{},50.320241566564604,1.0,0.0
+FCQR_v6,pepper,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.320241566564604,0.9125306392888507,0.08740234375
+FCQR_v6,pepper,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.320241566564604,0.7688574567394947,0.2265625
+FCQR_v6,pepper,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.320241566564604,0.7521843341380023,0.241943359375
+FCQR_v6,pepper,watermark_2,average,"{""ksize"": 3}",50.320241566564604,0.814218647975538,0.183349609375
+FCQR_v6,pepper,watermark_2,motion_blur,"{""ksize"": 5}",50.320241566564604,0.6624963767417137,0.3291015625
+FCQR_v6,pepper,watermark_2,jpeg,"{""quality"": 90}",50.320241566564604,0.8970977339611502,0.1025390625
+FCQR_v6,pepper,watermark_2,jpeg,"{""quality"": 70}",50.320241566564604,0.7406666551374465,0.256103515625
+FCQR_v6,pepper,watermark_2,jpeg,"{""quality"": 50}",50.320241566564604,0.6626187031747584,0.335205078125
+FCQR_v6,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.320241566564604,0.7219491736665108,0.28173828125
+FCQR_v6,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.320241566564604,0.7170212216833605,0.285400390625
+FCQR_v6,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.320241566564604,0.7186249519871398,0.28125
+FCQR_v6,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.320241566564604,0.5381362720838184,0.468994140625
+FCQR_v6,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.320241566564604,0.5324932890814125,0.470703125
+FCQR_v6,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.320241566564604,0.5165824134188359,0.481201171875
+FCQR_v6,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.320241566564604,0.9299060924727631,0.070556640625
+FCQR_v6,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.320241566564604,0.9246954312145657,0.075439453125
+FCQR_v6,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.320241566564604,0.92678314845047,0.073486328125
+FCQR_v6,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.320241566564604,0.8370322119514538,0.163330078125
+FCQR_v6,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.320241566564604,0.8443404093782709,0.156005859375
+FCQR_v6,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.320241566564604,0.8369124286087629,0.166015625
+FCQR_v6,pepper,watermark_2,scale_resample,"{""scale"": 0.8}",50.320241566564604,0.9574973338869087,0.04248046875
+FCQR_v6,pepper,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.320241566564604,0.916933307055563,0.082763671875
+FCQR_v6,pepper,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.320241566564604,0.4756707414753193,0.51025390625
+FCQR_v6,pepper,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.320241566564604,0.5094635299683005,0.48486328125
+FCQR_v6,pepper,watermark_2,crop_resize,"{""fraction"": 0.05}",50.320241566564604,0.48434371257668557,0.505615234375
+FCQR_v6,safari,watermark_1,clean,{},50.65758943037323,1.0,0.0
+FCQR_v6,safari,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.65758943037323,0.9160566748050247,0.107666015625
+FCQR_v6,safari,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.65758943037323,0.7778802156694703,0.2744140625
+FCQR_v6,safari,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.65758943037323,0.7670815786037916,0.286376953125
+FCQR_v6,safari,watermark_1,average,"{""ksize"": 3}",50.65758943037323,0.8294953331369918,0.213623046875
+FCQR_v6,safari,watermark_1,motion_blur,"{""ksize"": 5}",50.65758943037323,0.6944367071607803,0.36669921875
+FCQR_v6,safari,watermark_1,jpeg,"{""quality"": 90}",50.65758943037323,0.9829976316299335,0.022216796875
+FCQR_v6,safari,watermark_1,jpeg,"{""quality"": 70}",50.65758943037323,0.8899903892089319,0.140380859375
+FCQR_v6,safari,watermark_1,jpeg,"{""quality"": 50}",50.65758943037323,0.8053754868205225,0.24267578125
+FCQR_v6,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.65758943037323,0.7714237588922137,0.28271484375
+FCQR_v6,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.65758943037323,0.7664361955388207,0.2861328125
+FCQR_v6,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.65758943037323,0.7659149139307264,0.2880859375
+FCQR_v6,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.65758943037323,0.5977646726890964,0.4736328125
+FCQR_v6,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.65758943037323,0.599833963086976,0.472412109375
+FCQR_v6,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.65758943037323,0.5873330889048738,0.484375
+FCQR_v6,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.65758943037323,0.941875544406886,0.0751953125
+FCQR_v6,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.65758943037323,0.9407241881542907,0.07666015625
+FCQR_v6,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.65758943037323,0.9430261539179676,0.07373046875
+FCQR_v6,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.65758943037323,0.871884977107802,0.162353515625
+FCQR_v6,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.65758943037323,0.868624934984311,0.16748046875
+FCQR_v6,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.65758943037323,0.8753692936780547,0.15869140625
+FCQR_v6,safari,watermark_1,scale_resample,"{""scale"": 0.8}",50.65758943037323,0.985449194540112,0.01904296875
+FCQR_v6,safari,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.65758943037323,0.9446150587860447,0.07177734375
+FCQR_v6,safari,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.65758943037323,0.5888658794930481,0.4853515625
+FCQR_v6,safari,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.65758943037323,0.5725625407636421,0.5
+FCQR_v6,safari,watermark_1,crop_resize,"{""fraction"": 0.05}",50.65758943037323,0.5912904556080804,0.480224609375
+FCQR_v6,safari,watermark_2,clean,{},50.73048736297656,1.0,0.0
+FCQR_v6,safari,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.73048736297656,0.8951305777425549,0.10498046875
+FCQR_v6,safari,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.73048736297656,0.7269861676171382,0.270751953125
+FCQR_v6,safari,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.73048736297656,0.7143273765882041,0.2841796875
+FCQR_v6,safari,watermark_2,average,"{""ksize"": 3}",50.73048736297656,0.7895414259842829,0.20947265625
+FCQR_v6,safari,watermark_2,motion_blur,"{""ksize"": 5}",50.73048736297656,0.6303539736108281,0.367431640625
+FCQR_v6,safari,watermark_2,jpeg,"{""quality"": 90}",50.73048736297656,0.9764985662238087,0.023681640625
+FCQR_v6,safari,watermark_2,jpeg,"{""quality"": 70}",50.73048736297656,0.8551324760440177,0.145751953125
+FCQR_v6,safari,watermark_2,jpeg,"{""quality"": 50}",50.73048736297656,0.750670025227861,0.250244140625
+FCQR_v6,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.73048736297656,0.7208838101880508,0.282470703125
+FCQR_v6,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.73048736297656,0.717201250848958,0.2841796875
+FCQR_v6,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.73048736297656,0.7128545366364759,0.28564453125
+FCQR_v6,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.73048736297656,0.5320912468039518,0.4736328125
+FCQR_v6,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.73048736297656,0.5298401330220407,0.47314453125
+FCQR_v6,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.73048736297656,0.5096334153797419,0.48681640625
+FCQR_v6,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.73048736297656,0.9280013361865407,0.072509765625
+FCQR_v6,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.73048736297656,0.9219929546184409,0.078369140625
+FCQR_v6,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.73048736297656,0.9280013361865407,0.072509765625
+FCQR_v6,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.73048736297656,0.8381760857922447,0.16357421875
+FCQR_v6,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.73048736297656,0.830845857205173,0.1708984375
+FCQR_v6,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.73048736297656,0.8449912790037937,0.15771484375
+FCQR_v6,safari,watermark_2,scale_resample,"{""scale"": 0.8}",50.73048736297656,0.982004936445046,0.01806640625
+FCQR_v6,safari,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.73048736297656,0.9291610391366373,0.0712890625
+FCQR_v6,safari,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.73048736297656,0.511041144877611,0.491943359375
+FCQR_v6,safari,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.73048736297656,0.5101238659958521,0.490478515625
+FCQR_v6,safari,watermark_2,crop_resize,"{""fraction"": 0.05}",50.73048736297656,0.5159238006116444,0.48291015625
+IntegerConv8_v7,airplane,watermark_1,clean,{},50.77515985287454,1.0,0.0
+IntegerConv8_v7,airplane,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.77515985287454,0.9199144289923263,0.10302734375
+IntegerConv8_v7,airplane,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.77515985287454,0.8294198640164568,0.2138671875
+IntegerConv8_v7,airplane,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.77515985287454,0.8217486763222864,0.22314453125
+IntegerConv8_v7,airplane,watermark_1,average,"{""ksize"": 3}",50.77515985287454,0.8706217884313976,0.164306640625
+IntegerConv8_v7,airplane,watermark_1,motion_blur,"{""ksize"": 5}",50.77515985287454,0.7701280040620366,0.28515625
+IntegerConv8_v7,airplane,watermark_1,jpeg,"{""quality"": 90}",50.77515985287454,0.9590795557885816,0.05322265625
+IntegerConv8_v7,airplane,watermark_1,jpeg,"{""quality"": 70}",50.77515985287454,0.8412271834021723,0.201416015625
+IntegerConv8_v7,airplane,watermark_1,jpeg,"{""quality"": 50}",50.77515985287454,0.7791171149354511,0.275146484375
+IntegerConv8_v7,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.77515985287454,0.7731800031084387,0.280029296875
+IntegerConv8_v7,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.77515985287454,0.7715920407317457,0.280029296875
+IntegerConv8_v7,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.77515985287454,0.7733465469990314,0.27978515625
+IntegerConv8_v7,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.77515985287454,0.5970309648833707,0.475341796875
+IntegerConv8_v7,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.77515985287454,0.5971815726509658,0.474853515625
+IntegerConv8_v7,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.77515985287454,0.5891535116621084,0.48388671875
+IntegerConv8_v7,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.77515985287454,0.939934643126928,0.07763671875
+IntegerConv8_v7,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.77515985287454,0.9383237953833218,0.079833984375
+IntegerConv8_v7,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.77515985287454,0.945747690751016,0.0703125
+IntegerConv8_v7,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.77515985287454,0.8784184981223806,0.15478515625
+IntegerConv8_v7,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.77515985287454,0.8731048782209415,0.161865234375
+IntegerConv8_v7,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.77515985287454,0.8758989534871325,0.159423828125
+IntegerConv8_v7,airplane,watermark_1,scale_resample,"{""scale"": 0.8}",50.77515985287454,0.9672887165253964,0.04248046875
+IntegerConv8_v7,airplane,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.77515985287454,0.9331719937755648,0.08642578125
+IntegerConv8_v7,airplane,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.77515985287454,0.5932448734014633,0.487548828125
+IntegerConv8_v7,airplane,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.77515985287454,0.5834858703467474,0.495849609375
+IntegerConv8_v7,airplane,watermark_1,crop_resize,"{""fraction"": 0.05}",50.77515985287454,0.6020506964960785,0.4775390625
+IntegerConv8_v7,airplane,watermark_2,clean,{},50.75466032364698,1.0,0.0
+IntegerConv8_v7,airplane,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.75466032364698,0.8920167372127721,0.108642578125
+IntegerConv8_v7,airplane,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.75466032364698,0.786582773352719,0.21435546875
+IntegerConv8_v7,airplane,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.75466032364698,0.7755621810298249,0.22509765625
+IntegerConv8_v7,airplane,watermark_2,average,"{""ksize"": 3}",50.75466032364698,0.8333108033432154,0.168701171875
+IntegerConv8_v7,airplane,watermark_2,motion_blur,"{""ksize"": 5}",50.75466032364698,0.7160119765787337,0.288818359375
+IntegerConv8_v7,airplane,watermark_2,jpeg,"{""quality"": 90}",50.75466032364698,0.9463060716850756,0.05419921875
+IntegerConv8_v7,airplane,watermark_2,jpeg,"{""quality"": 70}",50.75466032364698,0.8051333500572131,0.19677734375
+IntegerConv8_v7,airplane,watermark_2,jpeg,"{""quality"": 50}",50.75466032364698,0.7316049105068314,0.2734375
+IntegerConv8_v7,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.75466032364698,0.7231606438259932,0.280029296875
+IntegerConv8_v7,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.75466032364698,0.7205474123817582,0.2802734375
+IntegerConv8_v7,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.75466032364698,0.7199558819884719,0.27978515625
+IntegerConv8_v7,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.75466032364698,0.5317835384709863,0.47509765625
+IntegerConv8_v7,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.75466032364698,0.529071319848473,0.474609375
+IntegerConv8_v7,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.75466032364698,0.5125849602564586,0.48388671875
+IntegerConv8_v7,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.75466032364698,0.9225220539328994,0.078125
+IntegerConv8_v7,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.75466032364698,0.9195363867307322,0.0810546875
+IntegerConv8_v7,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.75466032364698,0.9294817228036188,0.0712890625
+IntegerConv8_v7,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.75466032364698,0.8483747635015532,0.153076171875
+IntegerConv8_v7,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.75466032364698,0.8345826186364835,0.1650390625
+IntegerConv8_v7,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.75466032364698,0.8405164738030163,0.16259765625
+IntegerConv8_v7,airplane,watermark_2,scale_resample,"{""scale"": 0.8}",50.75466032364698,0.9587379770404885,0.04150390625
+IntegerConv8_v7,airplane,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.75466032364698,0.9118711047602541,0.089111328125
+IntegerConv8_v7,airplane,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.75466032364698,0.5098754194897891,0.49853515625
+IntegerConv8_v7,airplane,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.75466032364698,0.5154516009033291,0.497314453125
+IntegerConv8_v7,airplane,watermark_2,crop_resize,"{""fraction"": 0.05}",50.75466032364698,0.5133184692219135,0.498291015625
+IntegerConv8_v7,girl,watermark_1,clean,{},50.22768833608219,1.0,0.0
+IntegerConv8_v7,girl,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.22768833608219,0.9811087756804322,0.024658203125
+IntegerConv8_v7,girl,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.22768833608219,0.8845215647582807,0.14501953125
+IntegerConv8_v7,girl,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.22768833608219,0.8738207304600512,0.157958984375
+IntegerConv8_v7,girl,watermark_1,average,"{""ksize"": 3}",50.22768833608219,0.9266046469918313,0.09375
+IntegerConv8_v7,girl,watermark_1,motion_blur,"{""ksize"": 5}",50.22768833608219,0.7845582573177825,0.26220703125
+IntegerConv8_v7,girl,watermark_1,jpeg,"{""quality"": 90}",50.22768833608219,0.9546793763234286,0.05859375
+IntegerConv8_v7,girl,watermark_1,jpeg,"{""quality"": 70}",50.22768833608219,0.85210423311855,0.18505859375
+IntegerConv8_v7,girl,watermark_1,jpeg,"{""quality"": 50}",50.22768833608219,0.75410143824154,0.300537109375
+IntegerConv8_v7,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.22768833608219,0.7794351801501135,0.273193359375
+IntegerConv8_v7,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.22768833608219,0.7779702378645783,0.2734375
+IntegerConv8_v7,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.22768833608219,0.7766506179857703,0.275634765625
+IntegerConv8_v7,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.22768833608219,0.5982751021851329,0.474609375
+IntegerConv8_v7,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.22768833608219,0.6041213235086788,0.468994140625
+IntegerConv8_v7,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.22768833608219,0.5972899269077708,0.475830078125
+IntegerConv8_v7,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.22768833608219,0.9351197082457291,0.083984375
+IntegerConv8_v7,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.22768833608219,0.941015140740517,0.07666015625
+IntegerConv8_v7,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.22768833608219,0.9413157951071219,0.07568359375
+IntegerConv8_v7,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.22768833608219,0.8607515972274777,0.176513671875
+IntegerConv8_v7,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.22768833608219,0.8693805133482043,0.167724609375
+IntegerConv8_v7,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.22768833608219,0.8621413922432439,0.17529296875
+IntegerConv8_v7,girl,watermark_1,scale_resample,"{""scale"": 0.8}",50.22768833608219,0.999256229081443,0.0009765625
+IntegerConv8_v7,girl,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.22768833608219,0.9766454996122212,0.030517578125
+IntegerConv8_v7,girl,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.22768833608219,0.5606955791467544,0.503662109375
+IntegerConv8_v7,girl,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.22768833608219,0.5440514350664828,0.5205078125
+IntegerConv8_v7,girl,watermark_1,crop_resize,"{""fraction"": 0.05}",50.22768833608219,0.5570610656971029,0.5087890625
+IntegerConv8_v7,girl,watermark_2,clean,{},50.35676373355179,1.0,0.0
+IntegerConv8_v7,girl,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.35676373355179,0.9757046827267668,0.0244140625
+IntegerConv8_v7,girl,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.35676373355179,0.8628841262868487,0.1337890625
+IntegerConv8_v7,girl,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.35676373355179,0.847022681979086,0.149169921875
+IntegerConv8_v7,girl,watermark_2,average,"{""ksize"": 3}",50.35676373355179,0.9152530787462252,0.083740234375
+IntegerConv8_v7,girl,watermark_2,motion_blur,"{""ksize"": 5}",50.35676373355179,0.7359546877028383,0.256591796875
+IntegerConv8_v7,girl,watermark_2,jpeg,"{""quality"": 90}",50.35676373355179,0.94082768250623,0.05908203125
+IntegerConv8_v7,girl,watermark_2,jpeg,"{""quality"": 70}",50.35676373355179,0.8166155271976255,0.180419921875
+IntegerConv8_v7,girl,watermark_2,jpeg,"{""quality"": 50}",50.35676373355179,0.6951790836609208,0.30078125
+IntegerConv8_v7,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.35676373355179,0.729485832452704,0.274169921875
+IntegerConv8_v7,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.35676373355179,0.7306222988383675,0.271484375
+IntegerConv8_v7,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.35676373355179,0.724354797764369,0.275390625
+IntegerConv8_v7,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.35676373355179,0.5311815034540868,0.47802734375
+IntegerConv8_v7,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.35676373355179,0.542394112669295,0.465576171875
+IntegerConv8_v7,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.35676373355179,0.5199680070951955,0.478759765625
+IntegerConv8_v7,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.35676373355179,0.9156490090820203,0.085205078125
+IntegerConv8_v7,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.35676373355179,0.9253946169071223,0.075439453125
+IntegerConv8_v7,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.35676373355179,0.9258455661996599,0.074462890625
+IntegerConv8_v7,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.35676373355179,0.8251950023250775,0.177001953125
+IntegerConv8_v7,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.35676373355179,0.8345490662866848,0.1669921875
+IntegerConv8_v7,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.35676373355179,0.8281004832743204,0.1748046875
+IntegerConv8_v7,girl,watermark_2,scale_resample,"{""scale"": 0.8}",50.35676373355179,0.9978163284599888,0.002197265625
+IntegerConv8_v7,girl,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.35676373355179,0.9695283065730529,0.03076171875
+IntegerConv8_v7,girl,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.35676373355179,0.4953973996482146,0.483642578125
+IntegerConv8_v7,girl,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.35676373355179,0.4809383186953304,0.5029296875
+IntegerConv8_v7,girl,watermark_2,crop_resize,"{""fraction"": 0.05}",50.35676373355179,0.49580606476561195,0.485595703125
+IntegerConv8_v7,lenna,watermark_1,clean,{},50.71682313098384,1.0,0.0
+IntegerConv8_v7,lenna,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.71682313098384,0.9304436367796479,0.08984375
+IntegerConv8_v7,lenna,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.71682313098384,0.819257258373258,0.2265625
+IntegerConv8_v7,lenna,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.71682313098384,0.8107866000565769,0.236572265625
+IntegerConv8_v7,lenna,watermark_1,average,"{""ksize"": 3}",50.71682313098384,0.8533881211593454,0.185791015625
+IntegerConv8_v7,lenna,watermark_1,motion_blur,"{""ksize"": 5}",50.71682313098384,0.7319007961022467,0.328857421875
+IntegerConv8_v7,lenna,watermark_1,jpeg,"{""quality"": 90}",50.71682313098384,0.9546495065809425,0.058837890625
+IntegerConv8_v7,lenna,watermark_1,jpeg,"{""quality"": 70}",50.71682313098384,0.8384857274764914,0.203369140625
+IntegerConv8_v7,lenna,watermark_1,jpeg,"{""quality"": 50}",50.71682313098384,0.7671118271402289,0.288818359375
+IntegerConv8_v7,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.71682313098384,0.7755504792750488,0.27685546875
+IntegerConv8_v7,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.71682313098384,0.7760600717497818,0.27490234375
+IntegerConv8_v7,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.71682313098384,0.7758805235983406,0.27685546875
+IntegerConv8_v7,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.71682313098384,0.5950746524828331,0.47705078125
+IntegerConv8_v7,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.71682313098384,0.6052173409343957,0.46826171875
+IntegerConv8_v7,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.71682313098384,0.5933608867309887,0.480224609375
+IntegerConv8_v7,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.71682313098384,0.9396159976956533,0.078369140625
+IntegerConv8_v7,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.71682313098384,0.9402991652714777,0.077392578125
+IntegerConv8_v7,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.71682313098384,0.9422539596517261,0.07470703125
+IntegerConv8_v7,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.71682313098384,0.8677021547647792,0.16796875
+IntegerConv8_v7,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.71682313098384,0.8631550722222279,0.173583984375
+IntegerConv8_v7,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.71682313098384,0.8736185579113076,0.16162109375
+IntegerConv8_v7,lenna,watermark_1,scale_resample,"{""scale"": 0.8}",50.71682313098384,0.974339124326219,0.033447265625
+IntegerConv8_v7,lenna,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.71682313098384,0.9449028663656064,0.0712890625
+IntegerConv8_v7,lenna,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.71682313098384,0.5735140793258038,0.502197265625
+IntegerConv8_v7,lenna,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.71682313098384,0.5655864219625704,0.5078125
+IntegerConv8_v7,lenna,watermark_1,crop_resize,"{""fraction"": 0.05}",50.71682313098384,0.5938972484500055,0.482177734375
+IntegerConv8_v7,lenna,watermark_2,clean,{},50.6914150905165,1.0,0.0
+IntegerConv8_v7,lenna,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.6914150905165,0.9064400950782247,0.093994140625
+IntegerConv8_v7,lenna,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.6914150905165,0.7769410436091342,0.223876953125
+IntegerConv8_v7,lenna,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.6914150905165,0.763577123991829,0.237060546875
+IntegerConv8_v7,lenna,watermark_2,average,"{""ksize"": 3}",50.6914150905165,0.8171499087614784,0.184326171875
+IntegerConv8_v7,lenna,watermark_2,motion_blur,"{""ksize"": 5}",50.6914150905165,0.669898235813352,0.332763671875
+IntegerConv8_v7,lenna,watermark_2,jpeg,"{""quality"": 90}",50.6914150905165,0.9425006106656131,0.0576171875
+IntegerConv8_v7,lenna,watermark_2,jpeg,"{""quality"": 70}",50.6914150905165,0.7947382897219787,0.205322265625
+IntegerConv8_v7,lenna,watermark_2,jpeg,"{""quality"": 50}",50.6914150905165,0.7093823635630482,0.291259765625
+IntegerConv8_v7,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.6914150905165,0.7251708097270488,0.277587890625
+IntegerConv8_v7,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.6914150905165,0.7252390236709017,0.275634765625
+IntegerConv8_v7,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.6914150905165,0.7228441244365005,0.277099609375
+IntegerConv8_v7,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.6914150905165,0.530389956761456,0.4755859375
+IntegerConv8_v7,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.6914150905165,0.5378473149611656,0.46826171875
+IntegerConv8_v7,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.6914150905165,0.5163477663020231,0.481201171875
+IntegerConv8_v7,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.6914150905165,0.9221447479346494,0.078369140625
+IntegerConv8_v7,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.6914150905165,0.9225540451535871,0.077880859375
+IntegerConv8_v7,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.6914150905165,0.92546737371723,0.074951171875
+IntegerConv8_v7,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.6914150905165,0.83196477094841,0.16943359375
+IntegerConv8_v7,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.6914150905165,0.823574786931823,0.17626953125
+IntegerConv8_v7,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.6914150905165,0.8404487396240551,0.1630859375
+IntegerConv8_v7,lenna,watermark_2,scale_resample,"{""scale"": 0.8}",50.6914150905165,0.9666457851554722,0.033447265625
+IntegerConv8_v7,lenna,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.6914150905165,0.9270787075300587,0.0732421875
+IntegerConv8_v7,lenna,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.6914150905165,0.48942904865617815,0.512939453125
+IntegerConv8_v7,lenna,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.6914150905165,0.4995170090508862,0.5009765625
+IntegerConv8_v7,lenna,watermark_2,crop_resize,"{""fraction"": 0.05}",50.6914150905165,0.5158652358215616,0.488037109375
+IntegerConv8_v7,manhattan,watermark_1,clean,{},50.736228721328644,1.0,0.0
+IntegerConv8_v7,manhattan,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.736228721328644,0.932607462113039,0.0869140625
+IntegerConv8_v7,manhattan,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.736228721328644,0.8419306568662458,0.199462890625
+IntegerConv8_v7,manhattan,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.736228721328644,0.8317717362830463,0.2119140625
+IntegerConv8_v7,manhattan,watermark_1,average,"{""ksize"": 3}",50.736228721328644,0.8662521918005067,0.170166015625
+IntegerConv8_v7,manhattan,watermark_1,motion_blur,"{""ksize"": 5}",50.736228721328644,0.761258077612334,0.293701171875
+IntegerConv8_v7,manhattan,watermark_1,jpeg,"{""quality"": 90}",50.736228721328644,0.9754895959800861,0.031982421875
+IntegerConv8_v7,manhattan,watermark_1,jpeg,"{""quality"": 70}",50.736228721328644,0.8731641718883263,0.16259765625
+IntegerConv8_v7,manhattan,watermark_1,jpeg,"{""quality"": 50}",50.736228721328644,0.7805056451692273,0.273681640625
+IntegerConv8_v7,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.736228721328644,0.7754805851841147,0.27734375
+IntegerConv8_v7,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.736228721328644,0.7718267508797909,0.27978515625
+IntegerConv8_v7,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.736228721328644,0.7736131721381844,0.279296875
+IntegerConv8_v7,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.736228721328644,0.5963509527168886,0.475341796875
+IntegerConv8_v7,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.736228721328644,0.6011091844188702,0.470703125
+IntegerConv8_v7,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.736228721328644,0.5907183311822749,0.481201171875
+IntegerConv8_v7,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.736228721328644,0.943514515063226,0.0732421875
+IntegerConv8_v7,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.736228721328644,0.9346306991512017,0.08447265625
+IntegerConv8_v7,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.736228721328644,0.9407893911979062,0.07666015625
+IntegerConv8_v7,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.736228721328644,0.8584691708196376,0.1787109375
+IntegerConv8_v7,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.736228721328644,0.8638778781869024,0.173583984375
+IntegerConv8_v7,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.736228721328644,0.8601616506311474,0.178466796875
+IntegerConv8_v7,manhattan,watermark_1,scale_resample,"{""scale"": 0.8}",50.736228721328644,0.9699245131459571,0.039306640625
+IntegerConv8_v7,manhattan,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.736228721328644,0.9417424495672234,0.075439453125
+IntegerConv8_v7,manhattan,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.736228721328644,0.5945928702071235,0.481689453125
+IntegerConv8_v7,manhattan,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.736228721328644,0.5699795498461906,0.502197265625
+IntegerConv8_v7,manhattan,watermark_1,crop_resize,"{""fraction"": 0.05}",50.736228721328644,0.5894888121332058,0.490478515625
+IntegerConv8_v7,manhattan,watermark_2,clean,{},50.77418535416973,1.0,0.0
+IntegerConv8_v7,manhattan,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.77418535416973,0.9132835889884346,0.086669921875
+IntegerConv8_v7,manhattan,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.77418535416973,0.8023346555826885,0.198486328125
+IntegerConv8_v7,manhattan,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.77418535416973,0.7902018907867142,0.211181640625
+IntegerConv8_v7,manhattan,watermark_2,average,"{""ksize"": 3}",50.77418535416973,0.8344280418059961,0.166259765625
+IntegerConv8_v7,manhattan,watermark_2,motion_blur,"{""ksize"": 5}",50.77418535416973,0.7105989947509321,0.28955078125
+IntegerConv8_v7,manhattan,watermark_2,jpeg,"{""quality"": 90}",50.77418535416973,0.9698882952889752,0.0302734375
+IntegerConv8_v7,manhattan,watermark_2,jpeg,"{""quality"": 70}",50.77418535416973,0.84478992047553,0.156005859375
+IntegerConv8_v7,manhattan,watermark_2,jpeg,"{""quality"": 50}",50.77418535416973,0.7361949144423495,0.266845703125
+IntegerConv8_v7,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.77418535416973,0.7246873625205641,0.278076171875
+IntegerConv8_v7,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.77418535416973,0.7206826304524612,0.2802734375
+IntegerConv8_v7,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.77418535416973,0.7201330146967712,0.279541015625
+IntegerConv8_v7,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.77418535416973,0.5302886930365917,0.475341796875
+IntegerConv8_v7,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.77418535416973,0.5341787298012929,0.470947265625
+IntegerConv8_v7,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.77418535416973,0.5133948604092448,0.4814453125
+IntegerConv8_v7,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.77418535416973,0.9279584977536287,0.07275390625
+IntegerConv8_v7,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.77418535416973,0.9156884837250865,0.084228515625
+IntegerConv8_v7,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.77418535416973,0.9224064078623374,0.078125
+IntegerConv8_v7,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.77418535416973,0.8207824727256396,0.179443359375
+IntegerConv8_v7,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.77418535416973,0.8278908096411521,0.173583984375
+IntegerConv8_v7,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.77418535416973,0.8261404793822122,0.17724609375
+IntegerConv8_v7,manhattan,watermark_2,scale_resample,"{""scale"": 0.8}",50.77418535416973,0.9611461874696454,0.0390625
+IntegerConv8_v7,manhattan,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.77418535416973,0.927530170282666,0.07275390625
+IntegerConv8_v7,manhattan,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.77418535416973,0.5047279994619587,0.498779296875
+IntegerConv8_v7,manhattan,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.77418535416973,0.5072168889085046,0.492431640625
+IntegerConv8_v7,manhattan,watermark_2,crop_resize,"{""fraction"": 0.05}",50.77418535416973,0.5250963372627664,0.483642578125
+IntegerConv8_v7,pepper,watermark_1,clean,{},50.03942638089402,1.0,0.0
+IntegerConv8_v7,pepper,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.03942638089402,0.9420883915628732,0.074951171875
+IntegerConv8_v7,pepper,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.03942638089402,0.8161454303217761,0.22705078125
+IntegerConv8_v7,pepper,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.03942638089402,0.8028804132477907,0.241943359375
+IntegerConv8_v7,pepper,watermark_1,average,"{""ksize"": 3}",50.03942638089402,0.8507606779314187,0.18603515625
+IntegerConv8_v7,pepper,watermark_1,motion_blur,"{""ksize"": 5}",50.03942638089402,0.7267650334631991,0.329345703125
+IntegerConv8_v7,pepper,watermark_1,jpeg,"{""quality"": 90}",50.03942638089402,0.9322275812730745,0.08740234375
+IntegerConv8_v7,pepper,watermark_1,jpeg,"{""quality"": 70}",50.03942638089402,0.7891037664341328,0.259765625
+IntegerConv8_v7,pepper,watermark_1,jpeg,"{""quality"": 50}",50.03942638089402,0.717837470186752,0.340087890625
+IntegerConv8_v7,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.03942638089402,0.776314386210637,0.277099609375
+IntegerConv8_v7,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.03942638089402,0.774529502777879,0.2763671875
+IntegerConv8_v7,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.03942638089402,0.7784475801701944,0.273681640625
+IntegerConv8_v7,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.03942638089402,0.6038854070792364,0.46826171875
+IntegerConv8_v7,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.03942638089402,0.6026122689502214,0.469970703125
+IntegerConv8_v7,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.03942638089402,0.5967384506073624,0.47607421875
+IntegerConv8_v7,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.03942638089402,0.9415947068794546,0.07568359375
+IntegerConv8_v7,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.03942638089402,0.9400472256938109,0.077880859375
+IntegerConv8_v7,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.03942638089402,0.9428139121875889,0.073974609375
+IntegerConv8_v7,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.03942638089402,0.8647636058447629,0.17138671875
+IntegerConv8_v7,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.03942638089402,0.8761651894311474,0.158447265625
+IntegerConv8_v7,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.03942638089402,0.868624934984311,0.16748046875
+IntegerConv8_v7,pepper,watermark_1,scale_resample,"{""scale"": 0.8}",50.03942638089402,0.9760134746508867,0.03125
+IntegerConv8_v7,pepper,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.03942638089402,0.9474683804160035,0.068115234375
+IntegerConv8_v7,pepper,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.03942638089402,0.5544159880591165,0.51123046875
+IntegerConv8_v7,pepper,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.03942638089402,0.5500988142751363,0.51416015625
+IntegerConv8_v7,pepper,watermark_1,crop_resize,"{""fraction"": 0.05}",50.03942638089402,0.5674492613528649,0.5009765625
+IntegerConv8_v7,pepper,watermark_2,clean,{},50.16629929233825,1.0,0.0
+IntegerConv8_v7,pepper,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.16629929233825,0.9278845829930533,0.072998046875
+IntegerConv8_v7,pepper,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.16629929233825,0.7708758629759902,0.22509765625
+IntegerConv8_v7,pepper,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.16629929233825,0.7580495681109224,0.23681640625
+IntegerConv8_v7,pepper,watermark_2,average,"{""ksize"": 3}",50.16629929233825,0.8157918840153787,0.180908203125
+IntegerConv8_v7,pepper,watermark_2,motion_blur,"{""ksize"": 5}",50.16629929233825,0.6743360876139008,0.31787109375
+IntegerConv8_v7,pepper,watermark_2,jpeg,"{""quality"": 90}",50.16629929233825,0.9103264809068609,0.09033203125
+IntegerConv8_v7,pepper,watermark_2,jpeg,"{""quality"": 70}",50.16629929233825,0.7503608428492643,0.245849609375
+IntegerConv8_v7,pepper,watermark_2,jpeg,"{""quality"": 50}",50.16629929233825,0.6624875048887892,0.33349609375
+IntegerConv8_v7,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.16629929233825,0.7267871866051525,0.277587890625
+IntegerConv8_v7,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.16629929233825,0.7219581771438589,0.2783203125
+IntegerConv8_v7,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.16629929233825,0.7259996787676206,0.273681640625
+IntegerConv8_v7,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.16629929233825,0.5351446949546407,0.469970703125
+IntegerConv8_v7,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.16629929233825,0.5349556627301916,0.47119140625
+IntegerConv8_v7,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.16629929233825,0.5218521079316923,0.478271484375
+IntegerConv8_v7,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.16629929233825,0.9261355219632168,0.074462890625
+IntegerConv8_v7,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.16629929233825,0.9236700301272989,0.076171875
+IntegerConv8_v7,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.16629929233825,0.9258811695034949,0.074462890625
+IntegerConv8_v7,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.16629929233825,0.8305002428363283,0.17041015625
+IntegerConv8_v7,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.16629929233825,0.8409636472172799,0.158935546875
+IntegerConv8_v7,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.16629929233825,0.8356195124810706,0.1669921875
+IntegerConv8_v7,pepper,watermark_2,scale_resample,"{""scale"": 0.8}",50.16629929233825,0.9663216580894662,0.033935546875
+IntegerConv8_v7,pepper,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.16629929233825,0.9298927520480604,0.07080078125
+IntegerConv8_v7,pepper,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.16629929233825,0.4717923827836211,0.5078125
+IntegerConv8_v7,pepper,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.16629929233825,0.49152555117304664,0.4931640625
+IntegerConv8_v7,pepper,watermark_2,crop_resize,"{""fraction"": 0.05}",50.16629929233825,0.4783467851226701,0.510498046875
+IntegerConv8_v7,safari,watermark_1,clean,{},50.61212848905738,1.0,0.0
+IntegerConv8_v7,safari,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.61212848905738,0.9211732314584232,0.101318359375
+IntegerConv8_v7,safari,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.61212848905738,0.7853289175127605,0.265625
+IntegerConv8_v7,safari,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.61212848905738,0.7740138003992606,0.27880859375
+IntegerConv8_v7,safari,watermark_1,average,"{""ksize"": 3}",50.61212848905738,0.8376708432416324,0.20361328125
+IntegerConv8_v7,safari,watermark_1,motion_blur,"{""ksize"": 5}",50.61212848905738,0.6930041941353572,0.3681640625
+IntegerConv8_v7,safari,watermark_1,jpeg,"{""quality"": 90}",50.61212848905738,0.9822495360198651,0.023193359375
+IntegerConv8_v7,safari,watermark_1,jpeg,"{""quality"": 70}",50.61212848905738,0.8905547906214305,0.13916015625
+IntegerConv8_v7,safari,watermark_1,jpeg,"{""quality"": 50}",50.61212848905738,0.8088194064547417,0.238525390625
+IntegerConv8_v7,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.61212848905738,0.7733465469990314,0.27978515625
+IntegerConv8_v7,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.61212848905738,0.7713572646578015,0.2802734375
+IntegerConv8_v7,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.61212848905738,0.7735801997974183,0.279541015625
+IntegerConv8_v7,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.61212848905738,0.5960568336684346,0.47607421875
+IntegerConv8_v7,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.61212848905738,0.5988550927097046,0.473388671875
+IntegerConv8_v7,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.61212848905738,0.5916806483291092,0.481689453125
+IntegerConv8_v7,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.61212848905738,0.9414500556914212,0.07568359375
+IntegerConv8_v7,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.61212848905738,0.9396217273695273,0.078125
+IntegerConv8_v7,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.61212848905738,0.9447506706941664,0.071533203125
+IntegerConv8_v7,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.61212848905738,0.869840950996072,0.1650390625
+IntegerConv8_v7,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.61212848905738,0.869317066516426,0.16650390625
+IntegerConv8_v7,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.61212848905738,0.8817347358801432,0.151123046875
+IntegerConv8_v7,safari,watermark_1,scale_resample,"{""scale"": 0.8}",50.61212848905738,0.9843249579751627,0.0205078125
+IntegerConv8_v7,safari,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.61212848905738,0.9443010395167712,0.072265625
+IntegerConv8_v7,safari,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.61212848905738,0.5890145277013269,0.487548828125
+IntegerConv8_v7,safari,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.61212848905738,0.5749693263782468,0.49658203125
+IntegerConv8_v7,safari,watermark_1,crop_resize,"{""fraction"": 0.05}",50.61212848905738,0.5781052068641593,0.4931640625
+IntegerConv8_v7,safari,watermark_2,clean,{},50.66254264423701,1.0,0.0
+IntegerConv8_v7,safari,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.66254264423701,0.9016015227768783,0.098388671875
+IntegerConv8_v7,safari,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.66254264423701,0.7332290609105725,0.266845703125
+IntegerConv8_v7,safari,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.66254264423701,0.7200416610054354,0.279296875
+IntegerConv8_v7,safari,watermark_2,average,"{""ksize"": 3}",50.66254264423701,0.7949436705396102,0.203857421875
+IntegerConv8_v7,safari,watermark_2,motion_blur,"{""ksize"": 5}",50.66254264423701,0.632122527763483,0.365234375
+IntegerConv8_v7,safari,watermark_2,jpeg,"{""quality"": 90}",50.66254264423701,0.9781554550564984,0.02197265625
+IntegerConv8_v7,safari,watermark_2,jpeg,"{""quality"": 70}",50.66254264423701,0.8704741073914747,0.130126953125
+IntegerConv8_v7,safari,watermark_2,jpeg,"{""quality"": 50}",50.66254264423701,0.7535999666092348,0.246826171875
+IntegerConv8_v7,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.66254264423701,0.7233342093256306,0.27978515625
+IntegerConv8_v7,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.66254264423701,0.720723305808614,0.280029296875
+IntegerConv8_v7,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.66254264423701,0.720267528180285,0.279541015625
+IntegerConv8_v7,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.66254264423701,0.5303646033970221,0.47607421875
+IntegerConv8_v7,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.66254264423701,0.5313366714247272,0.472900390625
+IntegerConv8_v7,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.66254264423701,0.5152798277435362,0.4814453125
+IntegerConv8_v7,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.66254264423701,0.9262861403875208,0.07421875
+IntegerConv8_v7,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.66254264423701,0.9210590507312277,0.079345703125
+IntegerConv8_v7,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.66254264423701,0.928369317159475,0.072265625
+IntegerConv8_v7,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.66254264423701,0.8369680490875158,0.16455078125
+IntegerConv8_v7,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.66254264423701,0.83196477094841,0.16943359375
+IntegerConv8_v7,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.66254264423701,0.8475406695574499,0.15576171875
+IntegerConv8_v7,safari,watermark_2,scale_resample,"{""scale"": 0.8}",50.66254264423701,0.9829629902694391,0.01708984375
+IntegerConv8_v7,safari,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.66254264423701,0.9296809063470562,0.07080078125
+IntegerConv8_v7,safari,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.66254264423701,0.5084585596928498,0.4970703125
+IntegerConv8_v7,safari,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.66254264423701,0.5041610812037582,0.49560546875
+IntegerConv8_v7,safari,watermark_2,crop_resize,"{""fraction"": 0.05}",50.66254264423701,0.5025049917740382,0.49365234375
+IntegerConvPair_v8,airplane,watermark_1,clean,{},50.79560359913967,1.0,0.0
+IntegerConvPair_v8,airplane,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.79560359913967,0.908918786332732,0.11669921875
+IntegerConvPair_v8,airplane,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.79560359913967,0.8206056778772796,0.224853515625
+IntegerConvPair_v8,airplane,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.79560359913967,0.8135901803703519,0.233642578125
+IntegerConvPair_v8,airplane,watermark_1,average,"{""ksize"": 3}",50.79560359913967,0.845779494539034,0.194091796875
+IntegerConvPair_v8,airplane,watermark_1,motion_blur,"{""ksize"": 5}",50.79560359913967,0.7488444094669783,0.315185546875
+IntegerConvPair_v8,airplane,watermark_1,jpeg,"{""quality"": 90}",50.79560359913967,0.9527384571192096,0.061279296875
+IntegerConvPair_v8,airplane,watermark_1,jpeg,"{""quality"": 70}",50.79560359913967,0.839889719031049,0.204833984375
+IntegerConvPair_v8,airplane,watermark_1,jpeg,"{""quality"": 50}",50.79560359913967,0.7821524817736835,0.27294921875
+IntegerConvPair_v8,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.79560359913967,0.7814590074359988,0.2724609375
+IntegerConvPair_v8,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.79560359913967,0.775615943769531,0.27783203125
+IntegerConvPair_v8,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.79560359913967,0.7740216663928208,0.27978515625
+IntegerConvPair_v8,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.79560359913967,0.5971258952471212,0.47705078125
+IntegerConvPair_v8,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.79560359913967,0.607831486817354,0.466064453125
+IntegerConvPair_v8,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.79560359913967,0.6071807229032574,0.4658203125
+IntegerConvPair_v8,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.79560359913967,0.9428642447920826,0.07373046875
+IntegerConvPair_v8,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.79560359913967,0.9343729894373909,0.08447265625
+IntegerConvPair_v8,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.79560359913967,0.9472896072152936,0.068115234375
+IntegerConvPair_v8,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.79560359913967,0.8749905511885566,0.159423828125
+IntegerConvPair_v8,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.79560359913967,0.867801936675645,0.167724609375
+IntegerConvPair_v8,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.79560359913967,0.8723085932913398,0.162109375
+IntegerConvPair_v8,airplane,watermark_1,scale_resample,"{""scale"": 0.8}",50.79560359913967,0.9608311961550746,0.05078125
+IntegerConvPair_v8,airplane,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.79560359913967,0.9256741117744323,0.095947265625
+IntegerConvPair_v8,airplane,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.79560359913967,0.5836043414118991,0.498779296875
+IntegerConvPair_v8,airplane,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.79560359913967,0.5985399297675102,0.485595703125
+IntegerConvPair_v8,airplane,watermark_1,crop_resize,"{""fraction"": 0.05}",50.79560359913967,0.5963378723975918,0.4873046875
+IntegerConvPair_v8,airplane,watermark_2,clean,{},50.77356625504663,1.0,0.0
+IntegerConvPair_v8,airplane,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.77356625504663,0.8842421864572034,0.1162109375
+IntegerConvPair_v8,airplane,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.77356625504663,0.7917476661028033,0.20947265625
+IntegerConvPair_v8,airplane,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.77356625504663,0.7822510703900896,0.21923828125
+IntegerConvPair_v8,airplane,watermark_2,average,"{""ksize"": 3}",50.77356625504663,0.8212472689391696,0.179931640625
+IntegerConvPair_v8,airplane,watermark_2,motion_blur,"{""ksize"": 5}",50.77356625504663,0.6883125288210346,0.317138671875
+IntegerConvPair_v8,airplane,watermark_2,jpeg,"{""quality"": 90}",50.77356625504663,0.9445799311646063,0.0556640625
+IntegerConvPair_v8,airplane,watermark_2,jpeg,"{""quality"": 70}",50.77356625504663,0.8079460902298671,0.196533203125
+IntegerConvPair_v8,airplane,watermark_2,jpeg,"{""quality"": 50}",50.77356625504663,0.7122532291341234,0.294677734375
+IntegerConvPair_v8,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.77356625504663,0.7325637636005494,0.2724609375
+IntegerConvPair_v8,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.77356625504663,0.7241894368875667,0.27783203125
+IntegerConvPair_v8,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.77356625504663,0.7221152162497478,0.27978515625
+IntegerConvPair_v8,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.77356625504663,0.5275678588062579,0.47705078125
+IntegerConvPair_v8,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.77356625504663,0.5364791703312956,0.46533203125
+IntegerConvPair_v8,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.77356625504663,0.5344133923435925,0.4658203125
+IntegerConvPair_v8,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.77356625504663,0.9269240379990514,0.073486328125
+IntegerConvPair_v8,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.77356625504663,0.9153866843313344,0.08447265625
+IntegerConvPair_v8,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.77356625504663,0.9326532541864221,0.067626953125
+IntegerConvPair_v8,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.77356625504663,0.8421058823853504,0.158935546875
+IntegerConvPair_v8,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.77356625504663,0.8307401839762946,0.169921875
+IntegerConvPair_v8,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.77356625504663,0.8368515107243762,0.165283203125
+IntegerConvPair_v8,airplane,watermark_2,scale_resample,"{""scale"": 0.8}",50.77356625504663,0.9509957348871048,0.049072265625
+IntegerConvPair_v8,airplane,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.77356625504663,0.9090995183829192,0.091796875
+IntegerConvPair_v8,airplane,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.77356625504663,0.5060359219964948,0.50146484375
+IntegerConvPair_v8,airplane,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.77356625504663,0.5102197522906041,0.500732421875
+IntegerConvPair_v8,airplane,watermark_2,crop_resize,"{""fraction"": 0.05}",50.77356625504663,0.5235786830957966,0.49267578125
+IntegerConvPair_v8,girl,watermark_1,clean,{},50.206395431373146,1.0,0.0
+IntegerConvPair_v8,girl,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.206395431373146,0.9781411282486872,0.028564453125
+IntegerConvPair_v8,girl,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.206395431373146,0.8919031840623344,0.136962890625
+IntegerConvPair_v8,girl,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.206395431373146,0.8827178338580188,0.1484375
+IntegerConvPair_v8,girl,watermark_1,average,"{""ksize"": 3}",50.206395431373146,0.9238504765884088,0.09765625
+IntegerConvPair_v8,girl,watermark_1,motion_blur,"{""ksize"": 5}",50.206395431373146,0.7682072204797021,0.286865234375
+IntegerConvPair_v8,girl,watermark_1,jpeg,"{""quality"": 90}",50.206395431373146,0.9470306179709418,0.068359375
+IntegerConvPair_v8,girl,watermark_1,jpeg,"{""quality"": 70}",50.206395431373146,0.8498682803605858,0.188232421875
+IntegerConvPair_v8,girl,watermark_1,jpeg,"{""quality"": 50}",50.206395431373146,0.7669949669276955,0.287109375
+IntegerConvPair_v8,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.206395431373146,0.7872475440422058,0.265625
+IntegerConvPair_v8,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.206395431373146,0.7846391995209526,0.26708984375
+IntegerConvPair_v8,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.206395431373146,0.7803943571414862,0.27294921875
+IntegerConvPair_v8,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.206395431373146,0.5957373456299339,0.47802734375
+IntegerConvPair_v8,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.206395431373146,0.6152541689272575,0.458984375
+IntegerConvPair_v8,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.206395431373146,0.6111389483175821,0.462890625
+IntegerConvPair_v8,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.206395431373146,0.9436798920511285,0.07275390625
+IntegerConvPair_v8,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.206395431373146,0.9377877665151165,0.080078125
+IntegerConvPair_v8,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.206395431373146,0.9390809793023787,0.07861328125
+IntegerConvPair_v8,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.206395431373146,0.8634522142498064,0.174072265625
+IntegerConvPair_v8,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.206395431373146,0.8692777274116311,0.165771484375
+IntegerConvPair_v8,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.206395431373146,0.8748451727087971,0.159423828125
+IntegerConvPair_v8,girl,watermark_1,scale_resample,"{""scale"": 0.8}",50.206395431373146,0.997953643813235,0.002685546875
+IntegerConvPair_v8,girl,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.206395431373146,0.9750054978606031,0.03271484375
+IntegerConvPair_v8,girl,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.206395431373146,0.5511170381192942,0.5126953125
+IntegerConvPair_v8,girl,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.206395431373146,0.5798197819099529,0.492431640625
+IntegerConvPair_v8,girl,watermark_1,crop_resize,"{""fraction"": 0.05}",50.206395431373146,0.5732297384940683,0.49658203125
+IntegerConvPair_v8,girl,watermark_2,clean,{},50.55009146770893,1.0,0.0
+IntegerConvPair_v8,girl,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.55009146770893,0.9743245642997063,0.02587890625
+IntegerConvPair_v8,girl,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.55009146770893,0.8683445890982484,0.130615234375
+IntegerConvPair_v8,girl,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.55009146770893,0.8532890451969003,0.1455078125
+IntegerConvPair_v8,girl,watermark_2,average,"{""ksize"": 3}",50.55009146770893,0.905596457251134,0.094482421875
+IntegerConvPair_v8,girl,watermark_2,motion_blur,"{""ksize"": 5}",50.55009146770893,0.711721654582461,0.2802734375
+IntegerConvPair_v8,girl,watermark_2,jpeg,"{""quality"": 90}",50.55009146770893,0.9396327742545901,0.060546875
+IntegerConvPair_v8,girl,watermark_2,jpeg,"{""quality"": 70}",50.55009146770893,0.8196928785623377,0.1806640625
+IntegerConvPair_v8,girl,watermark_2,jpeg,"{""quality"": 50}",50.55009146770893,0.7196474343267883,0.274658203125
+IntegerConvPair_v8,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.55009146770893,0.7388415655517092,0.265869140625
+IntegerConvPair_v8,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.55009146770893,0.7330919646363895,0.268798828125
+IntegerConvPair_v8,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.55009146770893,0.728337725624186,0.274658203125
+IntegerConvPair_v8,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.55009146770893,0.5253460084235798,0.477783203125
+IntegerConvPair_v8,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.55009146770893,0.542637251126639,0.4609375
+IntegerConvPair_v8,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.55009146770893,0.5379009381367186,0.46435546875
+IntegerConvPair_v8,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.55009146770893,0.9244962641960157,0.075927734375
+IntegerConvPair_v8,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.55009146770893,0.9183687349668194,0.081298828125
+IntegerConvPair_v8,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.55009146770893,0.9207969988880593,0.07958984375
+IntegerConvPair_v8,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.55009146770893,0.8275218079681245,0.173828125
+IntegerConvPair_v8,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.55009146770893,0.835208693855172,0.1650390625
+IntegerConvPair_v8,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.55009146770893,0.840729015254949,0.162841796875
+IntegerConvPair_v8,girl,watermark_2,scale_resample,"{""scale"": 0.8}",50.55009146770893,0.9968439235264812,0.003173828125
+IntegerConvPair_v8,girl,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.55009146770893,0.970214147747031,0.030029296875
+IntegerConvPair_v8,girl,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.55009146770893,0.48426940516373085,0.489990234375
+IntegerConvPair_v8,girl,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.55009146770893,0.48920209054229946,0.491943359375
+IntegerConvPair_v8,girl,watermark_2,crop_resize,"{""fraction"": 0.05}",50.55009146770893,0.4974373032896017,0.4921875
+IntegerConvPair_v8,lenna,watermark_1,clean,{},50.789365638638635,1.0,0.0
+IntegerConvPair_v8,lenna,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.789365638638635,0.9235336105930902,0.0986328125
+IntegerConvPair_v8,lenna,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.789365638638635,0.8081506240463476,0.240478515625
+IntegerConvPair_v8,lenna,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.789365638638635,0.7961260138097079,0.255126953125
+IntegerConvPair_v8,lenna,watermark_1,average,"{""ksize"": 3}",50.789365638638635,0.8378366587310372,0.204833984375
+IntegerConvPair_v8,lenna,watermark_1,motion_blur,"{""ksize"": 5}",50.789365638638635,0.7091885038678964,0.355712890625
+IntegerConvPair_v8,lenna,watermark_1,jpeg,"{""quality"": 90}",50.789365638638635,0.9522173356564329,0.06201171875
+IntegerConvPair_v8,lenna,watermark_1,jpeg,"{""quality"": 70}",50.789365638638635,0.8417021610805188,0.199462890625
+IntegerConvPair_v8,lenna,watermark_1,jpeg,"{""quality"": 50}",50.789365638638635,0.7747600827491077,0.279296875
+IntegerConvPair_v8,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.789365638638635,0.7835314523692002,0.269775390625
+IntegerConvPair_v8,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.789365638638635,0.7789364479799381,0.27392578125
+IntegerConvPair_v8,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.789365638638635,0.7746919480057276,0.279296875
+IntegerConvPair_v8,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.789365638638635,0.5943502489377983,0.478759765625
+IntegerConvPair_v8,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.789365638638635,0.609734250651725,0.46484375
+IntegerConvPair_v8,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.789365638638635,0.6083924938918598,0.46533203125
+IntegerConvPair_v8,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.789365638638635,0.94199556035662,0.074951171875
+IntegerConvPair_v8,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.789365638638635,0.9341421299551464,0.084716796875
+IntegerConvPair_v8,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.789365638638635,0.9419072729624178,0.0751953125
+IntegerConvPair_v8,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.789365638638635,0.8723499640970986,0.162353515625
+IntegerConvPair_v8,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.789365638638635,0.8622911121406791,0.173828125
+IntegerConvPair_v8,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.789365638638635,0.8740776791348636,0.159423828125
+IntegerConvPair_v8,lenna,watermark_1,scale_resample,"{""scale"": 0.8}",50.789365638638635,0.9714796596853539,0.037109375
+IntegerConvPair_v8,lenna,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.789365638638635,0.9376446262292664,0.08056640625
+IntegerConvPair_v8,lenna,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.789365638638635,0.5703189226586214,0.5068359375
+IntegerConvPair_v8,lenna,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.789365638638635,0.5976471918068068,0.482177734375
+IntegerConvPair_v8,lenna,watermark_1,crop_resize,"{""fraction"": 0.05}",50.789365638638635,0.5802691311329398,0.4990234375
+IntegerConvPair_v8,lenna,watermark_2,clean,{},50.72618882928889,1.0,0.0
+IntegerConvPair_v8,lenna,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.72618882928889,0.8960913584570391,0.105224609375
+IntegerConvPair_v8,lenna,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.72618882928889,0.7634363881488323,0.240478515625
+IntegerConvPair_v8,lenna,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.72618882928889,0.7528517817822595,0.250244140625
+IntegerConvPair_v8,lenna,watermark_2,average,"{""ksize"": 3}",50.72618882928889,0.8001231664327463,0.20263671875
+IntegerConvPair_v8,lenna,watermark_2,motion_blur,"{""ksize"": 5}",50.72618882928889,0.6500126050670332,0.352294921875
+IntegerConvPair_v8,lenna,watermark_2,jpeg,"{""quality"": 90}",50.72618882928889,0.9290574468991922,0.0712890625
+IntegerConvPair_v8,lenna,watermark_2,jpeg,"{""quality"": 70}",50.72618882928889,0.8000000942596076,0.201171875
+IntegerConvPair_v8,lenna,watermark_2,jpeg,"{""quality"": 50}",50.72618882928889,0.7162631612073395,0.286865234375
+IntegerConvPair_v8,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.72618882928889,0.7356144122019028,0.269287109375
+IntegerConvPair_v8,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.72618882928889,0.7280238961876124,0.274169921875
+IntegerConvPair_v8,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.72618882928889,0.7223468350787129,0.280029296875
+IntegerConvPair_v8,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.72618882928889,0.5260372263870573,0.477783203125
+IntegerConvPair_v8,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.72618882928889,0.5374150294301813,0.46484375
+IntegerConvPair_v8,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.72618882928889,0.5323306761104457,0.468017578125
+IntegerConvPair_v8,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.72618882928889,0.9232637202525498,0.0771484375
+IntegerConvPair_v8,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.72618882928889,0.9152381820092766,0.084716796875
+IntegerConvPair_v8,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.72618882928889,0.9245331253483846,0.075927734375
+IntegerConvPair_v8,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.72618882928889,0.8379782302825889,0.164306640625
+IntegerConvPair_v8,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.72618882928889,0.8242306390555643,0.17578125
+IntegerConvPair_v8,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.72618882928889,0.8401655462508221,0.160888671875
+IntegerConvPair_v8,lenna,watermark_2,scale_resample,"{""scale"": 0.8}",50.72618882928889,0.9639920938057566,0.0361328125
+IntegerConvPair_v8,lenna,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.72618882928889,0.9172533369598146,0.083251953125
+IntegerConvPair_v8,lenna,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.72618882928889,0.5142164185483977,0.488037109375
+IntegerConvPair_v8,lenna,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.72618882928889,0.5162544885855781,0.48681640625
+IntegerConvPair_v8,lenna,watermark_2,crop_resize,"{""fraction"": 0.05}",50.72618882928889,0.521041579200487,0.487060546875
+IntegerConvPair_v8,manhattan,watermark_1,clean,{},50.7875224671211,1.0,0.0
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.7875224671211,0.9251893717288903,0.096435546875
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.7875224671211,0.843717520972797,0.1982421875
+IntegerConvPair_v8,manhattan,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.7875224671211,0.8337249306839195,0.210693359375
+IntegerConvPair_v8,manhattan,watermark_1,average,"{""ksize"": 3}",50.7875224671211,0.86123218680126,0.1767578125
+IntegerConvPair_v8,manhattan,watermark_1,motion_blur,"{""ksize"": 5}",50.7875224671211,0.7545375600618853,0.309814453125
+IntegerConvPair_v8,manhattan,watermark_1,jpeg,"{""quality"": 90}",50.7875224671211,0.9711856389102271,0.03759765625
+IntegerConvPair_v8,manhattan,watermark_1,jpeg,"{""quality"": 70}",50.7875224671211,0.8761873603052392,0.1591796875
+IntegerConvPair_v8,manhattan,watermark_1,jpeg,"{""quality"": 50}",50.7875224671211,0.795016144419057,0.25830078125
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.7875224671211,0.7829411248773777,0.270751953125
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.7875224671211,0.7757145742890339,0.277587890625
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.7875224671211,0.7727575567546402,0.28125
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.7875224671211,0.5956050470011198,0.477783203125
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.7875224671211,0.6086675686424122,0.465087890625
+IntegerConvPair_v8,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.7875224671211,0.6095274714521193,0.463623046875
+IntegerConvPair_v8,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.7875224671211,0.943679137400168,0.072998046875
+IntegerConvPair_v8,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.7875224671211,0.9320898002347523,0.087158203125
+IntegerConvPair_v8,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.7875224671211,0.9413157951071219,0.07568359375
+IntegerConvPair_v8,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.7875224671211,0.859911598771988,0.17724609375
+IntegerConvPair_v8,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.7875224671211,0.8598918394131634,0.17626953125
+IntegerConvPair_v8,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.7875224671211,0.8661020942860933,0.169677734375
+IntegerConvPair_v8,manhattan,watermark_1,scale_resample,"{""scale"": 0.8}",50.7875224671211,0.9658928269344496,0.04443359375
+IntegerConvPair_v8,manhattan,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.7875224671211,0.9393745310297462,0.078369140625
+IntegerConvPair_v8,manhattan,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.7875224671211,0.5981943909061612,0.48046875
+IntegerConvPair_v8,manhattan,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.7875224671211,0.5887204847274948,0.493408203125
+IntegerConvPair_v8,manhattan,watermark_1,crop_resize,"{""fraction"": 0.05}",50.7875224671211,0.5976471918068068,0.482177734375
+IntegerConvPair_v8,manhattan,watermark_2,clean,{},50.725636755990884,1.0,0.0
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.725636755990884,0.9144627395415563,0.086669921875
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.725636755990884,0.8025339215538521,0.20263671875
+IntegerConvPair_v8,manhattan,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.725636755990884,0.7907831617030678,0.21435546875
+IntegerConvPair_v8,manhattan,watermark_2,average,"{""ksize"": 3}",50.725636755990884,0.8302820467609726,0.173828125
+IntegerConvPair_v8,manhattan,watermark_2,motion_blur,"{""ksize"": 5}",50.725636755990884,0.6891304922202713,0.3212890625
+IntegerConvPair_v8,manhattan,watermark_2,jpeg,"{""quality"": 90}",50.725636755990884,0.9644201712310966,0.035888671875
+IntegerConvPair_v8,manhattan,watermark_2,jpeg,"{""quality"": 70}",50.725636755990884,0.8340652697265186,0.16748046875
+IntegerConvPair_v8,manhattan,watermark_2,jpeg,"{""quality"": 50}",50.725636755990884,0.7345658280892009,0.269287109375
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.725636755990884,0.7343077308216782,0.270751953125
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.725636755990884,0.7236109658238538,0.278076171875
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.725636755990884,0.721145283118452,0.28076171875
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.725636755990884,0.5261404837082113,0.47802734375
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.725636755990884,0.5356727272901861,0.465576171875
+IntegerConvPair_v8,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.725636755990884,0.536552829546453,0.46435546875
+IntegerConvPair_v8,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.725636755990884,0.9286758375496208,0.07177734375
+IntegerConvPair_v8,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.725636755990884,0.9118987255532286,0.088134765625
+IntegerConvPair_v8,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.725636755990884,0.9231973980211741,0.076904296875
+IntegerConvPair_v8,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.725636755990884,0.8267835042761514,0.17431640625
+IntegerConvPair_v8,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.725636755990884,0.8195489464894917,0.180419921875
+IntegerConvPair_v8,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.725636755990884,0.8290591896761804,0.17236328125
+IntegerConvPair_v8,manhattan,watermark_2,scale_resample,"{""scale"": 0.8}",50.725636755990884,0.9551101909520009,0.04541015625
+IntegerConvPair_v8,manhattan,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.725636755990884,0.9275120418712781,0.0732421875
+IntegerConvPair_v8,manhattan,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.725636755990884,0.5165183701382422,0.489990234375
+IntegerConvPair_v8,manhattan,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.725636755990884,0.5165305946757206,0.489501953125
+IntegerConvPair_v8,manhattan,watermark_2,crop_resize,"{""fraction"": 0.05}",50.725636755990884,0.5085478523202194,0.502197265625
+IntegerConvPair_v8,pepper,watermark_1,clean,{},49.95355170412263,1.0,0.0
+IntegerConvPair_v8,pepper,watermark_1,gaussian_blur,"{""sigma"": 0.7}",49.95355170412263,0.9341843239687706,0.085205078125
+IntegerConvPair_v8,pepper,watermark_1,gaussian_blur,"{""sigma"": 1.0}",49.95355170412263,0.8270584419365654,0.215576171875
+IntegerConvPair_v8,pepper,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",49.95355170412263,0.8177139271725695,0.2265625
+IntegerConvPair_v8,pepper,watermark_1,average,"{""ksize"": 3}",49.95355170412263,0.8562260736380564,0.180908203125
+IntegerConvPair_v8,pepper,watermark_1,motion_blur,"{""ksize"": 5}",49.95355170412263,0.7315250024539627,0.330078125
+IntegerConvPair_v8,pepper,watermark_1,jpeg,"{""quality"": 90}",49.95355170412263,0.9270575737376698,0.09375
+IntegerConvPair_v8,pepper,watermark_1,jpeg,"{""quality"": 70}",49.95355170412263,0.8032813485235246,0.244384765625
+IntegerConvPair_v8,pepper,watermark_1,jpeg,"{""quality"": 50}",49.95355170412263,0.741923009174638,0.3154296875
+IntegerConvPair_v8,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",49.95355170412263,0.786757347457243,0.265869140625
+IntegerConvPair_v8,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",49.95355170412263,0.7793039990543816,0.273193359375
+IntegerConvPair_v8,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",49.95355170412263,0.7797646337421199,0.273193359375
+IntegerConvPair_v8,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",49.95355170412263,0.6000586207469346,0.473876953125
+IntegerConvPair_v8,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",49.95355170412263,0.6149680707165184,0.45947265625
+IntegerConvPair_v8,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",49.95355170412263,0.611175814117587,0.462158203125
+IntegerConvPair_v8,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",49.95355170412263,0.946165359617756,0.069580078125
+IntegerConvPair_v8,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",49.95355170412263,0.9405849597522952,0.07666015625
+IntegerConvPair_v8,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",49.95355170412263,0.9472640617796182,0.068115234375
+IntegerConvPair_v8,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",49.95355170412263,0.8740747234153504,0.160400390625
+IntegerConvPair_v8,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",49.95355170412263,0.8764905475521422,0.15625
+IntegerConvPair_v8,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",49.95355170412263,0.8694851245386316,0.165283203125
+IntegerConvPair_v8,pepper,watermark_1,scale_resample,"{""scale"": 0.8}",49.95355170412263,0.9738530461585019,0.0341796875
+IntegerConvPair_v8,pepper,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",49.95355170412263,0.9464767284518268,0.069580078125
+IntegerConvPair_v8,pepper,watermark_1,rotation_unregistered,"{""angle"": 2.0}",49.95355170412263,0.564367754674699,0.50732421875
+IntegerConvPair_v8,pepper,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",49.95355170412263,0.5728266595901733,0.50341796875
+IntegerConvPair_v8,pepper,watermark_1,crop_resize,"{""fraction"": 0.05}",49.95355170412263,0.5510336931707474,0.517578125
+IntegerConvPair_v8,pepper,watermark_2,clean,{},50.16933586001714,1.0,0.0
+IntegerConvPair_v8,pepper,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.16933586001714,0.9193680698904955,0.081787109375
+IntegerConvPair_v8,pepper,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.16933586001714,0.7795501598854063,0.2197265625
+IntegerConvPair_v8,pepper,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.16933586001714,0.7637948126822082,0.235595703125
+IntegerConvPair_v8,pepper,watermark_2,average,"{""ksize"": 3}",50.16933586001714,0.8171625271580804,0.182373046875
+IntegerConvPair_v8,pepper,watermark_2,motion_blur,"{""ksize"": 5}",50.16933586001714,0.6608153503558565,0.337158203125
+IntegerConvPair_v8,pepper,watermark_2,jpeg,"{""quality"": 90}",50.16933586001714,0.9127501403341954,0.087890625
+IntegerConvPair_v8,pepper,watermark_2,jpeg,"{""quality"": 70}",50.16933586001714,0.7521376122108987,0.248291015625
+IntegerConvPair_v8,pepper,watermark_2,jpeg,"{""quality"": 50}",50.16933586001714,0.673873069002807,0.322021484375
+IntegerConvPair_v8,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.16933586001714,0.7357926959528758,0.269775390625
+IntegerConvPair_v8,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.16933586001714,0.7276260504481715,0.274169921875
+IntegerConvPair_v8,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.16933586001714,0.7273215092453232,0.275146484375
+IntegerConvPair_v8,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.16933586001714,0.5331275292659919,0.473388671875
+IntegerConvPair_v8,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.16933586001714,0.5404760522956069,0.462890625
+IntegerConvPair_v8,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.16933586001714,0.5367986556213115,0.465576171875
+IntegerConvPair_v8,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.16933586001714,0.928935924405499,0.071533203125
+IntegerConvPair_v8,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.16933586001714,0.9225679058374342,0.077392578125
+IntegerConvPair_v8,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.16933586001714,0.9317575263461885,0.06884765625
+IntegerConvPair_v8,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.16933586001714,0.8391356220192177,0.161376953125
+IntegerConvPair_v8,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.16933586001714,0.8447996262023222,0.155029296875
+IntegerConvPair_v8,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.16933586001714,0.8326503621444227,0.169921875
+IntegerConvPair_v8,pepper,watermark_2,scale_resample,"{""scale"": 0.8}",50.16933586001714,0.9666989900333195,0.03369140625
+IntegerConvPair_v8,pepper,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.16933586001714,0.9354370034212766,0.06494140625
+IntegerConvPair_v8,pepper,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.16933586001714,0.49831951101505717,0.490966796875
+IntegerConvPair_v8,pepper,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.16933586001714,0.48410919249488277,0.507568359375
+IntegerConvPair_v8,pepper,watermark_2,crop_resize,"{""fraction"": 0.05}",50.16933586001714,0.48333304661984183,0.501220703125
+IntegerConvPair_v8,safari,watermark_1,clean,{},50.66224588554044,1.0,0.0
+IntegerConvPair_v8,safari,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.66224588554044,0.9164172560726025,0.107177734375
+IntegerConvPair_v8,safari,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.66224588554044,0.7683257588145321,0.286376953125
+IntegerConvPair_v8,safari,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.66224588554044,0.7565494350912317,0.300048828125
+IntegerConvPair_v8,safari,watermark_1,average,"{""ksize"": 3}",50.66224588554044,0.8133815356136911,0.233154296875
+IntegerConvPair_v8,safari,watermark_1,motion_blur,"{""ksize"": 5}",50.66224588554044,0.6669825340368594,0.401611328125
+IntegerConvPair_v8,safari,watermark_1,jpeg,"{""quality"": 90}",50.66224588554044,0.9766134319201553,0.030517578125
+IntegerConvPair_v8,safari,watermark_1,jpeg,"{""quality"": 70}",50.66224588554044,0.8875062265968862,0.1435546875
+IntegerConvPair_v8,safari,watermark_1,jpeg,"{""quality"": 50}",50.66224588554044,0.8136682522477376,0.232666015625
+IntegerConvPair_v8,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.66224588554044,0.7815558309562672,0.272216796875
+IntegerConvPair_v8,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.66224588554044,0.7751499950108465,0.2783203125
+IntegerConvPair_v8,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.66224588554044,0.7735261867732462,0.280517578125
+IntegerConvPair_v8,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.66224588554044,0.5958791709731239,0.477783203125
+IntegerConvPair_v8,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.66224588554044,0.6086902084418829,0.464599609375
+IntegerConvPair_v8,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.66224588554044,0.6084149526787528,0.46484375
+IntegerConvPair_v8,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.66224588554044,0.9415274181290308,0.075439453125
+IntegerConvPair_v8,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.66224588554044,0.936999870912938,0.080810546875
+IntegerConvPair_v8,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.66224588554044,0.9469636416756686,0.068603515625
+IntegerConvPair_v8,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.66224588554044,0.8675434427062542,0.167724609375
+IntegerConvPair_v8,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.66224588554044,0.8594999105893653,0.1767578125
+IntegerConvPair_v8,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.66224588554044,0.882015489844391,0.150634765625
+IntegerConvPair_v8,safari,watermark_1,scale_resample,"{""scale"": 0.8}",50.66224588554044,0.9857927503323247,0.0185546875
+IntegerConvPair_v8,safari,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.66224588554044,0.9402050789123306,0.0771484375
+IntegerConvPair_v8,safari,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.66224588554044,0.5701951310880894,0.504150390625
+IntegerConvPair_v8,safari,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.66224588554044,0.5652170112651963,0.506103515625
+IntegerConvPair_v8,safari,watermark_1,crop_resize,"{""fraction"": 0.05}",50.66224588554044,0.571971521688953,0.504150390625
+IntegerConvPair_v8,safari,watermark_2,clean,{},50.7269417696302,1.0,0.0
+IntegerConvPair_v8,safari,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.7269417696302,0.89249759531015,0.108642578125
+IntegerConvPair_v8,safari,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.7269417696302,0.7115476971985026,0.293212890625
+IntegerConvPair_v8,safari,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.7269417696302,0.7008305013692542,0.303955078125
+IntegerConvPair_v8,safari,watermark_2,average,"{""ksize"": 3}",50.7269417696302,0.7677122923064694,0.23583984375
+IntegerConvPair_v8,safari,watermark_2,motion_blur,"{""ksize"": 5}",50.7269417696302,0.592808621975426,0.4091796875
+IntegerConvPair_v8,safari,watermark_2,jpeg,"{""quality"": 90}",50.7269417696302,0.9708596406022341,0.029296875
+IntegerConvPair_v8,safari,watermark_2,jpeg,"{""quality"": 70}",50.7269417696302,0.8597753930359361,0.141357421875
+IntegerConvPair_v8,safari,watermark_2,jpeg,"{""quality"": 50}",50.7269417696302,0.7778696915013702,0.22119140625
+IntegerConvPair_v8,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.7269417696302,0.732604591297052,0.272216796875
+IntegerConvPair_v8,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.7269417696302,0.7237453781791146,0.278076171875
+IntegerConvPair_v8,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.7269417696302,0.7215912481921842,0.280517578125
+IntegerConvPair_v8,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.7269417696302,0.5261643345745803,0.4775390625
+IntegerConvPair_v8,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.7269417696302,0.5369655521720311,0.46484375
+IntegerConvPair_v8,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.7269417696302,0.5358402536759101,0.46484375
+IntegerConvPair_v8,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.7269417696302,0.9254788671693499,0.07470703125
+IntegerConvPair_v8,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.7269417696302,0.921015916480736,0.07861328125
+IntegerConvPair_v8,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.7269417696302,0.9301555531779148,0.070068359375
+IntegerConvPair_v8,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.7269417696302,0.8365934282444041,0.16357421875
+IntegerConvPair_v8,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.7269417696302,0.8218005400941366,0.177001953125
+IntegerConvPair_v8,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.7269417696302,0.8478893279537781,0.154296875
+IntegerConvPair_v8,safari,watermark_2,scale_resample,"{""scale"": 0.8}",50.7269417696302,0.9793639521446238,0.020751953125
+IntegerConvPair_v8,safari,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.7269417696302,0.9243090232664721,0.076171875
+IntegerConvPair_v8,safari,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.7269417696302,0.49097705269192154,0.50927734375
+IntegerConvPair_v8,safari,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.7269417696302,0.49279048341585174,0.500244140625
+IntegerConvPair_v8,safari,watermark_2,crop_resize,"{""fraction"": 0.05}",50.7269417696302,0.49382235185213946,0.510009765625
+IntegerConvQuad_v9,airplane,watermark_1,clean,{},51.030810111678726,1.0,0.0
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_blur,"{""sigma"": 0.7}",51.030810111678726,0.8961160789094099,0.132568359375
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_blur,"{""sigma"": 1.0}",51.030810111678726,0.8015236961599109,0.24853515625
+IntegerConvQuad_v9,airplane,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",51.030810111678726,0.7910244334319448,0.260986328125
+IntegerConvQuad_v9,airplane,watermark_1,average,"{""ksize"": 3}",51.030810111678726,0.8248760595236088,0.22021484375
+IntegerConvQuad_v9,airplane,watermark_1,motion_blur,"{""ksize"": 5}",51.030810111678726,0.7767432582431181,0.27880859375
+IntegerConvQuad_v9,airplane,watermark_1,jpeg,"{""quality"": 90}",51.030810111678726,0.9365249648568181,0.08203125
+IntegerConvQuad_v9,airplane,watermark_1,jpeg,"{""quality"": 70}",51.030810111678726,0.8207339414140958,0.2275390625
+IntegerConvQuad_v9,airplane,watermark_1,jpeg,"{""quality"": 50}",51.030810111678726,0.7450844065451437,0.31494140625
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",51.030810111678726,0.7687368574933042,0.28515625
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",51.030810111678726,0.7772484784404277,0.27392578125
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",51.030810111678726,0.7751019841765042,0.279296875
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",51.030810111678726,0.5889193396087103,0.481201171875
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",51.030810111678726,0.6045662223066461,0.46533203125
+IntegerConvQuad_v9,airplane,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",51.030810111678726,0.6116450397159741,0.458740234375
+IntegerConvQuad_v9,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",51.030810111678726,0.9730092007773942,0.03515625
+IntegerConvQuad_v9,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",51.030810111678726,0.9704198660922654,0.03857421875
+IntegerConvQuad_v9,airplane,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",51.030810111678726,0.9758771985460676,0.031494140625
+IntegerConvQuad_v9,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",51.030810111678726,0.9311078506534697,0.088623046875
+IntegerConvQuad_v9,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",51.030810111678726,0.9328553770727275,0.086181640625
+IntegerConvQuad_v9,airplane,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",51.030810111678726,0.9357764663815494,0.08251953125
+IntegerConvQuad_v9,airplane,watermark_1,scale_resample,"{""scale"": 0.8}",51.030810111678726,0.9544312024824624,0.05908203125
+IntegerConvQuad_v9,airplane,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",51.030810111678726,0.9183878383579205,0.1044921875
+IntegerConvQuad_v9,airplane,watermark_1,rotation_unregistered,"{""angle"": 2.0}",51.030810111678726,0.5916669383988705,0.4833984375
+IntegerConvQuad_v9,airplane,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",51.030810111678726,0.6084704003575744,0.475341796875
+IntegerConvQuad_v9,airplane,watermark_1,crop_resize,"{""fraction"": 0.05}",51.030810111678726,0.5939009502105532,0.4814453125
+IntegerConvQuad_v9,airplane,watermark_2,clean,{},51.06677203288167,1.0,0.0
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_blur,"{""sigma"": 0.7}",51.06677203288167,0.8740888915254565,0.12646484375
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_blur,"{""sigma"": 1.0}",51.06677203288167,0.7579184827976361,0.24267578125
+IntegerConvQuad_v9,airplane,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",51.06677203288167,0.7442798468604035,0.25634765625
+IntegerConvQuad_v9,airplane,watermark_2,average,"{""ksize"": 3}",51.06677203288167,0.7805923595263474,0.218017578125
+IntegerConvQuad_v9,airplane,watermark_2,motion_blur,"{""ksize"": 5}",51.06677203288167,0.7057423930441459,0.296630859375
+IntegerConvQuad_v9,airplane,watermark_2,jpeg,"{""quality"": 90}",51.06677203288167,0.9216982968080532,0.078857421875
+IntegerConvQuad_v9,airplane,watermark_2,jpeg,"{""quality"": 70}",51.06677203288167,0.7753706613534299,0.227783203125
+IntegerConvQuad_v9,airplane,watermark_2,jpeg,"{""quality"": 50}",51.06677203288167,0.6769442610685904,0.32275390625
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",51.06677203288167,0.716504938790765,0.28515625
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",51.06677203288167,0.7258211030230012,0.27392578125
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",51.06677203288167,0.7224116200260448,0.27880859375
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",51.06677203288167,0.5161130133939671,0.481201171875
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",51.06677203288167,0.536538010470902,0.466064453125
+IntegerConvQuad_v9,airplane,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",51.06677203288167,0.5361473617998118,0.45849609375
+IntegerConvQuad_v9,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",51.06677203288167,0.9669426058087502,0.033203125
+IntegerConvQuad_v9,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",51.06677203288167,0.9651848595355899,0.034912109375
+IntegerConvQuad_v9,airplane,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",51.06677203288167,0.9680260962062721,0.0322265625
+IntegerConvQuad_v9,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",51.06677203288167,0.9158381697764579,0.083984375
+IntegerConvQuad_v9,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",51.06677203288167,0.9147510500150174,0.084716796875
+IntegerConvQuad_v9,airplane,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",51.06677203288167,0.9195210567001176,0.08056640625
+IntegerConvQuad_v9,airplane,watermark_2,scale_resample,"{""scale"": 0.8}",51.06677203288167,0.9427220526451634,0.057861328125
+IntegerConvQuad_v9,airplane,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",51.06677203288167,0.8954483432478424,0.104736328125
+IntegerConvQuad_v9,airplane,watermark_2,rotation_unregistered,"{""angle"": 2.0}",51.06677203288167,0.5208540915058625,0.482421875
+IntegerConvQuad_v9,airplane,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",51.06677203288167,0.5535556809986886,0.44775390625
+IntegerConvQuad_v9,airplane,watermark_2,crop_resize,"{""fraction"": 0.05}",51.06677203288167,0.5057080547527468,0.496826171875
+IntegerConvQuad_v9,girl,watermark_1,clean,{},50.11842837898921,1.0,0.0
+IntegerConvQuad_v9,girl,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.11842837898921,0.9649115947614734,0.045654296875
+IntegerConvQuad_v9,girl,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.11842837898921,0.8413574130992004,0.199951171875
+IntegerConvQuad_v9,girl,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.11842837898921,0.8296194474743345,0.21435546875
+IntegerConvQuad_v9,girl,watermark_1,average,"{""ksize"": 3}",50.11842837898921,0.8705091241823202,0.1640625
+IntegerConvQuad_v9,girl,watermark_1,motion_blur,"{""ksize"": 5}",50.11842837898921,0.8053080369007544,0.245361328125
+IntegerConvQuad_v9,girl,watermark_1,jpeg,"{""quality"": 90}",50.11842837898921,0.916752693337951,0.10693359375
+IntegerConvQuad_v9,girl,watermark_1,jpeg,"{""quality"": 70}",50.11842837898921,0.8218454137230594,0.224365234375
+IntegerConvQuad_v9,girl,watermark_1,jpeg,"{""quality"": 50}",50.11842837898921,0.7397522668448893,0.322021484375
+IntegerConvQuad_v9,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.11842837898921,0.779155265570273,0.271728515625
+IntegerConvQuad_v9,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.11842837898921,0.7855143198560307,0.26318359375
+IntegerConvQuad_v9,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.11842837898921,0.78363902167716,0.2685546875
+IntegerConvQuad_v9,girl,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.11842837898921,0.6034126111686341,0.46484375
+IntegerConvQuad_v9,girl,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.11842837898921,0.6165812737139074,0.4501953125
+IntegerConvQuad_v9,girl,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.11842837898921,0.6204343912043957,0.44921875
+IntegerConvQuad_v9,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.11842837898921,0.9712282548373838,0.03759765625
+IntegerConvQuad_v9,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.11842837898921,0.9672198828793231,0.042724609375
+IntegerConvQuad_v9,girl,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.11842837898921,0.9656284505072669,0.044677734375
+IntegerConvQuad_v9,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.11842837898921,0.9231626049375927,0.098876953125
+IntegerConvQuad_v9,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.11842837898921,0.9242500836338183,0.09765625
+IntegerConvQuad_v9,girl,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.11842837898921,0.9244652823715784,0.09716796875
+IntegerConvQuad_v9,girl,watermark_1,scale_resample,"{""scale"": 0.8}",50.11842837898921,0.9968357004472231,0.004150390625
+IntegerConvQuad_v9,girl,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.11842837898921,0.9706113658330433,0.038330078125
+IntegerConvQuad_v9,girl,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.11842837898921,0.5682976321750263,0.497802734375
+IntegerConvQuad_v9,girl,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.11842837898921,0.5963960618918984,0.48095703125
+IntegerConvQuad_v9,girl,watermark_1,crop_resize,"{""fraction"": 0.05}",50.11842837898921,0.5639395214988374,0.502685546875
+IntegerConvQuad_v9,girl,watermark_2,clean,{},50.36570687303612,1.0,0.0
+IntegerConvQuad_v9,girl,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.36570687303612,0.9522199580198404,0.048095703125
+IntegerConvQuad_v9,girl,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.36570687303612,0.7920952313882031,0.20654296875
+IntegerConvQuad_v9,girl,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.36570687303612,0.776016077464743,0.2216796875
+IntegerConvQuad_v9,girl,watermark_2,average,"{""ksize"": 3}",50.36570687303612,0.8303181725660947,0.168701171875
+IntegerConvQuad_v9,girl,watermark_2,motion_blur,"{""ksize"": 5}",50.36570687303612,0.7353818021983238,0.263427734375
+IntegerConvQuad_v9,girl,watermark_2,jpeg,"{""quality"": 90}",50.36570687303612,0.897764308220769,0.101806640625
+IntegerConvQuad_v9,girl,watermark_2,jpeg,"{""quality"": 70}",50.36570687303612,0.7721371961249246,0.22509765625
+IntegerConvQuad_v9,girl,watermark_2,jpeg,"{""quality"": 50}",50.36570687303612,0.6768349144211165,0.32177734375
+IntegerConvQuad_v9,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.36570687303612,0.7284441221304746,0.271240234375
+IntegerConvQuad_v9,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.36570687303612,0.7341908969583062,0.263671875
+IntegerConvQuad_v9,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.36570687303612,0.7332558084906508,0.267333984375
+IntegerConvQuad_v9,girl,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.36570687303612,0.5298386352294685,0.46630859375
+IntegerConvQuad_v9,girl,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.36570687303612,0.5482132059937236,0.451904296875
+IntegerConvQuad_v9,girl,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.36570687303612,0.5453452411791141,0.449951171875
+IntegerConvQuad_v9,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.36570687303612,0.9624166851780601,0.0380859375
+IntegerConvQuad_v9,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.36570687303612,0.9575139879173019,0.042724609375
+IntegerConvQuad_v9,girl,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.36570687303612,0.957157971146525,0.043212890625
+IntegerConvQuad_v9,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.36570687303612,0.900996957159172,0.099853515625
+IntegerConvQuad_v9,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.36570687303612,0.9000785144353302,0.100830078125
+IntegerConvQuad_v9,girl,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.36570687303612,0.9039753215018059,0.09716796875
+IntegerConvQuad_v9,girl,watermark_2,scale_resample,"{""scale"": 0.8}",50.36570687303612,0.9968423903483541,0.003173828125
+IntegerConvQuad_v9,girl,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.36570687303612,0.9573027311835955,0.04296875
+IntegerConvQuad_v9,girl,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.36570687303612,0.4879966497800094,0.49658203125
+IntegerConvQuad_v9,girl,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.36570687303612,0.5315944993216282,0.457763671875
+IntegerConvQuad_v9,girl,watermark_2,crop_resize,"{""fraction"": 0.05}",50.36570687303612,0.4896458892545923,0.494384765625
+IntegerConvQuad_v9,lenna,watermark_1,clean,{},50.8091704601313,1.0,0.0
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.8091704601313,0.895221915980913,0.13330078125
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.8091704601313,0.7637717140974891,0.289306640625
+IntegerConvQuad_v9,lenna,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.8091704601313,0.750606169957775,0.303955078125
+IntegerConvQuad_v9,lenna,watermark_1,average,"{""ksize"": 3}",50.8091704601313,0.7888794036248277,0.26025390625
+IntegerConvQuad_v9,lenna,watermark_1,motion_blur,"{""ksize"": 5}",50.8091704601313,0.7162176461737844,0.34619140625
+IntegerConvQuad_v9,lenna,watermark_1,jpeg,"{""quality"": 90}",50.8091704601313,0.9319394286848655,0.087646484375
+IntegerConvQuad_v9,lenna,watermark_1,jpeg,"{""quality"": 70}",50.8091704601313,0.8097733275089789,0.238037109375
+IntegerConvQuad_v9,lenna,watermark_1,jpeg,"{""quality"": 50}",50.8091704601313,0.7361710977145605,0.32373046875
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.8091704601313,0.7721150494737049,0.281494140625
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.8091704601313,0.7818189583536408,0.268798828125
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.8091704601313,0.7769218573037338,0.277099609375
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.8091704601313,0.5909013939289169,0.479248046875
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.8091704601313,0.6091454462891214,0.461181640625
+IntegerConvQuad_v9,lenna,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.8091704601313,0.6136073820732949,0.45654296875
+IntegerConvQuad_v9,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.8091704601313,0.9663497424597911,0.043701171875
+IntegerConvQuad_v9,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.8091704601313,0.9694299202176738,0.039794921875
+IntegerConvQuad_v9,lenna,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.8091704601313,0.969836979739421,0.039306640625
+IntegerConvQuad_v9,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.8091704601313,0.927509171783085,0.093505859375
+IntegerConvQuad_v9,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.8091704601313,0.9240240723617091,0.09765625
+IntegerConvQuad_v9,lenna,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.8091704601313,0.9249295346782906,0.096435546875
+IntegerConvQuad_v9,lenna,watermark_1,scale_resample,"{""scale"": 0.8}",50.8091704601313,0.9643244287792511,0.04638671875
+IntegerConvQuad_v9,lenna,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.8091704601313,0.9214721003869812,0.100830078125
+IntegerConvQuad_v9,lenna,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.8091704601313,0.5636029182926761,0.51025390625
+IntegerConvQuad_v9,lenna,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.8091704601313,0.5857581357125912,0.498291015625
+IntegerConvQuad_v9,lenna,watermark_1,crop_resize,"{""fraction"": 0.05}",50.8091704601313,0.5688912367672176,0.508056640625
+IntegerConvQuad_v9,lenna,watermark_2,clean,{},50.84793801763938,1.0,0.0
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.84793801763938,0.8701144873458898,0.129150390625
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.84793801763938,0.703790375235446,0.291259765625
+IntegerConvQuad_v9,lenna,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.84793801763938,0.6874161322587747,0.30712890625
+IntegerConvQuad_v9,lenna,watermark_2,average,"{""ksize"": 3}",50.84793801763938,0.7381983231085907,0.258056640625
+IntegerConvQuad_v9,lenna,watermark_2,motion_blur,"{""ksize"": 5}",50.84793801763938,0.6515283032522967,0.34814453125
+IntegerConvQuad_v9,lenna,watermark_2,jpeg,"{""quality"": 90}",50.84793801763938,0.9152357755767582,0.08447265625
+IntegerConvQuad_v9,lenna,watermark_2,jpeg,"{""quality"": 70}",50.84793801763938,0.7541022487364573,0.245849609375
+IntegerConvQuad_v9,lenna,watermark_2,jpeg,"{""quality"": 50}",50.84793801763938,0.6784743378520893,0.320068359375
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.84793801763938,0.7197284120166164,0.281982421875
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.84793801763938,0.7311470637036765,0.268798828125
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.84793801763938,0.7243990068465879,0.276611328125
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.84793801763938,0.5176094172425968,0.479248046875
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.84793801763938,0.5413145898124041,0.462158203125
+IntegerConvQuad_v9,lenna,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.84793801763938,0.5387061210364487,0.456298828125
+IntegerConvQuad_v9,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.84793801763938,0.9581919939914765,0.0419921875
+IntegerConvQuad_v9,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.84793801763938,0.9603332843642207,0.039794921875
+IntegerConvQuad_v9,lenna,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.84793801763938,0.9618285374277454,0.03857421875
+IntegerConvQuad_v9,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.84793801763938,0.9090029101194353,0.091552734375
+IntegerConvQuad_v9,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.84793801763938,0.9012977608411871,0.098876953125
+IntegerConvQuad_v9,lenna,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.84793801763938,0.9062294386295395,0.094482421875
+IntegerConvQuad_v9,lenna,watermark_2,scale_resample,"{""scale"": 0.8}",50.84793801763938,0.9567130807267982,0.04345703125
+IntegerConvQuad_v9,lenna,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.84793801763938,0.909821819654237,0.090087890625
+IntegerConvQuad_v9,lenna,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.84793801763938,0.4959831179916966,0.500244140625
+IntegerConvQuad_v9,lenna,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.84793801763938,0.5288897514859472,0.466796875
+IntegerConvQuad_v9,lenna,watermark_2,crop_resize,"{""fraction"": 0.05}",50.84793801763938,0.49756577073428115,0.5029296875
+IntegerConvQuad_v9,manhattan,watermark_1,clean,{},51.07912341993698,1.0,0.0
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_blur,"{""sigma"": 0.7}",51.07912341993698,0.9115988333016997,0.11328125
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_blur,"{""sigma"": 1.0}",51.07912341993698,0.7920556547845778,0.261474609375
+IntegerConvQuad_v9,manhattan,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",51.07912341993698,0.7820360839018361,0.2734375
+IntegerConvQuad_v9,manhattan,watermark_1,average,"{""ksize"": 3}",51.07912341993698,0.8154332307751341,0.232177734375
+IntegerConvQuad_v9,manhattan,watermark_1,motion_blur,"{""ksize"": 5}",51.07912341993698,0.7866967921956104,0.267333984375
+IntegerConvQuad_v9,manhattan,watermark_1,jpeg,"{""quality"": 90}",51.07912341993698,0.958636491076874,0.0537109375
+IntegerConvQuad_v9,manhattan,watermark_1,jpeg,"{""quality"": 70}",51.07912341993698,0.8444603937588203,0.19677734375
+IntegerConvQuad_v9,manhattan,watermark_1,jpeg,"{""quality"": 50}",51.07912341993698,0.7654255327110964,0.29443359375
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",51.07912341993698,0.7704081460495746,0.283203125
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",51.07912341993698,0.7784566366970708,0.2724609375
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",51.07912341993698,0.7760323968119351,0.2783203125
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",51.07912341993698,0.5883385397758797,0.482421875
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",51.07912341993698,0.6072246233889471,0.462646484375
+IntegerConvQuad_v9,manhattan,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",51.07912341993698,0.6149260267160634,0.4560546875
+IntegerConvQuad_v9,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",51.07912341993698,0.9696139950166778,0.03955078125
+IntegerConvQuad_v9,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",51.07912341993698,0.9695135957937534,0.039794921875
+IntegerConvQuad_v9,manhattan,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",51.07912341993698,0.9721259293555424,0.036376953125
+IntegerConvQuad_v9,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",51.07912341993698,0.9327008171069937,0.086669921875
+IntegerConvQuad_v9,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",51.07912341993698,0.9277709938685655,0.093017578125
+IntegerConvQuad_v9,manhattan,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",51.07912341993698,0.9299463098532654,0.090087890625
+IntegerConvQuad_v9,manhattan,watermark_1,scale_resample,"{""scale"": 0.8}",51.07912341993698,0.9588521105037071,0.053466796875
+IntegerConvQuad_v9,manhattan,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",51.07912341993698,0.9279708777034282,0.0927734375
+IntegerConvQuad_v9,manhattan,watermark_1,rotation_unregistered,"{""angle"": 2.0}",51.07912341993698,0.5919480880941396,0.485107421875
+IntegerConvQuad_v9,manhattan,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",51.07912341993698,0.6045426344521276,0.47998046875
+IntegerConvQuad_v9,manhattan,watermark_1,crop_resize,"{""fraction"": 0.05}",51.07912341993698,0.5949300587947612,0.4873046875
+IntegerConvQuad_v9,manhattan,watermark_2,clean,{},50.91424507724244,1.0,0.0
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.91424507724244,0.8818558228359321,0.118408203125
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.91424507724244,0.7409565646865126,0.260498046875
+IntegerConvQuad_v9,manhattan,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.91424507724244,0.7240462437349231,0.277099609375
+IntegerConvQuad_v9,manhattan,watermark_2,average,"{""ksize"": 3}",50.91424507724244,0.7686767972065371,0.2314453125
+IntegerConvQuad_v9,manhattan,watermark_2,motion_blur,"{""ksize"": 5}",50.91424507724244,0.707107034821974,0.29248046875
+IntegerConvQuad_v9,manhattan,watermark_2,jpeg,"{""quality"": 90}",50.91424507724244,0.9418646590026823,0.058349609375
+IntegerConvQuad_v9,manhattan,watermark_2,jpeg,"{""quality"": 70}",50.91424507724244,0.7962139192580918,0.202880859375
+IntegerConvQuad_v9,manhattan,watermark_2,jpeg,"{""quality"": 50}",50.91424507724244,0.7073217979131899,0.296630859375
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.91424507724244,0.7186210456985836,0.282958984375
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.91424507724244,0.7266673953979622,0.27294921875
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.91424507724244,0.722856470194128,0.278564453125
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.91424507724244,0.5141487393182527,0.483154296875
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.91424507724244,0.5400293663493876,0.462890625
+IntegerConvQuad_v9,manhattan,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.91424507724244,0.5387061210364487,0.456298828125
+IntegerConvQuad_v9,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.91424507724244,0.9597088509412889,0.04052734375
+IntegerConvQuad_v9,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.91424507724244,0.9591449899304759,0.041015625
+IntegerConvQuad_v9,manhattan,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.91424507724244,0.9627750750534001,0.03759765625
+IntegerConvQuad_v9,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.91424507724244,0.9114728991947428,0.089111328125
+IntegerConvQuad_v9,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.91424507724244,0.9085612784939802,0.091796875
+IntegerConvQuad_v9,manhattan,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.91424507724244,0.9105929160507774,0.08984375
+IntegerConvQuad_v9,manhattan,watermark_2,scale_resample,"{""scale"": 0.8}",50.91424507724244,0.9494413821742027,0.05078125
+IntegerConvQuad_v9,manhattan,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.91424507724244,0.9012050951200671,0.098876953125
+IntegerConvQuad_v9,manhattan,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.91424507724244,0.50875540540937,0.4931640625
+IntegerConvQuad_v9,manhattan,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.91424507724244,0.5244722975377549,0.476806640625
+IntegerConvQuad_v9,manhattan,watermark_2,crop_resize,"{""fraction"": 0.05}",50.91424507724244,0.506278938941193,0.5048828125
+IntegerConvQuad_v9,pepper,watermark_1,clean,{},50.03771270092362,1.0,0.0
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.03771270092362,0.9163258304287378,0.107421875
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.03771270092362,0.7718374787934918,0.28271484375
+IntegerConvQuad_v9,pepper,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.03771270092362,0.7590999091431531,0.297119140625
+IntegerConvQuad_v9,pepper,watermark_1,average,"{""ksize"": 3}",50.03771270092362,0.8061698685860345,0.2421875
+IntegerConvQuad_v9,pepper,watermark_1,motion_blur,"{""ksize"": 5}",50.03771270092362,0.7483516250743156,0.31201171875
+IntegerConvQuad_v9,pepper,watermark_1,jpeg,"{""quality"": 90}",50.03771270092362,0.9142208967803073,0.109619140625
+IntegerConvQuad_v9,pepper,watermark_1,jpeg,"{""quality"": 70}",50.03771270092362,0.7787042714426862,0.274169921875
+IntegerConvQuad_v9,pepper,watermark_1,jpeg,"{""quality"": 50}",50.03771270092362,0.7118233320111637,0.351318359375
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.03771270092362,0.7734840405720602,0.27880859375
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.03771270092362,0.7822275216899687,0.267333984375
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.03771270092362,0.7807590917091807,0.272705078125
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.03771270092362,0.5927689574449787,0.4765625
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.03771270092362,0.6051011344032338,0.463134765625
+IntegerConvQuad_v9,pepper,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.03771270092362,0.6121786785035198,0.45849609375
+IntegerConvQuad_v9,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.03771270092362,0.969637291898503,0.03955078125
+IntegerConvQuad_v9,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.03771270092362,0.9694001815001029,0.039794921875
+IntegerConvQuad_v9,pepper,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.03771270092362,0.9731811916000992,0.034912109375
+IntegerConvQuad_v9,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.03771270092362,0.9339283267801283,0.085205078125
+IntegerConvQuad_v9,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.03771270092362,0.9296187240141816,0.090576171875
+IntegerConvQuad_v9,pepper,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.03771270092362,0.9300091580865847,0.08984375
+IntegerConvQuad_v9,pepper,watermark_1,scale_resample,"{""scale"": 0.8}",50.03771270092362,0.9656036599072327,0.044677734375
+IntegerConvQuad_v9,pepper,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.03771270092362,0.9405592303810781,0.076904296875
+IntegerConvQuad_v9,pepper,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.03771270092362,0.5712179358224265,0.49853515625
+IntegerConvQuad_v9,pepper,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.03771270092362,0.5925605323078155,0.488525390625
+IntegerConvQuad_v9,pepper,watermark_1,crop_resize,"{""fraction"": 0.05}",50.03771270092362,0.5695759999399868,0.50341796875
+IntegerConvQuad_v9,pepper,watermark_2,clean,{},50.146244263748656,1.0,0.0
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.146244263748656,0.8943243658576806,0.106689453125
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.146244263748656,0.7091955760854181,0.287841796875
+IntegerConvQuad_v9,pepper,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.146244263748656,0.6909351471952576,0.305908203125
+IntegerConvQuad_v9,pepper,watermark_2,average,"{""ksize"": 3}",50.146244263748656,0.7508633314040962,0.247314453125
+IntegerConvQuad_v9,pepper,watermark_2,motion_blur,"{""ksize"": 5}",50.146244263748656,0.6790198922940907,0.321533203125
+IntegerConvQuad_v9,pepper,watermark_2,jpeg,"{""quality"": 90}",50.146244263748656,0.8839233340714946,0.115478515625
+IntegerConvQuad_v9,pepper,watermark_2,jpeg,"{""quality"": 70}",50.146244263748656,0.7180767890683077,0.280517578125
+IntegerConvQuad_v9,pepper,watermark_2,jpeg,"{""quality"": 50}",50.146244263748656,0.6519535778740448,0.344970703125
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.146244263748656,0.7224459867230102,0.27783203125
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.146244263748656,0.7323107103827171,0.266357421875
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.146244263748656,0.7308539317216853,0.270263671875
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.146244263748656,0.519161472951633,0.476318359375
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.146244263748656,0.5379616678584892,0.462158203125
+IntegerConvQuad_v9,pepper,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.146244263748656,0.5362833640416687,0.45947265625
+IntegerConvQuad_v9,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.146244263748656,0.9595998355512149,0.040771484375
+IntegerConvQuad_v9,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.146244263748656,0.963220420854496,0.036865234375
+IntegerConvQuad_v9,pepper,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.146244263748656,0.9649178950971633,0.03515625
+IntegerConvQuad_v9,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.146244263748656,0.9139114787420711,0.08642578125
+IntegerConvQuad_v9,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.146244263748656,0.91297982988425,0.0869140625
+IntegerConvQuad_v9,pepper,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.146244263748656,0.9106860491867496,0.089599609375
+IntegerConvQuad_v9,pepper,watermark_2,scale_resample,"{""scale"": 0.8}",50.146244263748656,0.9541602941543689,0.046142578125
+IntegerConvQuad_v9,pepper,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.146244263748656,0.9171127273033977,0.08349609375
+IntegerConvQuad_v9,pepper,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.146244263748656,0.4869596870718668,0.50244140625
+IntegerConvQuad_v9,pepper,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.146244263748656,0.5330417191284168,0.46044921875
+IntegerConvQuad_v9,pepper,watermark_2,crop_resize,"{""fraction"": 0.05}",50.146244263748656,0.4970950615494644,0.49853515625
+IntegerConvQuad_v9,safari,watermark_1,clean,{},50.800379857135745,1.0,0.0
+IntegerConvQuad_v9,safari,watermark_1,gaussian_blur,"{""sigma"": 0.7}",50.800379857135745,0.8987399219865038,0.12939453125
+IntegerConvQuad_v9,safari,watermark_1,gaussian_blur,"{""sigma"": 1.0}",50.800379857135745,0.7414889455027693,0.317138671875
+IntegerConvQuad_v9,safari,watermark_1,lowpass,"{""kx"": 5, ""ky"": 5}",50.800379857135745,0.727352710755759,0.33349609375
+IntegerConvQuad_v9,safari,watermark_1,average,"{""ksize"": 3}",50.800379857135745,0.7794707129292281,0.27294921875
+IntegerConvQuad_v9,safari,watermark_1,motion_blur,"{""ksize"": 5}",50.800379857135745,0.6945850693365903,0.369384765625
+IntegerConvQuad_v9,safari,watermark_1,jpeg,"{""quality"": 90}",50.800379857135745,0.9549439716593483,0.05859375
+IntegerConvQuad_v9,safari,watermark_1,jpeg,"{""quality"": 70}",50.800379857135745,0.8494623863762382,0.190185546875
+IntegerConvQuad_v9,safari,watermark_1,jpeg,"{""quality"": 50}",50.800379857135745,0.7883954017891232,0.264404296875
+IntegerConvQuad_v9,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.800379857135745,0.7689715921292763,0.284912109375
+IntegerConvQuad_v9,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.800379857135745,0.7770152095108607,0.274169921875
+IntegerConvQuad_v9,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.800379857135745,0.7753346829272195,0.279052734375
+IntegerConvQuad_v9,safari,watermark_1,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.800379857135745,0.5886258846231823,0.48193359375
+IntegerConvQuad_v9,safari,watermark_1,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.800379857135745,0.603175690896685,0.466552734375
+IntegerConvQuad_v9,safari,watermark_1,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.800379857135745,0.613021319492513,0.45751953125
+IntegerConvQuad_v9,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.800379857135745,0.9688394085472382,0.04052734375
+IntegerConvQuad_v9,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.800379857135745,0.9707486571145852,0.0380859375
+IntegerConvQuad_v9,safari,watermark_1,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.800379857135745,0.9710903780491756,0.03759765625
+IntegerConvQuad_v9,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.800379857135745,0.9319394286848655,0.087646484375
+IntegerConvQuad_v9,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.800379857135745,0.9241045154183783,0.09765625
+IntegerConvQuad_v9,safari,watermark_1,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.800379857135745,0.9304584088888727,0.08935546875
+IntegerConvQuad_v9,safari,watermark_1,scale_resample,"{""scale"": 0.8}",50.800379857135745,0.9790729961442856,0.02734375
+IntegerConvQuad_v9,safari,watermark_1,registered_rotation_resample,"{""angle"": 5.0}",50.800379857135745,0.9286755187922533,0.091796875
+IntegerConvQuad_v9,safari,watermark_1,rotation_unregistered,"{""angle"": 2.0}",50.800379857135745,0.5687880387531054,0.501708984375
+IntegerConvQuad_v9,safari,watermark_1,translation,"{""dx"": 2, ""dy"": 2}",50.800379857135745,0.5991746978593597,0.482177734375
+IntegerConvQuad_v9,safari,watermark_1,crop_resize,"{""fraction"": 0.05}",50.800379857135745,0.5801279707758817,0.494140625
+IntegerConvQuad_v9,safari,watermark_2,clean,{},50.705299184276804,1.0,0.0
+IntegerConvQuad_v9,safari,watermark_2,gaussian_blur,"{""sigma"": 0.7}",50.705299184276804,0.8676007242893126,0.132568359375
+IntegerConvQuad_v9,safari,watermark_2,gaussian_blur,"{""sigma"": 1.0}",50.705299184276804,0.6876788400139147,0.317626953125
+IntegerConvQuad_v9,safari,watermark_2,lowpass,"{""kx"": 5, ""ky"": 5}",50.705299184276804,0.6719881363122703,0.332763671875
+IntegerConvQuad_v9,safari,watermark_2,average,"{""ksize"": 3}",50.705299184276804,0.7280672919713019,0.27392578125
+IntegerConvQuad_v9,safari,watermark_2,motion_blur,"{""ksize"": 5}",50.705299184276804,0.6278109283676665,0.37255859375
+IntegerConvQuad_v9,safari,watermark_2,jpeg,"{""quality"": 90}",50.705299184276804,0.9442577128895447,0.05615234375
+IntegerConvQuad_v9,safari,watermark_2,jpeg,"{""quality"": 70}",50.705299184276804,0.8085902197142666,0.191650390625
+IntegerConvQuad_v9,safari,watermark_2,jpeg,"{""quality"": 50}",50.705299184276804,0.7277324970582542,0.277587890625
+IntegerConvQuad_v9,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.001}",50.705299184276804,0.7168164966611884,0.284912109375
+IntegerConvQuad_v9,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.001}",50.705299184276804,0.7255107900950498,0.274169921875
+IntegerConvQuad_v9,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.001}",50.705299184276804,0.7222359148987892,0.279052734375
+IntegerConvQuad_v9,safari,watermark_2,gaussian_noise,"{""seed"": 0, ""variance"": 0.003}",50.705299184276804,0.5152383451109367,0.482421875
+IntegerConvQuad_v9,safari,watermark_2,gaussian_noise,"{""seed"": 1, ""variance"": 0.003}",50.705299184276804,0.536632955240272,0.46630859375
+IntegerConvQuad_v9,safari,watermark_2,gaussian_noise,"{""seed"": 2, ""variance"": 0.003}",50.705299184276804,0.5376727868528947,0.457763671875
+IntegerConvQuad_v9,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 0}",50.705299184276804,0.9591259045386907,0.041015625
+IntegerConvQuad_v9,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 1}",50.705299184276804,0.9629851159967393,0.037109375
+IntegerConvQuad_v9,safari,watermark_2,salt_pepper,"{""density"": 0.02, ""seed"": 2}",50.705299184276804,0.9644787127324632,0.03564453125
+IntegerConvQuad_v9,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 0}",50.705299184276804,0.9139527898041481,0.08642578125
+IntegerConvQuad_v9,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 1}",50.705299184276804,0.9031185472757848,0.09716796875
+IntegerConvQuad_v9,safari,watermark_2,salt_pepper,"{""density"": 0.05, ""seed"": 2}",50.705299184276804,0.9123573951808369,0.088134765625
+IntegerConvQuad_v9,safari,watermark_2,scale_resample,"{""scale"": 0.8}",50.705299184276804,0.9728568941320925,0.02734375
+IntegerConvQuad_v9,safari,watermark_2,registered_rotation_resample,"{""angle"": 5.0}",50.705299184276804,0.9122039130128489,0.087890625
+IntegerConvQuad_v9,safari,watermark_2,rotation_unregistered,"{""angle"": 2.0}",50.705299184276804,0.4909329047422146,0.5029296875
+IntegerConvQuad_v9,safari,watermark_2,translation,"{""dx"": 2, ""dy"": 2}",50.705299184276804,0.5385244584008448,0.45703125
+IntegerConvQuad_v9,safari,watermark_2,crop_resize,"{""fraction"": 0.05}",50.705299184276804,0.5107366293713651,0.48974609375

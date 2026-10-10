@@ -1,0 +1,10 @@
+method: blind_integer_convolution_quad_v9_experimental
+parameters:
+  design: integer_conv_quad_v9
+  block_size: 2
+  channel: 1
+  watermark_size: 64
+  arnold_iterations: 10
+  integer_conv4_period: 70
+  compute_certificate: false
+  store_certificate_mask: false
