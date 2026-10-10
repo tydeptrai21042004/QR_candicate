@@ -266,16 +266,27 @@ try:
                       'attacks':str(attack_cfg.resolve())},yaml)
         return p
 
-    # True functional smoke test before any long PSNR-matched comparisons.
-    test_cfg=conf(hosts[0],wms[0],[v9],False,'PREFLIGHT')
-    smoke_result=OUT/'00_PREFLIGHT'/'metrics.csv'
-    if not cmd('00_PREFLIGHT_CLEAN',[sys.executable,'scripts/run_main_comparison.py',
+    # A clean extraction preflight must evaluate CLEAN ONLY.  Never require
+    # BER=0 after JPEG, noise, blur, cropping, or geometric attacks.
+    clean_attack_cfg=CFGS/'attack_clean_preflight.yaml'
+    write_yaml(clean_attack_cfg, {'attacks':[{'name':'clean'}]}, yaml)
+    test_cfg=conf(hosts[0],wms[0],[v9],False,'PREFLIGHT_CLEAN_V2')
+    preflight_document=yaml.safe_load(test_cfg.read_text(encoding='utf-8'))
+    preflight_document['attacks']=str(clean_attack_cfg.resolve())
+    write_yaml(test_cfg,preflight_document,yaml)
+    smoke_result=OUT/'00_PREFLIGHT_CLEAN_V2'/'metrics.csv'
+    if not cmd('00_PREFLIGHT_CLEAN_V2',[sys.executable,'scripts/run_main_comparison.py',
                 '--config',str(test_cfg),'--key',KEY,
                 '--run-dir',str(smoke_result.parent)],limit=120,expected=smoke_result):
-        raise RuntimeError('Clean preflight failed, stopped before expensive experiments')
+        raise RuntimeError('Clean preflight execution failed; inspect its job log')
     smoke=pd.read_csv(smoke_result)
-    if not (smoke['ber'].eq(0).all() and smoke['nc'].eq(1).all()):
-        raise RuntimeError('Preflight clean decoding not exact')
+    if smoke.empty or not smoke['attack'].eq('clean').all():
+        raise RuntimeError('Preflight must contain clean rows only')
+    failed_rows=smoke.loc[~(smoke['ber'].eq(0) & smoke['nc'].ge(1 - 1e-12))]
+    if not failed_rows.empty:
+        failed_rows.to_csv(OUT/'CLEAN_PREFLIGHT_FAILURES.csv',index=False)
+        raise RuntimeError('Actual clean decoding is not exact; see CLEAN_PREFLIGHT_FAILURES.csv')
+    print('CLEAN PREFLIGHT PASSED: BER=0, NC=1',flush=True)
 
     # PSNR matching is performed separately for every baseline and image-pair.
     # Each completed metrics.csv survives any later timeout/failure.
