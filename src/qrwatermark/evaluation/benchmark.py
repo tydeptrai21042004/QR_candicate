@@ -6,7 +6,7 @@ from typing import Iterable
 import pandas as pd
 
 from ..core.interfaces import WatermarkMethod
-from ..proposed.method import ConvolutionCertifiedR12QIM
+from ..proposed.method import GreenQuadWatermark
 from ..utils.image_io import read_color, write_image
 from ..utils.watermark import prepare_binary_watermark
 from .evaluator import embed_once, evaluate_embedded
@@ -88,7 +88,7 @@ def run_benchmark(
         for host_path in host_paths:
             host = read_color(host_path)
             if match_psnr_to_proposed:
-                proposed = next((m for m in methods if isinstance(m, ConvolutionCertifiedR12QIM)), None)
+                proposed = next((m for m in methods if isinstance(m, GreenQuadWatermark)), None)
                 if proposed is None:
                     raise ValueError("match_psnr_to_proposed requires the proposed method")
                 p_emb, p_time = embed_once(proposed, host, wm, key=key)

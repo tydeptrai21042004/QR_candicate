@@ -5,7 +5,6 @@ from pathlib import Path
 
 from _common import ROOT, resolve
 from qrwatermark.core.factory import build_method
-from qrwatermark.proposed.side_info import load_side_info, save_side_info
 from qrwatermark.utils.image_io import read_color, write_image
 from qrwatermark.utils.watermark import prepare_binary_watermark
 from qrwatermark.evaluation.metrics import ber, nc, psnr, ssim
@@ -19,7 +18,6 @@ def main():
     ap.add_argument("--host")
     ap.add_argument("--watermark")
     ap.add_argument("--image")
-    ap.add_argument("--side-info")
     ap.add_argument("--key", required=True)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
@@ -34,9 +32,6 @@ def main():
         emb = method.embed(host, wm, key=key)
         out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
         write_image(out, emb.image)
-        side_path = Path(args.side_info) if args.side_info else out.with_suffix(".side.npz")
-        if emb.side_info is not None:
-            save_side_info(side_path, emb.side_info)
         if args.mode == "roundtrip":
             ext = method.extract(emb.image, key=key, side_info=emb.side_info, watermark_shape=wm.shape)
             ext_path = out.with_name(out.stem + "_extracted.png")
@@ -44,27 +39,21 @@ def main():
             print(f"PSNR={psnr(host, emb.image):.4f} SSIM={ssim(host, emb.image):.6f} NC={nc(wm, ext.watermark):.6f} BER={ber(wm, ext.watermark):.6f}")
             print(f"Extracted: {ext_path}")
         print(f"Watermarked: {out}")
-        if emb.side_info is not None:
-            print(f"Side info: {side_path}")
-        elif getattr(method.config, "design", None) == "blind_v3":
-            print("Side info: none (fully blind v3)")
+        print("Side info: none (fully blind)")
         return
 
     if not args.image:
         ap.error("extract requires --image; --watermark is optional and used only to print NC/BER")
     image = read_color(resolve(args.image))
     wm = prepare_binary_watermark(resolve(args.watermark), 64) if args.watermark else None
-    side = None
-    if args.side_info:
-        side = load_side_info(args.side_info)
     shape = wm.shape if wm is not None else (int(method.config.watermark_size), int(method.config.watermark_size))
-    ext = method.extract(image, key=key, side_info=side, watermark_shape=shape)
+    ext = method.extract(image, key=key,  watermark_shape=shape)
     write_image(args.out, ext.watermark)
     print(f"Extracted: {args.out}")
     if wm is not None:
         print(f"NC={nc(wm, ext.watermark):.6f} BER={ber(wm, ext.watermark):.6f}")
-    elif getattr(method.config, "design", None) == "blind_v3":
-        print("Fully blind extraction: no side information or reference watermark was used.")
+    else:
+        print("Fully blind extraction: no side information or reference watermark.")
 
 
 if __name__ == "__main__":

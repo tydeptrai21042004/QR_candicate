@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from .config import baseline_from_dict, load_yaml, proposed_from_dict
-from ..proposed import ConvolutionCertifiedR12QIM
+from ..proposed import GreenQuadWatermark
 from ..baselines import (
     Chen2021QuaternionQR,
     Nha2022ImprovedQR,
@@ -19,8 +19,8 @@ def build_method(name: str, config_path: str | Path | None = None):
     if "method" in data:
         data = dict(data.get("parameters", {}))
     name = name.lower()
-    if name in {"proposed", "ccqr", "mecqr_qim_v2", "ccqr_r12_qim_v1", "proposed_adaptive_qr_v2", "blind_mecqr_qim_v3", "blind_v3", "blind_cqr_qim_v4", "blind_v4", "blind_convqr_v5_experimental", "convqr_v5", "blind_fcqr_v6_experimental", "fcqr_v6", "integer_conv8_v7", "blind_integer_convolution_v7_experimental", "integer_conv_pair_v8", "blind_integer_convolution_pair_v8_experimental", "integer_conv_quad_v9", "blind_integer_convolution_quad_v9_experimental"}:
-        return ConvolutionCertifiedR12QIM(proposed_from_dict(data))
+    if name in {'proposed','green_quad_min_energy'}:
+        return GreenQuadWatermark(proposed_from_dict(data))
     cfg = baseline_from_dict(data)
     if name in {"su2014", "su2014_qr"}:
         return Su2014QR(cfg)

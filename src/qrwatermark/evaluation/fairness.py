@@ -7,7 +7,7 @@ import time
 import numpy as np
 
 from .metrics import psnr
-from ..proposed.method import ConvolutionCertifiedR12QIM
+from ..proposed.method import GreenQuadWatermark
 
 
 @dataclass(frozen=True)
@@ -63,7 +63,7 @@ def tune_baseline_to_psnr(
     residual rather than pretending a method with a distortion floor matched
     the proposal exactly.
     """
-    if isinstance(method, ConvolutionCertifiedR12QIM):
+    if isinstance(method, GreenQuadWatermark):
         emb = method.embed(host, watermark, key=key)
         p = float(psnr(host, emb.image))
         return method, emb, {

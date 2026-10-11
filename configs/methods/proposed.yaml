@@ -1,45 +1,12 @@
-method: blind_cqr_qim_v4
+# The only proposed method in this repository.
+method: proposed
 parameters:
-  # Fully blind v4. Extraction receives only the attacked image, public fixed
-  # parameters, and the secret key. There is no selector stream, period map,
-  # certificate mask, original host, or reference watermark.
-  design: blind_v4
-  block_size: 2
-  channel: 0
+  design: green_quad_min_energy
+  block_size: 4
+  channel: 1                  # OpenCV BGR green
   watermark_size: 64
-  arnold_iterations: 10
-
-  # Same-block coupled QR carriers. The Q branch quantizes q1 direction. The R
-  # branch quantizes asinh(r12/sqrt(r11^2+r22^2+1)), making the triangular
-  # carrier invariant to a positive common block gain. One keyed 2x2 block is
-  # used per bit; the payload is NOT repeated into additional blocks.
-  coupled_q_period: 0.20
-  coupled_r_period: 0.48
-  coupled_q_margin_ratio: 0.08
-  coupled_r_margin_ratio: 0.08
-  coupled_q_weight: 0.5
-  coupled_r_weight: 1.0
-  coupled_energy_tau: 16.0
-
-  # v4 has no online/report certificate path. Keep this false for timing.
+  integer_conv4_period: 66
+  arnold_iterations: 0
+  projection: optimal
   compute_certificate: false
   store_certificate_mask: false
-
-  # Historical fields retained so v3/v2/v1 ablations remain constructible.
-  qim_period: 48.0
-  blind_margin_ratio: 0.125
-  blind_projection: safe_set
-  carrier_pool: 4
-  carrier_selector_policy: min_energy
-  repetition: 5
-  period_candidates: [24.0, 28.0, 32.0, 36.0]
-  max_group_mse: 220.0
-  target_psnr_db: 50.0
-  convolution_kernel_size: 3
-  convolution_gaussian_sigmas: [0.50, 0.75]
-  convolution_safety_factor: 1.0
-  additive_feature_budget: 1.0
-  certificate_max_passes: 4
-  certificate_path_subdivisions: 8
-  certificate_final_tighten: true
-  nlm: {enabled: false, compare_always: false, mild_h: 4.0, mild_template: 3, mild_search: 11, strong_h: 8.0, strong_template: 5, strong_search: 17}

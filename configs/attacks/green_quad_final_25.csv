@@ -1,0 +1,27 @@
+attack,parameters
+clean,{}
+gaussian_blur,{'sigma': 0.7}
+gaussian_blur,{'sigma': 1.0}
+lowpass,"{'kx': 5, 'ky': 5}"
+average,{'ksize': 3}
+motion_blur,{'ksize': 5}
+jpeg,{'quality': 90}
+jpeg,{'quality': 70}
+jpeg,{'quality': 50}
+gaussian_noise,"{'variance': 0.001, 'seed': 0}"
+gaussian_noise,"{'variance': 0.001, 'seed': 1}"
+gaussian_noise,"{'variance': 0.001, 'seed': 2}"
+gaussian_noise,"{'variance': 0.003, 'seed': 0}"
+gaussian_noise,"{'variance': 0.003, 'seed': 1}"
+gaussian_noise,"{'variance': 0.003, 'seed': 2}"
+salt_pepper,"{'density': 0.02, 'seed': 0}"
+salt_pepper,"{'density': 0.02, 'seed': 1}"
+salt_pepper,"{'density': 0.02, 'seed': 2}"
+salt_pepper,"{'density': 0.05, 'seed': 0}"
+salt_pepper,"{'density': 0.05, 'seed': 1}"
+salt_pepper,"{'density': 0.05, 'seed': 2}"
+scale_resample,{'scale': 0.8}
+registered_rotation_resample,{'angle': 5}
+rotation_unregistered,{'angle': 2}
+translation,"{'dx': 2, 'dy': 2}"
+crop_resize,{'fraction': 0.05}

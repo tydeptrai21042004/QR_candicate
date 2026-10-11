@@ -23,15 +23,6 @@ def evaluate_embedded(method:WatermarkMethod,host:np.ndarray,watermark:np.ndarra
     ep=psnr(host,emb.image); es=ssim(host,emb.image); ap=psnr(host,attacked); ass=ssim(host,attacked)
     overhead=emb.metadata.get("side_information_overhead_bits",{}) if emb.metadata else {}
     certified_ber=None; uncertified_ber=None
-    if emb.side_info is not None and "packed_certified_mask" in emb.side_info:
-        from ..proposed.side_info import unpack_certified_mask
-        mask=unpack_certified_mask(emb.side_info,key)
-        iters=int(emb.side_info.get("metadata",{}).get("arnold_iterations",0))
-        truth=bits_from_watermark(arnold_transform(watermark,iters))
-        recovered=bits_from_watermark(arnold_transform(ext.watermark,iters))
-        if mask.size==truth.size:
-            if np.any(mask): certified_ber=float(np.mean(truth[mask]!=recovered[mask]))
-            if np.any(~mask): uncertified_ber=float(np.mean(truth[~mask]!=recovered[~mask]))
     logical_side_bits=(int(overhead.get("period_code_bits",0))+int(overhead.get("selector_code_bits",0))+int(overhead.get("certificate_mask_bits",0))+int(overhead.get("authentication_bits",0)) if overhead else (int(emb.metadata.get("side_information_bits",0)) if emb.metadata else 0))
     serialized_side_bits=(int(overhead.get("total_serialized_bits",logical_side_bits)) if overhead else logical_side_bits)
     record=BenchmarkRecord(
