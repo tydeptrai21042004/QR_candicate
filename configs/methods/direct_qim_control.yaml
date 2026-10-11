@@ -1,0 +1,6 @@
+method: direct_pixel_qim_control
+parameters:
+  watermark_size: 64
+  channel: 1
+  arnold_iterations: 0
+  quant_step: 66.0

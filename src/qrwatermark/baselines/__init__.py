@@ -1,3 +1,4 @@
+from .direct_qim_control import DirectPixelQIM
 from .su2014_qr import Su2014QR
 from .su2016_hessenberg import Su2016Hessenberg
 from .chen2021_qqrd import Chen2021QuaternionQR
@@ -6,6 +7,7 @@ from .su2020_schur import Su2020Schur
 from .zareian2013_aqim import Zareian2013AdaptiveQIM
 
 __all__ = [
+    "DirectPixelQIM",
     "Su2014QR",
     "Su2016Hessenberg",
     "Chen2021QuaternionQR",

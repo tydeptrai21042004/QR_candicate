@@ -1,0 +1,24 @@
+CHANGE-ONLY PATCH — original QR_candicate-main(20261011-061352).zip
+
+Merge these paths into the ROOT of the same GitHub checkout.
+
+new      REVIEWER_CODE_PATCH.md
+new      configs/attacks/reviewer_stress.yaml
+new      configs/experiments/reviewer_matched.yaml
+new      configs/methods/direct_qim_control.yaml
+modified kaggle/QR_KAGGLE_GITHUB_ONE_CELL.ipynb
+modified kaggle/QR_KAGGLE_GITHUB_ONE_CELL.py
+new      scripts/run_external_neural_baseline.py
+new      scripts/run_reviewer_suite.py
+modified src/qrwatermark/attacks/registry.py
+new      src/qrwatermark/attacks/reviewer_stress.py
+modified src/qrwatermark/baselines/__init__.py
+new      src/qrwatermark/baselines/direct_qim_control/__init__.py
+new      src/qrwatermark/baselines/direct_qim_control/method.py
+modified src/qrwatermark/core/factory.py
+new      src/qrwatermark/evaluation/review_protocol.py
+new      src/qrwatermark/evaluation/review_statistics.py
+new      tests/test_reviewer_suite.py
+
+Proposed Green-Quad embed/extract implementation is unchanged.
+Neural comparison requires user-supplied pretrained runner + checkpoint; no weights included.

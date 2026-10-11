@@ -5,6 +5,7 @@ from pathlib import Path
 from .config import baseline_from_dict, load_yaml, proposed_from_dict
 from ..proposed import GreenQuadWatermark
 from ..baselines import (
+    DirectPixelQIM,
     Chen2021QuaternionQR,
     Nha2022ImprovedQR,
     Su2014QR,
@@ -22,6 +23,8 @@ def build_method(name: str, config_path: str | Path | None = None):
     if name in {'proposed','green_quad_min_energy'}:
         return GreenQuadWatermark(proposed_from_dict(data))
     cfg = baseline_from_dict(data)
+    if name in {"direct_pixel_qim_control", "direct_qim_control"}:
+        return DirectPixelQIM(cfg)
     if name in {"su2014", "su2014_qr"}:
         return Su2014QR(cfg)
     if name in {"su2016", "su2016_hessenberg"}:

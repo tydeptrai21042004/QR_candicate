@@ -9,7 +9,13 @@ from .noise import gaussian_noise, salt_pepper_noise, speckle_noise
 from .occlusion import random_occlusion,random_pixel_dropout,rectangular_occlusion
 from .photometric import brightness_contrast, clahe, gamma_correction, histogram_equalization
 
+from .reviewer_stress import affine_shear, aspect_ratio_resample, subpixel_translation, green_carrier_null
+
 ATTACKS: dict[str, Callable] = {
+    "affine_shear": affine_shear,
+    "aspect_ratio_resample": aspect_ratio_resample,
+    "subpixel_translation": subpixel_translation,
+    "green_carrier_null": green_carrier_null,
     "gaussian_blur": gaussian_blur,
     "certified_convex_gaussian": certified_convex_gaussian,
     "sharpen": sharpen,

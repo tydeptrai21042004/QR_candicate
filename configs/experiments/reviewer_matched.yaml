@@ -1,0 +1,14 @@
+# Paper baselines + explicitly labeled scalar-QIM *control*, not a published method.
+match_psnr_to_proposed: true
+watermark_size: 64
+methods:
+  - {name: proposed, config: configs/methods/proposed.yaml}
+  - {name: direct_pixel_qim_control, config: configs/methods/direct_qim_control.yaml}
+  - {name: su2014_qr, config: configs/methods/su2014_qr.yaml}
+  - {name: su2016_hessenberg, config: configs/methods/su2016_hessenberg.yaml}
+  - {name: su2020_schur, config: configs/methods/su2020_schur.yaml}
+  - {name: chen2021_qqrd, config: configs/methods/chen2021_qqrd.yaml}
+  - {name: nha2022_improved_qr, config: configs/methods/nha2022_improved_qr.yaml}
+hosts: data/hosts/classical
+watermarks: data/watermarks
+attacks: configs/attacks/reviewer_stress.yaml

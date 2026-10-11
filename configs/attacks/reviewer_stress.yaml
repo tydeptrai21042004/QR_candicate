@@ -1,0 +1,20 @@
+# NO synchronization / registration added to the extractor.
+# Every candidate has its own independent row and attack_params.
+attacks:
+  - name: clean
+  - {name: jpeg, params: {quality: 90}}
+  - {name: jpeg, params: {quality: 70}}
+  - {name: jpeg, params: {quality: 50}}
+  - {name: jpeg, params: {quality: 40}}
+  - {name: jpeg, params: {quality: 30}}
+  - {name: gaussian_noise, params: {mean: 0.0, variance: 0.01}, seeds: [100, 101, 102]}
+  - {name: gaussian_noise, params: {mean: 0.0, variance: 0.05}, seeds: [100, 101, 102]}
+  - {name: speckle_noise, params: {variance: 0.03}, seeds: [100, 101, 102]}
+  - {name: rotation_unregistered, params: {angle: 2.5}}
+  - {name: rotation_unregistered, params: {angle: 15.0}}
+  - {name: subpixel_translation, params: {dx: 0.5, dy: 1.25}}
+  - {name: affine_shear, params: {shx: 0.08, shy: 0.02}}
+  - {name: aspect_ratio_resample, params: {xscale: 0.85, yscale: 1.1}}
+  - {name: crop_resize, params: {fraction: 0.15}}
+  - {name: green_carrier_null, params: {period: 66, strength: 0.5}}
+  - {name: green_carrier_null, params: {period: 66, strength: 1.0}}
