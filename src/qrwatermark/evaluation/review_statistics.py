@@ -24,21 +24,49 @@ def host_cluster_ci(rows, metric='ber', confidence=0.95, n_boot=1000, seed=3101)
             'ci_method':'host_cluster_bootstrap','bootstrap_repeats':int(n_boot)}
 
 
-def paired_host_ci(df, method, reference='green_quad_min_energy',metric='ber',seed=3101,n_boot=1000):
-    keys=['host','watermark','attack','attack_params','seed']
-    subset=df[df.method.isin([method,reference])].copy()
-    a=subset[subset.method==method][keys+[metric]].rename(columns={metric:'candidate'})
-    b=subset[subset.method==reference][keys+[metric]].rename(columns={metric:'reference'})
-    both=a.merge(b,on=keys,validate='one_to_one')
-    if len(both)!=len(a) or len(both)!=len(b):
-        raise ValueError(f'{method}: unmatched sample identifiers; cannot claim paired comparison')
-    both['difference']=both['candidate']-both['reference']
-    return {'candidate':method,'reference':reference,'metric':metric,
-            'sign':'candidate_minus_reference', 'n_paired_conditions':len(both),
-            **host_cluster_ci(both,metric='difference',n_boot=n_boot,seed=seed)}
+PAIR_KEYS = ('host', 'watermark', 'attack', 'attack_params', 'seed')
 
 
-def statistical_report(df, out, seed=3101, n_boot=1000):
+def paired_host_ci(df, method, reference='green_quad_min_energy', metric='ber',
+                   seed=3101, n_boot=1000, pairing='strict'):
+    """Host-clustered paired CI on exactly common evaluation conditions.
+
+    ``intersection`` is essential for PSNR-eligible comparisons: the proposed
+    rows are usually all eligible, while a baseline may be eligible on only a
+    subset.  Strict mode remains the default for a complete benchmark.
+    Never counts the unmatched rows as zeros or independent replicates.
+    """
+    if pairing not in ('strict', 'intersection'):
+        raise ValueError('pairing must be strict or intersection')
+    df = pd.DataFrame(df)
+    keys = list(PAIR_KEYS)
+    a = df.loc[df.method.eq(method), keys + [metric]].rename(columns={metric:'candidate'})
+    b = df.loc[df.method.eq(reference), keys + [metric]].rename(columns={metric:'reference'})
+    both = a.merge(b, on=keys, validate='one_to_one')
+    if pairing == 'strict' and (len(both) != len(a) or len(both) != len(b)):
+        raise ValueError(f'{method}: unmatched sample identifiers; cannot claim strict paired comparison')
+    if both.empty:
+        raise ValueError(f'{method}: no common evaluation conditions for paired comparison')
+    both['difference'] = both['candidate'] - both['reference']
+    result = {'candidate':method, 'reference':reference, 'metric':metric,
+              'sign':'candidate_minus_reference', 'pairing_policy':pairing,
+              'n_paired_conditions':len(both),
+              'n_candidate_conditions':len(a), 'n_reference_conditions':len(b),
+              'candidate_coverage':float(len(both)/len(a)) if len(a) else 0.0,
+              'reference_coverage':float(len(both)/len(b)) if len(b) else 0.0,
+              **host_cluster_ci(both,metric='difference',n_boot=n_boot,seed=seed)}
+    if result['n_independent_hosts'] < 2:
+        result['ci_lower'] = result['ci_upper'] = float('nan')
+        result['ci_valid'] = False
+        result['caution'] = 'Fewer than two independent matched hosts: no inferential CI'
+    else:
+        result['ci_valid'] = True
+        result['caution'] = 'Host bootstrap; interpret cautiously for small host counts'
+    return result
+
+
+def statistical_report(df, out, seed=3101, n_boot=1000, pair_policy='strict',
+                       expected_methods=None):
     from pathlib import Path
     out=Path(out);out.mkdir(parents=True,exist_ok=True)
     df=pd.DataFrame(df)
@@ -56,13 +84,72 @@ def statistical_report(df, out, seed=3101, n_boot=1000):
         for method in sorted(set(df.method)-{'green_quad_min_energy'}):
             for metric in ('ber','nc'):
                 try:
-                    paired.append(paired_host_ci(df,method,metric=metric,seed=seed,n_boot=n_boot))
+                    paired.append(paired_host_ci(df,method,metric=metric,seed=seed,
+                                                 n_boot=n_boot,pairing=pair_policy))
                 except ValueError as e:
                     paired.append({'candidate':method,'reference':'green_quad_min_energy',
-                                   'metric':metric,'error':str(e)})
-    pd.DataFrame(paired).to_csv(out/'paired_host_ci.csv',index=False)
+                                   'metric':metric,'pairing_policy':pair_policy,
+                                   'ci_valid':False,'error':str(e)})
+    # Explicitly record excluded methods rather than producing an empty CSV
+    # that can be mistaken for a successful matched comparison.
+    covered={p['candidate'] for p in paired}
+    for method in (expected_methods or []):
+        if method=='green_quad_min_energy' or method in covered:continue
+        for metric in ('ber','nc'):
+            paired.append({'candidate':method,'reference':'green_quad_min_energy',
+                           'metric':metric,'pairing_policy':pair_policy,
+                           'ci_valid':False,
+                           'error':'No PSNR-eligible evaluation pairs; no matched CI'})
+    pd.DataFrame(paired,columns=['candidate','reference','metric','pairing_policy',
+                                  'n_paired_conditions','n_independent_hosts','mean',
+                                  'ci_lower','ci_upper','ci_valid','error']).to_csv(
+                                      out/'paired_host_ci.csv',index=False)
     return by_attack,paired
 
+
+def clustered_auc_ci(samples, *, host_col='host', truth_col='truth',
+                     score_col='score', n_boot=1000, seed=3101):
+    """Macro host-resampling CI for ROC-AUC, preserving all correlated rows.
+
+    Report n_independent_hosts and never interpret wrong keys from one image
+    as additional independent hosts.
+    """
+    df = pd.DataFrame(samples)
+    hosts = sorted(df[host_col].unique())
+    if len(hosts) < 2:
+        return {'n_independent_hosts':len(hosts), 'auc_ci_lower':float('nan'),
+                'auc_ci_upper':float('nan'), 'ci_valid':False}
+    pieces = {h:df.loc[df[host_col].eq(h)] for h in hosts}
+    rng = np.random.default_rng(seed)
+    vals=[]
+    for _ in range(n_boot):
+        draw = rng.choice(hosts, size=len(hosts), replace=True)
+        boot = pd.concat([pieces[h] for h in draw], ignore_index=True)
+        pos = boot.loc[boot[truth_col].eq(1),score_col].to_numpy()
+        neg = boot.loc[boot[truth_col].eq(0),score_col].to_numpy()
+        if len(pos) and len(neg):
+            vals.append(roc_points(pos,neg)[1])
+    if not vals:
+        return {'n_independent_hosts':len(hosts), 'auc_ci_lower':float('nan'),
+                'auc_ci_upper':float('nan'), 'ci_valid':False}
+    lo,hi=np.quantile(vals,[0.025,0.975])
+    return {'n_independent_hosts':len(hosts),'auc_ci_lower':float(lo),
+            'auc_ci_upper':float(hi),'ci_valid':True,
+            'ci_method':'host_cluster_bootstrap','bootstrap_repeats':len(vals)}
+
+
+def binomial_upper_bound(k, n, confidence=0.95):
+    """One-sided Clopper-Pearson upper bound (IID trials only).
+
+    This is a descriptive optimistic bound for correlated key trials; do not
+    use it as a host-independent false-positive guarantee.
+    """
+    from scipy.stats import beta
+    if n <= 0 or k < 0 or k > n:
+        return float('nan')
+    if k == n:
+        return 1.0
+    return float(beta.ppf(confidence,k+1,n-k))
 
 def roc_points(positive_scores,negative_scores):
     pos=np.asarray(positive_scores,dtype=float);neg=np.asarray(negative_scores,dtype=float)

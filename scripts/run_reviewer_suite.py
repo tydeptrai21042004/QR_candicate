@@ -24,9 +24,10 @@ from qrwatermark.utils.image_io import read_color
 from qrwatermark.utils.watermark import prepare_binary_watermark,scrambled_bits_from_watermark
 from qrwatermark.evaluation.metrics import psnr,ssim,ber,nc
 from qrwatermark.evaluation.benchmark import run_benchmark
-from qrwatermark.evaluation.fairness import tune_baseline_to_psnr
-from qrwatermark.evaluation.review_statistics import statistical_report,roc_points,calibrate_threshold
-from qrwatermark.evaluation.review_protocol import split_hosts,manifest
+from qrwatermark.evaluation.fairness import tune_baseline_to_psnr,calibrate_global_baseline
+from qrwatermark.evaluation.review_statistics import (statistical_report,roc_points,calibrate_threshold,
+    clustered_auc_ci,binomial_upper_bound)
+from qrwatermark.evaluation.review_protocol import split_hosts,manifest,audit_host_corpus
 from qrwatermark.attacks import apply_attack
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -84,30 +85,54 @@ def attack_evaluation(split,wms,key,out,attack_config,quick):
     statistical_report(df,out/'attacks',n_boot=200 if quick else 1000)
 
 
-def security(split,wms,key,out,quick):
-    method=proposal(); rows=[]
-    # Explicit calibration/test split: never derive threshold from test negatives.
+def security(split,wms,key,out,quick,wrong_keys=64,bootstrap=1000):
+    """Blind authentication stress test with host-disjoint calibration/testing.
+
+    Authentic attacked detections and adversarial wrong-key/template negatives
+    share hosts and must never be counted as independent images. A small number
+    of test hosts cannot substantiate a 1%-FPR population guarantee.
+    """
+    method=proposal();rows=[]
+    # No carrier-null control here: that projection can preserve target bits.
+    cases=[('clean',{},None),('jpeg',{'quality':90},None),
+           ('jpeg',{'quality':70},None),('jpeg',{'quality':50},None),
+           ('gaussian_noise',{'mean':0.0,'variance':0.001},3101),
+           ('rotation_unregistered',{'angle':2.5},None),
+           ('subpixel_translation',{'dx':0.5,'dy':1.25},None),
+           ('crop_resize',{'fraction':0.15},None)]
+    if quick:
+        cases=cases[:3]
+        wrong_keys=min(wrong_keys,6)
+    if wrong_keys<1:raise ValueError('wrong_keys must be positive')
     for split_name in ('validation','test'):
         for hp in split[split_name][:1 if quick else None]:
             host=read_color(hp)
             for wp in wms[:1 if quick else None]:
-                wm=get_wm(wp); stego=method.embed(host,wm,key=key).image
-                cases=[('positive_correct_key',stego,key,wm,1),
-                       ('negative_unmarked',host,key,wm,0)]
-                flipped=bytearray(key);flipped[0]^=1
-                cases.append(('negative_one_bit_key_flip',stego,bytes(flipped),wm,0))
-                for index in range(4 if quick else 32):
-                    # Derive adversarial keys reproducibly from a domain-separated seed.
-                    wrong=hashlib.sha256(b'wrong-key-audit-v1'+index.to_bytes(4,'big')+key).digest()
-                    cases.append(('negative_wrong_key',stego,wrong,wm,0))
-                # Both genuine and negative templates are deterministic and separate.
+                wm=get_wm(wp);stego=method.embed(host,wm,key=key).image
                 other=get_wm(wms[-1]) if len(wms)>1 and wms[-1]!=wp else (255-wm)
-                cases.append(('negative_unrelated_template',stego,key,other,0))
-                for label,img,k,template,truth in cases:
-                    ext=method.extract(img,key=k,watermark_shape=wm.shape).watermark
-                    rows.append(dict(split=split_name,host=hp.stem,watermark=wp.stem,
-                                     case=label,truth=truth,score=score(template,ext),
-                                     extraction_ber=ber(template,ext),key_tag=keyed_digest(k)))
+                # Distinct, reproducible wrong keys, with disjoint evaluation contexts.
+                keys=[hashlib.sha256(b'qr-wrong-key-v2/'+split_name.encode()+
+                        hp.name.encode()+wp.name.encode()+j.to_bytes(4,'big')+key).digest()
+                      for j in range(wrong_keys)]
+                flipped=bytearray(key);flipped[0]^=1
+                for name,kw,seed in cases:
+                    options=kw.copy()
+                    if seed is not None:options['seed']=seed
+                    attacked=apply_attack(name,stego,**options)
+                    negative_unmarked=apply_attack(name,host,**options)
+                    templates=[('positive_authentic',attacked,key,wm,1),
+                               ('negative_unmarked',negative_unmarked,key,wm,0),
+                               ('negative_wrong_template',attacked,key,other,0),
+                               ('negative_bitflip_key',attacked,bytes(flipped),wm,0)]
+                    templates.extend(('negative_wrong_key',attacked,k,wm,0) for k in keys)
+                    for label,img,k,template,truth in templates:
+                        ext=method.extract(img,key=k,watermark_shape=wm.shape).watermark
+                        rows.append(dict(split=split_name,host=hp.stem,watermark=wp.stem,
+                                         attack=name,attack_params=json.dumps(kw,sort_keys=True),
+                                         attack_seed=seed,case=label,truth=truth,
+                                         score=score(template,ext),
+                                         extraction_ber=ber(template,ext),
+                                         key_tag=keyed_digest(k)))
         dump_csv(out/'security/raw.csv',rows)
     df=dump_csv(out/'security/raw.csv',rows)
     val=df[df.split=='validation'];test=df[df.split=='test']
@@ -117,15 +142,43 @@ def security(split,wms,key,out,quick):
     negative=test[test.truth==0].score.to_numpy()
     roc,auc=roc_points(positive,negative)
     roc.to_csv(out/'security/roc.csv',index=False)
+    grouped=[]
+    for (attack,case),grp in test.groupby(['attack','case']):
+        accepted=grp.score.ge(threshold)
+        grouped.append(dict(attack=attack,case=case,truth=int(grp.truth.iloc[0]),
+                            n_rows=len(grp),n_hosts=grp.host.nunique(),
+                            acceptance_rate=float(accepted.mean()),
+                            mean_score=float(grp.score.mean())))
+    dump_csv(out/'security/acceptance_by_attack_case.csv',grouped)
+    neg=test.loc[test.truth.eq(0)].copy()
+    neg['false_alarm']=neg.score.ge(threshold)
+    per_host=neg.groupby('host')['false_alarm'].agg(['sum','count','max'])
+    any_host_fp=int(per_host['max'].sum());nh=len(per_host)
+    fpr=float((negative>=threshold).mean())
     report=dict(score='1-BER against the claimed reference',
-                threshold_calibration='validation negatives only',target_fpr=0.01,
-                threshold=threshold,heldout_auc=auc,
-                heldout_tpr=float((positive>=threshold).mean()),
-                heldout_fpr=float((negative>=threshold).mean()),
-                validation_negative_count=len(val_neg),test_positive_count=len(positive),
-                test_negative_count=len(negative),
-                caution='Null samples sharing a host are dependent; empirical FPR precision is limited by host count.')
-    (out/'security/report.json').write_text(json.dumps(report,indent=2))
+        threshold_calibration='validation negatives only; threshold frozen on test',
+        target_fpr=0.01,threshold=threshold,
+        heldout_auc=auc,**clustered_auc_ci(test,n_boot=200 if quick else bootstrap),
+        heldout_tpr=float((positive>=threshold).mean()),heldout_fpr=fpr,
+        heldout_positive_count=len(positive),heldout_negative_count=len(negative),
+        validation_negative_count=len(val_neg),
+        validation_independent_hosts=val.host.nunique(),
+        test_independent_hosts=test.host.nunique(),
+        heldout_false_positives=int((negative>=threshold).sum()),
+        iid_trial_fpr_upper_95_optimistic=binomial_upper_bound(int((negative>=threshold).sum()),len(negative)),
+        host_any_false_positive_rate=float(any_host_fp/nh),
+        hosts_with_any_false_positive=any_host_fp,
+        host_any_fp_upper_95=binomial_upper_bound(any_host_fp,nh),
+        wrong_keys_per_host_watermark_attack=wrong_keys,
+        attacks=[{'name':name,'params':kw} for name,kw,_ in cases],
+        warning='Wrong keys, watermarks and attacks from one host are dependent. '
+                'The trial-level Clopper-Pearson bound assumes IID and is NOT a '
+                'valid population 1% FPR certification. Increase independent hosts '
+                'and external corpora for meaningful low-FPR claims.')
+    # Strict JSON: null is valid, NaN is not.
+    report={k:(None if isinstance(v,(float,np.floating)) and not np.isfinite(v) else v)
+            for k,v in report.items()}
+    (out/'security/report.json').write_text(json.dumps(report,indent=2,allow_nan=False))
 
 
 def energy_study(split,wms,key,out,quick):
@@ -269,35 +322,25 @@ def baseline_comparison(split,wms,key,out,attack_path,quick,psnr_tolerance=0.2):
         names=[spec for spec in names if spec['name'] in
                ('proposed','direct_pixel_qim_control','su2014_qr','nha2022_improved_qr')]
     reference=proposal()
-    # Calibrate ONLY on validation hosts; freeze each baseline before touching test.
+    # One frozen global scale per baseline. Only validation hosts influence it.
     diagnostics=[]; methods=[reference]
+    val_pairs=[]
+    for hp in split['validation']:
+        host=read_color(hp)
+        for wp in wms[:1 if quick else None]:
+            wm=get_wm(wp)
+            ref=reference.embed(host,wm,key=key)
+            val_pairs.append((host,wm,float(psnr(host,ref.image))))
     for spec in names[1:]:
         name=spec['name'];original=build_method(name,resolve(spec['config']))
-        scales=[];failures=[]
-        for hp in split['validation']:
-            host=read_color(hp)
-            for wp in wms[:1 if quick else None]:
-                wm=get_wm(wp)
-                try:
-                    ref=reference.embed(host,wm,key=key)
-                    _,_,diag=tune_baseline_to_psnr(original,host,wm,key=key,
-                                                  target_psnr_db=psnr(host,ref.image),
-                                                  scales=([0.15,0.35,0.6,1.0,1.5] if quick else None))
-                    if 'strength_scale' in diag:scales.append(float(diag['strength_scale']))
-                except Exception as ex:
-                    failures.append(f'{hp.name}/{wp.name}: {ex}')
-        fields=getattr(original,'strength_fields',None)
-        if not fields:
-            field=getattr(original,'strength_field',None)
-            fields=(field,) if field else ('quant_step',)
-        if not scales:
-            diagnostics.append(dict(method=name,error='No successful validation calibration',failure_details=str(failures)))
-            continue
-        scale=float(np.median(scales));new={fld:float(getattr(original.config,fld))*scale for fld in fields}
-        tuned=original.__class__(replace(original.config,**new));methods.append(tuned)
-        diagnostics.append(dict(method=name,selected_scale=scale,strength_fields=','.join(fields),
-                                validation_pairs=len(scales),failure_details=str(failures),
-                                calibration='validation-only global strength; frozen on test'))
+        try:
+            tuned,diag=calibrate_global_baseline(original,val_pairs,key=key,
+                psnr_tolerance=psnr_tolerance,
+                scales=np.geomspace(0.1,5.0,7) if quick else None)
+            methods.append(tuned)
+            diagnostics.append(diag)
+        except Exception as ex:
+            diagnostics.append(dict(method=name,error=str(ex),status='calibration_failed'))
     dump_csv(out/'baselines/calibration.csv',diagnostics)
     attacks=load_yaml(attack_path)['attacks']
     if quick:
@@ -312,6 +355,7 @@ def baseline_comparison(split,wms,key,out,attack_path,quick,psnr_tolerance=0.2):
     fair['psnr_gap_db']=fair.embedding_psnr-fair.target_psnr
     fair['within_tolerance']=fair.psnr_gap_db.abs()<=psnr_tolerance
     fair['payload_bits']=4096
+    fair['matched_by']='locked_validation_only_global_strength'
     fair['method_note']=np.where(fair.method=='direct_pixel_qim_control','New non-paper scalar QIM control','Registered paper or proposed method')
     dump_csv(out/'baselines/psnr_audit.csv',fair)
     # Metrics for poorly-matched baselines are supplied but NOT mixed into fair wins.
@@ -320,7 +364,12 @@ def baseline_comparison(split,wms,key,out,attack_path,quick,psnr_tolerance=0.2):
     data.to_csv(out/'baselines/metrics_with_eligibility.csv',index=False)
     statistical_report(data,out/'baselines',n_boot=200 if quick else 1000)
     comparable=data[data.within_tolerance]
-    if len(comparable):statistical_report(comparable,out/'baselines/matched_only',n_boot=200 if quick else 1000)
+    if len(comparable):statistical_report(comparable,out/'baselines/matched_only',
+        n_boot=200 if quick else 1000,pair_policy='intersection',
+        expected_methods=[m.name for m in methods])
+    fair.groupby('method',as_index=False).agg(n_pairs=('within_tolerance','size'),
+        n_matched=('within_tolerance','sum'),mean_abs_psnr_gap_db=('psnr_gap_db',
+        lambda x:float(np.abs(x).mean()))).to_csv(out/'baselines/psnr_coverage.csv',index=False)
     # SECONDARY OPERATING-POINT study: tune ONLY the host PSNR (never attack BER)
     # separately for each evaluation host. It is not the locked-validation result.
     if not quick:
@@ -331,7 +380,9 @@ def baseline_comparison(split,wms,key,out,attack_path,quick,psnr_tolerance=0.2):
         calibrated['within_tolerance']=calibrated['matched_psnr_error_db'].abs()<=psnr_tolerance
         calibrated.to_csv(out/'baselines/operating_point_psnr_calibrated'/'metrics_eligibility.csv',index=False)
         statistical_report(calibrated[calibrated.within_tolerance],
-                           out/'baselines/operating_point_psnr_calibrated'/'matched_only',n_boot=1000)
+                           out/'baselines/operating_point_psnr_calibrated'/'matched_only',
+                           n_boot=1000,pair_policy='intersection',
+                           expected_methods=[m.name for m in original])
 
 
 def main():
@@ -340,6 +391,11 @@ def main():
     p.add_argument('--sections',nargs='+',default=['all'],
                    choices=['all','baselines','security','attacks','optimality','capacity','runtime'])
     p.add_argument('--hosts-dir',type=Path,default=resolve('data/hosts/classical'))
+    p.add_argument('--extra-hosts-dir',type=Path,nargs='*',default=[],
+                   help='Additional independent genuine 512x512 host images; not synthetic variants')
+    p.add_argument('--min-hosts',type=int,default=None,
+                   help='Defaults to 12 for full and 3 for smoke; 6 is exploratory only')
+    p.add_argument('--security-wrong-keys',type=int,default=64)
     p.add_argument('--watermarks-dir',type=Path,default=WM_DEFAULT)
     p.add_argument('--output',type=Path,default=Path('results/reviewer_suite'))
     p.add_argument('--attacks-config',default='configs/attacks/reviewer_stress.yaml')
@@ -348,7 +404,16 @@ def main():
     p.add_argument('--psnr-tolerance',type=float,default=0.2)
     p.add_argument('--fail-fast',action='store_true')
     a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=True)
-    hosts=sorted(a.hosts_dir.glob('*.bmp'))+sorted(a.hosts_dir.glob('*.png'))
+    all_dirs=[a.hosts_dir]+a.extra_hosts_dir
+    hosts=sorted((p for folder in all_dirs for p in folder.iterdir()
+                  if p.is_file() and p.suffix.lower() in ('.bmp','.png','.jpg','.jpeg','.tif','.tiff')),
+                 key=lambda p:(p.stem,p.name))
+    min_hosts=a.min_hosts if a.min_hosts is not None else (12 if a.mode=='full' else 3)
+    checks=audit_host_corpus(hosts,min_hosts=min_hosts)
+    (out/'host_audit.json').write_text(json.dumps({
+        'required_hosts':min_hosts,'exploratory_under_12':len(hosts)<12,
+        'checked_hosts':checks,'warning':'Exact duplicates excluded; independent scene provenance and near duplicates require manual audit'
+    },indent=2))
     wms=sorted(a.watermarks_dir.glob('*.png'))
     if not wms:raise ValueError('No watermark PNG files')
     split=split_hosts(hosts,a.split_seed)
@@ -357,7 +422,7 @@ def main():
     sections=['security','attacks','optimality','capacity','runtime','baselines'] if 'all' in a.sections else a.sections
     failed={}
     actions={
-        'security':lambda:security(split,wms,key,out,quick),
+        'security':lambda:security(split,wms,key,out,quick,a.security_wrong_keys),
         'attacks':lambda:attack_evaluation(split,wms,key,out,a.attacks_config,quick),
         'optimality':lambda:energy_study(split,wms,key,out,quick),
         'capacity':lambda:capacity(split,wms,key,out,quick),

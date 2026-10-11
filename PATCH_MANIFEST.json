@@ -1,0 +1,23 @@
+{
+  "patch": "QR reviewer audit v2",
+  "base": "uploaded QR_candicate-main (2026-10-11)",
+  "changed_files": [
+    "src/qrwatermark/evaluation/review_statistics.py",
+    "src/qrwatermark/evaluation/review_protocol.py",
+    "src/qrwatermark/evaluation/fairness.py",
+    "scripts/run_reviewer_suite.py",
+    "scripts/run_main_comparison.py",
+    "scripts/prepare_reviewer_hosts.py",
+    "tests/test_evaluation_audit_v2.py",
+    "kaggle/QR_REVIEWER_AUDIT_V2_ONE_CELL.py",
+    "REVIEWER_AUDIT_V2_README.md"
+  ],
+  "full_12_host_results_available": false,
+  "six_host_exploratory_security_test": {
+    "auc": 0.9045981032338308,
+    "tpr": 0.7708333333333334,
+    "fpr": 0.011504975124378109,
+    "independent_test_hosts": 3
+  },
+  "tests": "111 passed"
+}

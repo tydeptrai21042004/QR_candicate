@@ -122,6 +122,18 @@ def tune_baseline_to_psnr(
             if not any(abs(float(scale) - float(t[2])) <= 1e-12 for t in trials):
                 trial(float(scale))
 
+    # Refine around the best coarse scale before claiming a PSNR mismatch.
+    # This does not use attack outcomes; only embedding distortion is observed.
+    best_trial = min(trials, key=lambda x: (x[0], -x[1]))
+    if best_trial[0] > 0.05 and len(trials) >= 3:
+        unique_scales = sorted({float(t[2]) for t in trials})
+        centre = float(best_trial[2]); idx = unique_scales.index(centre)
+        lower = unique_scales[max(0,idx-1)]
+        upper = unique_scales[min(len(unique_scales)-1,idx+1)]
+        if lower < upper:
+            for candidate in np.geomspace(lower,upper,9):
+                if not any(abs(float(candidate)-float(t[2])) <= 1e-12 for t in trials):
+                    trial(float(candidate))
     _, p, scale, tuned, emb, embed_s = min(trials, key=lambda x: (x[0], -x[1]))
     diag = {
         "target_psnr_db": float(target_psnr_db),
@@ -135,3 +147,75 @@ def tune_baseline_to_psnr(
     for field in fields:
         diag[field] = float(getattr(tuned.config, field))
     return tuned, emb, diag
+
+
+def calibrate_global_baseline(method, validation_pairs, *, key: bytes,
+                              psnr_tolerance: float = 0.2, scales=None):
+    """Freeze one strength setting using ONLY validation image/mark pairs.
+
+    Optimize PSNR matching coverage first, then average absolute PSNR error.
+    No attack metric or evaluation/test host is accessed. A baseline with an
+    intrinsic distortion floor may remain unmatched; it is not modified.
+
+    validation_pairs: [(host_array, watermark_array, target_psnr), ...]
+    """
+    pairs = list(validation_pairs)
+    if not pairs:
+        raise ValueError('Validation host/watermark pairs are required')
+    fields = _strength_fields(method)
+    if not fields:
+        raise ValueError(f'{method.name} has no tunable strength field')
+    if scales is None:
+        # Limited, preregistered strength sweep; deterministic and attack-blind.
+        scales = np.geomspace(0.04, 8.0, 19)
+    trials = []
+    for scale in scales:
+        scale = float(scale)
+        try:
+            tuned = method.__class__(replace(method.config, **{
+                name:float(getattr(method.config,name))*scale for name in fields}))
+            errors = np.asarray([float(psnr(h,tuned.embed(h,w,key=key).image))-target
+                                 for h,w,target in pairs])
+            if not np.all(np.isfinite(errors)):
+                raise ValueError('Nonfinite PSNR error')
+            match_count = int(np.count_nonzero(np.abs(errors) <= psnr_tolerance))
+            trials.append(((-match_count, float(np.mean(np.abs(errors))),
+                            float(np.max(np.abs(errors))), scale), tuned, errors))
+        except Exception:
+            # Some parameter combinations are invalid for a given paper method.
+            continue
+    if not trials:
+        raise ValueError(f'No valid calibration settings for {method.name}')
+    # Refine the best valley; a coarse grid alone can miss ±0.2 dB matching.
+    best_scale = float(min(trials,key=lambda x:x[0])[0][-1])
+    tried = sorted({float(t[0][-1]) for t in trials})
+    idx = tried.index(best_scale)
+    lo,hi=tried[max(0,idx-1)],tried[min(len(tried)-1,idx+1)]
+    if lo < hi:
+        for scale in np.geomspace(lo,hi,13):
+            scale=float(scale)
+            if any(abs(scale-float(t[0][-1]))<1e-12 for t in trials):continue
+            try:
+                tuned=method.__class__(replace(method.config,**{
+                    name:float(getattr(method.config,name))*scale for name in fields}))
+                errors=np.asarray([float(psnr(h,tuned.embed(h,w,key=key).image))-target
+                                   for h,w,target in pairs])
+                if not np.all(np.isfinite(errors)):continue
+                score=(-int(np.count_nonzero(np.abs(errors)<=psnr_tolerance)),
+                       float(np.mean(np.abs(errors))),float(np.max(np.abs(errors))),scale)
+                trials.append((score,tuned,errors))
+            except Exception:continue
+    score,tuned,errors = min(trials,key=lambda x:x[0])
+    scale = float(score[-1])
+    return tuned, {
+        'method':method.name, 'selected_scale':scale,
+        'strength_fields':','.join(fields),
+        'validation_pairs':len(pairs),
+        'validation_psnr_matched_pairs':int(np.count_nonzero(np.abs(errors)<=psnr_tolerance)),
+        'validation_match_fraction':float(np.mean(np.abs(errors)<=psnr_tolerance)),
+        'validation_mean_abs_psnr_error_db':float(np.mean(np.abs(errors))),
+        'validation_max_abs_psnr_error_db':float(np.max(np.abs(errors))),
+        'psnr_tolerance_db':float(psnr_tolerance),
+        'settings_tested':len(trials),
+        'calibration':'validation-only single global strength; no test-host/attack optimization',
+    }
