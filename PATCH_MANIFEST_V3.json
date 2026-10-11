@@ -1,0 +1,38 @@
+{
+  "source_commit": "6191f711ce20260d497d08c40a3204942997f9a1",
+  "requires_external_12_host_images": true,
+  "original_proposal_algorithm_modified": false,
+  "contains_prior_audit_v2": true,
+  "v3_changed_files": [
+    "scripts/run_green_quad_ablation.py",
+    "scripts/run_green_quad_hyperparameters.py",
+    "scripts/run_qr_complete_suite.py",
+    "tests/test_qr_complete_runner_v3.py",
+    "kaggle/QR_ALL_RESULTS_SPLIT_V3_ONE_CELL.py",
+    "QR_SPLIT_STUDIES_V3_README.md"
+  ],
+  "smoke_validation": {
+    "tests_passed": 120,
+    "planned_smoke_jobs": 9,
+    "completed_smoke_jobs": 9,
+    "recorded_failures": 0
+  },
+  "full_validation_status": "not_run",
+  "files_sha256": {
+    "src/qrwatermark/evaluation/review_statistics.py": "0e31cc421ff8b3a86ba3b1cb17a49e608336e76e06c5d08c4665d4633986d331",
+    "src/qrwatermark/evaluation/review_protocol.py": "da745ccede86e7725aa70460a52d3406cfb37d1011e98d517314c60d6d2c3dc4",
+    "src/qrwatermark/evaluation/fairness.py": "47592b1524b05c119bae4460ba0055868c111e442b5870a519be56e0582eb948",
+    "scripts/run_reviewer_suite.py": "291f76fc5f15dbdb7c55e7f8039ac8a162f3d2ab195dd196185814dc2788bd46",
+    "scripts/run_main_comparison.py": "76b934390319471979ed6e1ac42b21e8e83c4afe74fa9a0e33648f2ffb5d16a2",
+    "scripts/prepare_reviewer_hosts.py": "8deef5652c68cf27ec7644c5879372702849db5a8519f1b29b07bf802d78fbcb",
+    "tests/test_evaluation_audit_v2.py": "4ac59aa90ded759ebfebcf8376057d7a3a67b0ca380de30e9517feb34f4a68a4",
+    "kaggle/QR_REVIEWER_AUDIT_V2_ONE_CELL.py": "b0eed56240cb5a3a76ac7adac3b8fe41297646edf7902c71bc42f321662c56d3",
+    "REVIEWER_AUDIT_V2_README.md": "63f685e28aa54f3c21c6db758addda75f2e80f8f23a92120010ff7a5494eac0c",
+    "scripts/run_green_quad_ablation.py": "e7c1b13b9da162372d80ec1e3e5cb66243ae7a9b3f5ab9af69a87006e6dc7d4b",
+    "scripts/run_green_quad_hyperparameters.py": "68e3626780312b85f9b7b55eb60f2a4b3d11884ba20d316ef4561d42ff158501",
+    "scripts/run_qr_complete_suite.py": "740b955695cbde1a385d5888beaac291602ffd0d7a7bb1ef35803d3838eb6add",
+    "tests/test_qr_complete_runner_v3.py": "6739e3c67ccf27f33ba5f3808b0949b06c795b922ed81f1ed19e3f9a1b65e8b6",
+    "kaggle/QR_ALL_RESULTS_SPLIT_V3_ONE_CELL.py": "7bf01e6472c99b4c6364426f168b89f85683c9f66c12794bd7fbcc50f4687cc7",
+    "QR_SPLIT_STUDIES_V3_README.md": "16c031c71a3b5f6e1289adbfa37d46a2912ca1330ea7883f087b93057ad3e0d2"
+  }
+}
