@@ -6,6 +6,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 from qrwatermark.core.factory import build_method
+from qrwatermark.utils.watermark import prepare_binary_watermark
 from qrwatermark.evaluation.metrics import ber,nc,psnr,ssim
 
 
@@ -34,8 +35,13 @@ def run(args):
     cap=None;writer=None;cap_ref=None;frames=[];processed=[]
     try:
         root=Path(__file__).resolve().parents[1]
-        wm=cv2.imread(str(root/'data/watermarks/watermark_1.png'),cv2.IMREAD_GRAYSCALE)
-        if wm is None or wm.shape!=(64,64):raise RuntimeError('Missing 64x64 watermark_1.png')
+        wm_path=root/'data/watermarks/watermark_1.png'
+        wm=prepare_binary_watermark(wm_path,size=64,background=255)
+        black=int(np.count_nonzero(wm==0));white=int(np.count_nonzero(wm==255))
+        if not black or not white:raise RuntimeError(f'Constant watermark after alpha compositing: {wm_path}')
+        summary['watermark_bit_counts']={'black':black,'white':white}
+        summary['watermark_preprocessing']='RGBA on white background; threshold 128'
+        if not cv2.imwrite(str(dest/'expected_watermark.png'),wm):raise RuntimeError('Cannot save reference watermark')
         key=args.key.encode('utf8');method=build_method('proposed')
         cap=cv2.VideoCapture(str(inp))
         if not cap.isOpened():raise RuntimeError(f'Could not decode input video: {inp}')

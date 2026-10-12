@@ -12,6 +12,7 @@ import cv2
 import numpy as np
 from PIL import Image
 from qrwatermark.core.factory import build_method
+from qrwatermark.utils.watermark import prepare_binary_watermark
 from qrwatermark.evaluation.metrics import ber, nc, psnr, ssim
 
 OFFICIAL_URL = 'https://github.com/Jielin-Qiu/MMWatermark-Robustness.git'
@@ -21,7 +22,9 @@ IMAGE_EXT = {'.png','.bmp','.jpg','.jpeg','.tif','.tiff','.webp'}
 KNOWN = ('gaussian_noise','shot_noise','impulse_noise','speckle_noise',
          'gaussian_blur','glass_blur','defocus_blur','motion_blur','zoom_blur',
          'fog','frost','snow','spatter','brightness','contrast','saturate',
-         'pixelate','jpeg_compression','elastic_transform')
+         'pixelate','jpeg_compression','elastic_transform',
+         'scaling','scale','rotation','rotate','shearing','shear',
+         'piecewise_affine','piecewise_affine_transform')
 
 
 def prepare_repo(path: Path, *, clone: bool=True) -> str:
@@ -120,7 +123,7 @@ def call_official(fn, image_bgr: np.ndarray, severity: int, seed: int|None=None)
 
 def read_images(folder: Path,limit: int, *,min_size: int=128) -> list[tuple[str,np.ndarray]]:
     if limit<1: raise ValueError('max-images must be positive')
-    if not folder.is_dir(): raise FileNotFoundError(f'Independent image directory missing: {folder}')
+    if not folder.is_dir(): raise FileNotFoundError(f'Image directory missing: {folder}')
     all_paths=sorted(p for p in folder.rglob('*') if p.is_file() and p.suffix.lower() in IMAGE_EXT)
     out=[]; names=set()
     for p in all_paths:
@@ -188,11 +191,24 @@ def run(args):
         official=import_official(script,repo)
         attacks={name:getattr(official,name) for name in requested}
         images=read_images(Path(args.images_dir),args.max_images)
-        if len(images)<args.min_images:raise RuntimeError(f'Only {len(images)} eligible independent images; require {args.min_images}')
+        if len(images)<args.min_images:raise RuntimeError(f'Only {len(images)} eligible images; require {args.min_images}')
+        status['dataset'] = 'existing_repository_hosts' if Path(args.images_dir).resolve() == (Path(__file__).resolve().parents[1]/'data/hosts/classical').resolve() else 'user_supplied_hosts'
+        status['dataset_is_independent_external_validation'] = False if status['dataset']=='existing_repository_hosts' else None
+        status['dataset_directory'] = str(Path(args.images_dir).resolve())
         project_root=Path(__file__).resolve().parents[1]
         wm_paths=[project_root/'data/watermarks/watermark_1.png',project_root/'data/watermarks/watermark_2.png']
-        wms=[cv2.imread(str(path),cv2.IMREAD_GRAYSCALE) for path in wm_paths]
-        if any(w is None or w.shape!=(64,64) for w in wms):raise RuntimeError('Expected two actual 64x64 watermark images in repository')
+        wms=[prepare_binary_watermark(path,size=64,background=255) for path in wm_paths]
+        if any(w.shape!=(64,64) for w in wms):raise RuntimeError('Expected two actual 64x64 watermark images in repository')
+        status['watermark_preprocessing']='RGBA on white background; threshold 128'
+        status['watermark_bit_counts']={}
+        for path, wm in zip(wm_paths, wms):
+            black=int(np.count_nonzero(wm==0));white=int(np.count_nonzero(wm==255))
+            if black==0 or white==0:
+                raise RuntimeError(f'Constant watermark after alpha compositing: {path.name}, black={black}, white={white}')
+            status['watermark_bit_counts'][path.name]={'black':black,'white':white,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
+        previews=dest/'watermark_previews';previews.mkdir(parents=True,exist_ok=True)
+        for path, wm in zip(wm_paths,wms):
+            if not cv2.imwrite(str(previews/path.name),wm):raise RuntimeError('Cannot save watermark preview')
         method=build_method('proposed');key=args.key.encode('utf8')
         trials=[];ok=set();skipped={}
         preflight_image=images[0][1]
@@ -234,6 +250,10 @@ def run(args):
                                                        severity=severity,error=f'{type(e).__name__}: {e}'))
                         if args.strict:raise
         status['images']=len(images);status['watermarks']=len(wms)
+        status['dataset_host_ids']=[h for h,_ in images]
+        status['attack_severity_pairs_requested']=len(requested)*len(args.severities)
+        status['attack_severity_pairs_executed']=len(ok)
+        status['coverage_complete']=not bool(skipped) and not bool(status['failures'])
         status['expected_rows']=len(images)*len(wms)*(1+len(ok))
         status['actual_rows']=len(trials)
         if len(trials)!=status['expected_rows']:
@@ -250,7 +270,7 @@ def run(args):
 
 def parse_args(argv=None):
     p=argparse.ArgumentParser(description='Clone/run original MMWatermark image perturbations against Green-Quad')
-    p.add_argument('--images-dir',type=Path,default=None,help='Independent host images; no default to development hosts')
+    p.add_argument('--images-dir',type=Path,default=Path(__file__).resolve().parents[1]/'data/hosts/classical',help='Host image directory (default: six existing repository hosts; not independent external validation)')
     p.add_argument('--official-repo',type=Path,default=Path('third_party/MMWatermark-Robustness'))
     p.add_argument('--no-clone',action='store_true')
     p.add_argument('--list-attacks',action='store_true')
@@ -265,6 +285,8 @@ def parse_args(argv=None):
     p.add_argument('--key',default='green-quad-mmwatermark-benchmark-v1')
     a=p.parse_args(argv)
     if not a.list_attacks and a.images_dir is None:p.error('--images-dir is required for evaluation')
+    if a.min_images < 1 or a.max_images < 1 or a.min_images > a.max_images:
+        p.error('min-images and max-images must be positive and min-images <= max-images')
     if a.bootstrap<1:p.error('bootstrap must be positive')
     return a
 
