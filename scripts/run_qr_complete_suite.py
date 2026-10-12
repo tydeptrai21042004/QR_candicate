@@ -54,7 +54,7 @@ def make_jobs(args, run_dir, hosts):
     mode='quick' if args.mode=='smoke' else 'full'
     rev_mode='smoke' if args.mode=='smoke' else 'full'
     repeats=str(3 if args.mode=='smoke' else args.repeats)
-    study_common=['--mode',mode,'--repeats',repeats,*suffix]
+    study_common=['--mode',mode,'--repeats',repeats,*suffix,'--partition','all']
     reviewer=['scripts/run_reviewer_suite.py','--mode',rev_mode,
         '--hosts-dir',str(hosts),'--min-hosts',str(args.min_hosts),
         '--security-wrong-keys',str(args.security_wrong_keys),
@@ -79,7 +79,8 @@ def make_jobs(args, run_dir, hosts):
                 ('hyperparameter_analysis/summary.csv','hyperparameter_analysis/by_attack.csv',
                  'hyperparameter_analysis/hyperparameter_selection.json',
                  'hyperparameter_analysis/attack_rows.csv',
-                 'hyperparameter_analysis/runtime.csv','hyperparameter_analysis/study_protocol.json')),
+                 'hyperparameter_analysis/runtime.csv','hyperparameter_analysis/study_protocol.json',
+                 'hyperparameter_analysis/analysis_summary.json')),
     ]
     for section, outputs in (
             ('security',('security/report.json','security/roc.csv','security/raw.csv')),
@@ -99,12 +100,15 @@ def make_jobs(args, run_dir, hosts):
                   '--key','review-audit-2026-fixed-key',
                   '--run-dir',str(run_dir/label),*suffix),
                  (label+'/metrics.csv',label+'/summary.csv',
-                  label+'/psnr_audit.csv',label+'/matched_only/paired_host_ci.csv')))
-    jobs.append(Job('reviewer_baselines_matched','baselines',
-             tuple([p,*reviewer,'--sections','baselines']),
-             ('reviewer_full/baselines/metrics_with_eligibility.csv',
-              'reviewer_full/baselines/psnr_coverage.csv',
-              'reviewer_full/baselines/matched_only/paired_host_ci.csv')))
+                  label+'/psnr_audit.csv',label+'/unrestricted/paired_host_ci.csv')))
+    # Per the chosen study protocol, matched-PSNR calibration is optional;
+    # do not run it by default or use it as an operating-point acceptance gate.
+    if getattr(args, 'include_matched_baselines', False):
+        jobs.append(Job('reviewer_baselines_matched','baselines',
+                 tuple([p,*reviewer,'--sections','baselines']),
+                 ('reviewer_full/baselines/metrics_with_eligibility.csv',
+                  'reviewer_full/baselines/psnr_coverage.csv',
+                  'reviewer_full/baselines/matched_only/paired_host_ci.csv')))
     if args.neural_checkpoint or args.neural_runner:
         if not args.neural_checkpoint or not args.neural_runner:
             raise ValueError('Supply BOTH --neural-runner and --neural-checkpoint')
@@ -176,6 +180,8 @@ def main(argv=None):
     ap.add_argument('--reserve-minutes',type=float,default=8)
     ap.add_argument('--repeats',type=int,default=250)
     ap.add_argument('--security-wrong-keys',type=int,default=64)
+    ap.add_argument('--include-matched-baselines',action='store_true',
+        help='Optional separate locked-validation PSNR-matched baseline audit')
     ap.add_argument('--checkpoint-seconds',type=int,default=240)
     ap.add_argument('--only',choices=('all','ablation','hyperparameters','review','baselines','tests','neural'),default='all')
     ap.add_argument('--neural-runner',type=Path,default=None)

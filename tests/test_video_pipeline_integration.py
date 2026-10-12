@@ -91,3 +91,18 @@ def test_lossy_post_codec_fidelity(tmp_path):
     mk_video(tmp_path/'input.mkv',count=2)
     result=vid.run(a(tmp_path,max_frames=2,codec='mp4v',output_video=tmp_path/'out.mp4'))
     assert result['encoded_psnr']['min']>0 and 0<=result['encoded_ssim']['mean']<=1
+
+
+@pytest.mark.parametrize('wm_idx',[1,2])
+def test_video_both_watermarks_lossless_with_separate_outputs(tmp_path,wm_idx):
+    mk_video(tmp_path/'input.mkv',count=3)
+    path=SCRIPT.parents[1]/'data/watermarks'/f'watermark_{wm_idx}.png'
+    args=a(tmp_path,watermark_path=path,max_frames=3,
+           results_dir=tmp_path/f'watermark_{wm_idx}')
+    res=vid.run(args)
+    assert res['completed'] and res['watermark_file']==path.name
+    assert res['encoded_ber']['max']==0
+    assert res['encoded_nc']['min']==pytest.approx(1.0)
+    assert res['algorithm_only_embed_extract_fps_from_mean_ms']>0
+    assert res['codec_inclusive_stage_fps_estimate']>0
+    assert (args.results_dir/'expected_watermark.png').is_file()

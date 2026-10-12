@@ -93,9 +93,12 @@ def test_launcher_records_mm_error_but_keeps_video(tmp_path,monkeypatch):
     monkeypatch.setattr(launcher,'run_command',runjob)
     args=launcher.parse_args(['--output',str(tmp_path/'out'),'--images-dir',str(actual),'--video',str(sample)])
     status=launcher.run(args)
-    assert calls==['mmwatermark','video_FFV1','video_mp4v']
+    assert calls==['mmwatermark','video_FFV1_wm1','video_FFV1_wm2','video_mp4v_wm1','video_mp4v_wm2']
     assert status['benchmarks']['mmwatermark']['status']=='FAILED'
-    assert status['benchmarks']['video_FFV1']['status']=='PASS'
+    assert status['benchmarks']['video_FFV1_wm1']['status']=='PASS'
+    assert status['benchmarks']['video_FFV1_wm2']['status']=='PASS'
+    assert status['benchmarks']['video_mp4v_wm1']['status']=='PASS'
+    assert status['benchmarks']['video_mp4v_wm2']['status']=='PASS'
     assert not status['completed']
     assert (tmp_path/'out/execution_status.json').exists()
     assert (tmp_path/'out/MMWATERMARK_VIDEO_RESULTS.zip').exists()

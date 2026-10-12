@@ -51,17 +51,16 @@ def variant_method(name, study='ablation'):
     return GreenQuadWatermark(cfg)
 
 def read_dataset(mode, hosts_dir=None, partition='test', min_hosts=6, seed=3101):
-    """Deterministically partition independent hosts *before* measuring anything.
+    """Read the requested host partition, or all hosts for descriptive studies.
 
-    Use validation hosts for hyperparameter selection and held-out test hosts
-    for architectural ablations. The in-repository six-host corpus is explicitly
-    exploratory; a supplied 12-host corpus supports the main reviewer protocol.
+    The in-repository six-host corpus is exploratory rather than an independent
+    held-out evaluation. Separate security calibration still uses disjoint hosts.
     """
     host_dir = Path(hosts_dir) if hosts_dir else ROOT/'data'/'hosts'/'classical'
     paths = sorted(p for p in host_dir.iterdir()
                    if p.is_file() and p.suffix.lower() in ('.bmp','.png','.jpg','.jpeg','.tif','.tiff'))
     checks = audit_host_corpus(paths, min_hosts=min_hosts)
-    groups = split_hosts(paths, seed)
+    groups = split_hosts(paths, seed) if partition != 'all' else {'all': paths}
     if partition not in ('all', 'train', 'validation', 'test'):
         raise ValueError(f'Unknown dataset partition: {partition}')
     selected = paths if partition == 'all' else groups[partition]
@@ -82,7 +81,8 @@ def read_dataset(mode, hosts_dir=None, partition='test', min_hosts=6, seed=3101)
                 'host_groups': {k:[p.name for p in v] for k,v in groups.items()},
                 'evaluated_hosts': [p.name for p in selected],
                 'n_watermarks':len(wms), 'mode':mode,
-                'warning': 'Hyperparameters must be selected on validation ONLY; do not tune on test hosts.'}
+                'warning': ('All six hosts used for descriptive sensitivity/ablation only; no independent test estimate.'
+                            if partition=='all' else 'Hyperparameters must be selected on validation ONLY; do not tune on test hosts.')}
     return data, protocol
 
 def get_attacks():
@@ -105,7 +105,10 @@ def speed_test(method,host,wm,key,repeats):
 def run(mode,out,repeat,include_greedy,*,study="ablation",hosts_dir=None,partition=None,min_hosts=6):
     out.mkdir(parents=True,exist_ok=True)
     if study not in STUDIES: raise ValueError(f'Unknown study: {study}')
-    if partition is None: partition = 'validation' if study=='hyperparameters' else 'test'
+    if study == 'hyperparameters':
+        # Never leave an obsolete PASS/FAIL artifact when reusing output folders.
+        (out/'acceptance.json').unlink(missing_ok=True)
+    if partition is None: partition = 'all'  # descriptive: use every existing host and both watermark PNGs
     samples,protocol=read_dataset(mode,hosts_dir=hosts_dir,partition=partition,min_hosts=min_hosts)
     (out/'study_protocol.json').write_text(json.dumps({**protocol,'study':study,
         'variants':STUDIES[study],'fixed_baseline':'FINAL_GREEN_T66',
@@ -148,25 +151,22 @@ def run(mode,out,repeat,include_greedy,*,study="ablation",hosts_dir=None,partiti
         write_csv(out/'summary.csv',summary,summary[0].keys())
         write_csv(out/'runtime.csv',times,times[0].keys())
         write_csv(out/'by_attack.csv',per_attack,per_attack[0].keys())
-    # Explicitly separate validation-only hyperparameter selection from final
-    # held-out ablation reporting. Never rewrite the production T=66 config.
+    # Descriptive sensitivity: no performance threshold and no parameter selection.
+    # Period 66 remains the single unchanged registered proposal.
     if study == 'hyperparameters':
-        eligible = [r for r in summary if r['min_psnr_db'] > 50
-                    and r['clean_ber_max'] == 0]
-        # The machine-specific speed criterion is included only as a report;
-        # it must not turn an ineligible test into a paper claim.
-        rank = sorted(eligible, key=lambda r:(r['mean_ber'],-r['mean_nc'],
-                                               -r['min_psnr_db'],r['variant']))
-        selected = rank[0]['variant'] if rank else None
+        observed_rank=sorted(summary,key=lambda r:(r['mean_ber'],-r['mean_nc']))
         (out/'hyperparameter_selection.json').write_text(json.dumps({
-            'partition':partition, 'selected_on_validation_only':selected,
+            'study_type':'descriptive_parameter_sensitivity',
+            'partition':partition,
+            'selected_on_validation_only':None,
+            'best_observed_mean_ber_variant':observed_rank[0]['variant'],
+            'best_observed_is_not_production_selection':True,
             'production_parameter_unchanged':'FINAL_GREEN_T66',
-            'selection_rule':'minimize mean BER subject to PSNR_min > 50 dB and clean BER=0',
-            'fps_reporting':'Measured separately and must be checked on the final hardware',
-            'eligible_variants':[r['variant'] for r in eligible],
-            'warning':'Selection is exploratory with <12 hosts and is NOT a test-set result.'
-                if protocol['exploratory_under_12'] else
-                'Freeze the selected parameters before any test-host evaluation.'},indent=2))
+            'selection_rule':None,
+            'thresholds_applied':False,
+            'all_variants':list(active),
+            'warning':'Descriptive within-corpus comparisons only; the most favorable observed variant is not an independent test result.'
+        },indent=2))
     else:
         final_row = next(r for r in summary if r['variant']=='FINAL_GREEN_T66')
         delta=[]
@@ -189,8 +189,16 @@ def run(mode,out,repeat,include_greedy,*,study="ablation",hosts_dir=None,partiti
     env=dict(study=study,partition=partition,independent_host_count=protocol['n_independent_hosts'],mode=mode,host_files=sorted({h for h,w,host,wm in samples}),watermarks=sorted({w for h,w,host,wm in samples}),tested_key_count=len(KEYS),attack_conditions_per_pair=len(attacks),python=sys.version,platform=platform.platform(),numpy=np.__version__,opencv=cv2.__version__,timing_repeats=repeat,proposal_count=1,warning='Only same-hardware timing comparisons are valid; unknown-geometry robustness is not claimed.')
     (out/'environment.json').write_text(json.dumps(env,indent=2))
     chosen=summary[0];clock=times[0]
+    if study == 'hyperparameters':
+        report={'study_type':'descriptive_parameter_sensitivity',
+                'acceptance_thresholds':None,'passed_or_failed':None,
+                'production_parameter_unchanged':'FINAL_GREEN_T66',
+                'observed_final':chosen,'observed_latency':clock,
+                'n_evaluated_host_watermark_pairs':len(samples)}
+        (out/'analysis_summary.json').write_text(json.dumps(report,indent=2))
+        return report
     gates=dict(clean_ber_zero=(chosen['clean_ber_max']==0),minimum_psnr_gt50=(min(x['PSNR'] for x in key_checks)>50),combined_median_fps_gt175=(clock['combined_fps']>175),combined_p95_ms_lt_5_714=(clock['combined_p95_ms']<1000/175),mean_ber_lt_0_24=(chosen['mean_ber']<0.24))
-    (out/'acceptance.json').write_text(json.dumps(dict(gates=gates,observed=chosen,latency=clock,note='These gates apply to this sample/hardware only; not evidence of held-out generalization.'),indent=2))
+    (out/'acceptance.json').write_text(json.dumps(dict(gates=gates,observed=chosen,latency=clock,note='These gates apply to this sample/hardware only; not evidence of independent generalization.'),indent=2))
     return gates
 
 def main(default_study='ablation'):

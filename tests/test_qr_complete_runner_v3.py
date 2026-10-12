@@ -47,10 +47,22 @@ def test_full_job_list_has_all_required_outputs(tmp_path):
     names={j.name for j in jobs}
     assert names=={'maintained_tests','ablation','hyperparameter_analysis',
        'reviewer_security','reviewer_attacks','reviewer_optimality',
-       'reviewer_capacity','reviewer_runtime','reviewer_baselines_matched',
+       'reviewer_capacity','reviewer_runtime',
        'paper_baselines_standard','paper_baselines_256bit'}
     assert all(j.required for j in jobs)
     assert all(j.group!='neural' for j in jobs)
+    descriptions={j.name:j for j in jobs}
+    for name in ('ablation','hyperparameter_analysis'):
+        assert ('--partition','all') in tuple(zip(descriptions[name].cmd,descriptions[name].cmd[1:]))
+    for name in ('paper_baselines_standard','paper_baselines_256bit'):
+        assert all('matched_only' not in output for output in descriptions[name].required)
+
+
+def test_matched_psnr_reviewer_job_opt_in_only(tmp_path):
+    args=_args('full')
+    assert 'reviewer_baselines_matched' not in {j.name for j in make_jobs(args,tmp_path,ROOT/'data/hosts/classical')}
+    args.include_matched_baselines=True
+    assert 'reviewer_baselines_matched' in {j.name for j in make_jobs(args,tmp_path,ROOT/'data/hosts/classical')}
 
 
 def test_smoke_explicitly_excludes_long_paper_comparisons(tmp_path):

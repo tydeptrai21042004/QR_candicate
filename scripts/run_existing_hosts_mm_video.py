@@ -199,11 +199,15 @@ def run(args):
                 if not (PROJECT/'scripts/run_video_pipeline.py').is_file():
                     raise FileNotFoundError('Missing scripts/run_video_pipeline.py')
                 for codec,ext in [('FFV1','.mkv'),('mp4v','.mp4')]:
-                    dest=out/'video'/codec
-                    cmd=[sys.executable,'-u',str(PROJECT/'scripts/run_video_pipeline.py'),
-                         '--input-video',str(video),'--output-video',str(dest/f'watermarked{ext}'),
-                         '--results-dir',str(dest),'--codec',codec,'--max-frames',str(args.video_frames)]
-                    status['benchmarks']['video_'+codec]=run_command('video_'+codec,cmd,out)
+                    for wm_idx in (1,2):
+                        watermark=PROJECT/f'data/watermarks/watermark_{wm_idx}.png'
+                        dest=out/'video'/codec/f'watermark_{wm_idx}'
+                        name=f'video_{codec}_wm{wm_idx}'
+                        cmd=[sys.executable,'-u',str(PROJECT/'scripts/run_video_pipeline.py'),
+                             '--input-video',str(video),'--output-video',str(dest/f'watermarked{ext}'),
+                             '--results-dir',str(dest),'--watermark-path',str(watermark),
+                             '--codec',codec,'--max-frames',str(args.video_frames)]
+                        status['benchmarks'][name]=run_command(name,cmd,out)
             except Exception as e:
                 status['benchmarks']['video']=dict(status='FAILED',error=f'{type(e).__name__}: {e}')
         attempted=[v for v in status['benchmarks'].values() if v['status']!='SKIPPED']

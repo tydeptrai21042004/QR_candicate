@@ -35,7 +35,10 @@ def run(args):
     cap=None;writer=None;cap_ref=None;frames=[];processed=[]
     try:
         root=Path(__file__).resolve().parents[1]
-        wm_path=root/'data/watermarks/watermark_1.png'
+        wm_path=Path(getattr(args,'watermark_path',None) or (root/'data/watermarks/watermark_1.png')).resolve()
+        if not wm_path.is_file():raise FileNotFoundError(f'Watermark PNG not found: {wm_path}')
+        summary['watermark_file']=wm_path.name
+        summary['watermark_path']=str(wm_path)
         wm=prepare_binary_watermark(wm_path,size=64,background=255)
         black=int(np.count_nonzero(wm==0));white=int(np.count_nonzero(wm==255))
         if not black or not white:raise RuntimeError(f'Constant watermark after alpha compositing: {wm_path}')
@@ -50,6 +53,7 @@ def run(args):
         summary['source_fps']=fps
         start=time.perf_counter()
         embed_times=[]; extract_times=[]; decode_times=[];encode_times=[]
+        encoded_read_times=[]; encoded_extract_times=[]
         expected_shape=None
         for idx in range(args.max_frames):
             td=time.perf_counter(); ok,frame=cap.read();decode_times.append((time.perf_counter()-td)*1e3)
@@ -87,8 +91,9 @@ def run(args):
         encoded_start=time.perf_counter()
         try:
             for idx in range(len(frames)):
-                ok,frame=cap_out.read()
+                t_read=time.perf_counter();ok,frame=cap_out.read()
                 if not ok:break
+                encoded_read_times.append((time.perf_counter()-t_read)*1e3)
                 if frame.shape!=expected_shape:raise RuntimeError('Codec changed frame dimensions')
                 ref_ok,original_frame=cap_ref.read()
                 if not ref_ok or original_frame.shape!=frame.shape:
@@ -96,6 +101,7 @@ def run(args):
                 tx=time.perf_counter()
                 recovered=method.extract(frame,key=key,watermark_shape=(64,64)).watermark
                 ms=(time.perf_counter()-tx)*1e3
+                encoded_extract_times.append(ms)
                 processed.append(dict(frame=idx,encoded_extract_ms=ms,encoded_nc=float(nc(wm,recovered)),
                                       encoded_ber=float(ber(wm,recovered)),
                                       encoded_psnr=float(psnr(original_frame,frame)),
@@ -108,7 +114,19 @@ def run(args):
         elapsed_verify=time.perf_counter()-encoded_start
         if len(processed)!=len(frames):raise RuntimeError(f'Encoded video has {len(processed)} of {len(frames)} frames')
         total_elapsed=time.perf_counter()-start
-        summary.update(decoded_output_frames=len(processed),output_redecode_extract_seconds=elapsed_verify,
+        algorithm_combined=[e+x for e,x in zip(embed_times,extract_times)]
+        codec_stage_ms=[d+e+w+r+x for d,e,w,r,x in zip(
+            decode_times[:len(frames)],embed_times,encode_times,encoded_read_times,encoded_extract_times)]
+        # Sum-of-stages estimates exclude PSNR/SSIM, quality evaluation,
+        # and the auxiliary reference-video pass; NOT wall-clock end-to-end FPS.
+        summary.update(algorithm_only_embed_extract_fps_from_mean_ms=(1000/float(np.mean(algorithm_combined))),
+                       algorithm_only_embed_extract_fps_from_median_ms=(1000/float(np.median(algorithm_combined))),
+                       codec_inclusive_stage_fps_estimate=(1000/float(np.mean(codec_stage_ms))),
+                       codec_inclusive_stage_ms=summarize(codec_stage_ms),
+                       encoded_read_ms=summarize(encoded_read_times),
+                       encoded_extract_ms=summarize(encoded_extract_times),
+                       timing_caution='Stage estimates exclude PSNR/SSIM and verification-only reads; total_e2e_fps includes quality evaluation and is NOT algorithm-only FPS.',
+        decoded_output_frames=len(processed),output_redecode_extract_seconds=elapsed_verify,
                        total_e2e_seconds=total_elapsed,total_e2e_fps=len(frames)/total_elapsed,
                        embed_ms=summarize(embed_times),extract_ms=summarize(extract_times),
                        embed_extract_ms=summarize([x+y for x,y in zip(embed_times,extract_times)]),
@@ -142,6 +160,7 @@ def parse_args(argv=None):
     p.add_argument('--max-frames',type=int,default=300)
     p.add_argument('--fallback-fps',type=float,default=30.0)
     p.add_argument('--key',default='green-quad-video-v1')
+    p.add_argument('--watermark-path',type=Path,default=None,help='Watermark PNG; use watermark_1.png or watermark_2.png')
     args=p.parse_args(argv)
     if args.fallback_fps<=0:p.error('fallback-fps must be >0')
     return args

@@ -1,0 +1,61 @@
+{
+  "based_on": "QR_candicate-main(20261012-153528).zip",
+  "changes": {
+    "KAGGLE_FINAL_RUN.py": {
+      "sha256": "42570a2959cefe5229b6f26f9031220532fbbbec45b66e46557a7fb5e2135ac1",
+      "bytes": 5229
+    },
+    "README_FINAL_PATCH.md": {
+      "sha256": "296c4d826a718d8a3ca81b4279afa2f9d7150900ce0e2cdd48f21894da1fc62b",
+      "bytes": 5182
+    },
+    "configs/experiments/main_comparison.yaml": {
+      "sha256": "94cde4386ca872507b1982f2afa4316c1c11a01b4a5dc75f0660457ad330aed5",
+      "bytes": 828
+    },
+    "configs/experiments/qim_control_comparison.yaml": {
+      "sha256": "4d690535408b60a1acb18a8e0ecf1f777bfa545561d9a6715d634e0bc994dbcf",
+      "bytes": 878
+    },
+    "scripts/run_existing_hosts_mm_video.py": {
+      "sha256": "1f1a6f67478e78d6aa1e53222d2beac5c9996a72e8e892b67838ccad3686224f",
+      "bytes": 13553
+    },
+    "scripts/run_green_quad_ablation.py": {
+      "sha256": "dd196497d8010c390db12f5abd8b652eb4642b2dfa79d77661952f847366916a",
+      "bytes": 13899
+    },
+    "scripts/run_main_comparison.py": {
+      "sha256": "8b0ded4b6bfec6e7a12b80a31d7f7fded267fe6db7e3d484336adfd85d687496",
+      "bytes": 5420
+    },
+    "scripts/run_mmwatermark_official.py": {
+      "sha256": "90bcb584b9e35bf066829b3a75be437db5a27f4207f9deaa63056ce887e47ce3",
+      "bytes": 22927
+    },
+    "scripts/run_qr_complete_suite.py": {
+      "sha256": "0cd57688dc14c8e9145caad4a335fef620d8cce3319de9432edfc98b327b8f6b",
+      "bytes": 16616
+    },
+    "scripts/run_video_pipeline.py": {
+      "sha256": "42965ef765fee4ea25a0c303a6ed605ee9756f5518ed1b56207fef5863d60bf1",
+      "bytes": 10773
+    },
+    "tests/test_existing_hosts_mm_video_fix.py": {
+      "sha256": "620163e34ee8d2d5b5114475e32c732659634f0f9794bfb4735fc1e814d30780",
+      "bytes": 6481
+    },
+    "tests/test_mmwatermark_official_integration.py": {
+      "sha256": "cc1432d5a0c14ee90922eb99d6be28621923451691a868e1d60263f56f246499",
+      "bytes": 12255
+    },
+    "tests/test_qr_complete_runner_v3.py": {
+      "sha256": "9c70d901b1515323348a3056027fbe62a24341e30987ac0a176d80a078ae34a0",
+      "bytes": 4654
+    },
+    "tests/test_video_pipeline_integration.py": {
+      "sha256": "dadd340599e21aee60a95ef14873801d43a7234adcf60703897fd93ed476cc8d",
+      "bytes": 4285
+    }
+  }
+}

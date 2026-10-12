@@ -43,9 +43,9 @@ def main():
     run_dir=Path(args.run_dir);run_dir.mkdir(parents=True,exist_ok=True)
     (run_dir/'host_audit.json').write_text(json.dumps({
         'hosts':audit,'n_hosts':len(hosts),'exploratory_under_12':len(hosts)<12,
-        'design':'Descriptive PSNR-only per-evaluation-host operating point; '
-                 'NOT locked-validation calibration. For final heldout results '
-                 'use run_reviewer_suite.py with >=12 hosts.'},indent=2))
+        'design':'Fixed operating-point comparison without PSNR matching. '
+                 'PSNR is measured and reported, not used as an eligibility threshold. '
+                 'This corpus is descriptive; do not call it independent held-out validation.'},indent=2))
     watermarks = sorted(resolve(cfg["watermarks"]).glob("*.png"))
     attacks = load_yaml(cfg["attacks"])["attacks"]
     df = run_benchmark(
@@ -74,18 +74,23 @@ def main():
     eligible_df=df.merge(eligible,on=['method','host','watermark'],validate='many_to_one')
     eligible_df.to_csv(run_dir/'metrics_with_eligibility.csv',index=False)
     statistical_report(eligible_df,run_dir/'unrestricted',pair_policy='strict')
-    matched=eligible_df.loc[eligible_df.within_tolerance]
-    if len(matched):
-        statistical_report(matched,run_dir/'matched_only',pair_policy='intersection',
-                           expected_methods=[m.name for m in methods])
+    # Optional secondary diagnostic; the operating-point comparison never
+    # requires achieving a fixed PSNR tolerance.
+    matched_diagnostic=bool(cfg.get('produce_matched_diagnostic',False))
+    if matched_diagnostic:
+        matched=eligible_df.loc[eligible_df.within_tolerance]
+        if len(matched):
+            statistical_report(matched,run_dir/'matched_only',pair_policy='intersection',
+                               expected_methods=[m.name for m in methods])
     (run_dir/'matching_protocol.json').write_text(json.dumps({
         'psnr_tolerance_db':args.psnr_tolerance,
-        'study':'secondary_descriptive_per_host_strength_tuning',
+        'study':'unmatched_operating_point_comparison',
+        'psnr_matching_required':False,
+        'produce_matched_diagnostic':matched_diagnostic,
         'matched_comparisons':'intersection of exact shared evaluation identifiers',
         'unmatched':'excluded from matched statistical comparisons',
-        'caution':'Per-test PSNR matching is not locked-validation tuning; '
-                  'baseline PSNR floors cannot be corrected by rescaling without '
-                  'changing the published algorithms.'},indent=2))
+        'caution':'PSNR is reported alongside BER and NC for transparency. '
+                  'Unmatched operating-point results do not demonstrate superiority at equal distortion.'},indent=2))
     print(f"Completed {len(df)} evaluations -> {args.run_dir}")
 
 

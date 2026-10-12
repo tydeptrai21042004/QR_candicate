@@ -20,10 +20,10 @@ import numpy as np
 from PIL import Image
 
 def gaussian_noise(image,severity):
-    assert isinstance(image,Image.Image)
+    assert isinstance(image,np.ndarray)
     arr=np.array(image).copy()
     arr[:,:,0]=np.minimum(255,arr[:,:,0].astype(np.int16)+severity).astype(np.uint8)
-    return Image.fromarray(arr)
+    return arr
 
 def jpeg_compression(image,severity=1):
     return np.asarray(image)
@@ -248,3 +248,39 @@ def test_repeat_import_does_not_dirty_official_checkout(tmp_path):
     for _ in range(2):
         mm.import_official(mm.find_module(r),r)
         assert len(mm.prepare_repo(r,clone=False))==40
+
+
+def test_numpy_array_interface_matches_official_legacy_shape(tmp_path):
+    upstream='\nimport numpy as np\ndef fog(x,severity):\n    assert isinstance(x,np.ndarray) and x.dtype==np.uint8\n    h,w=x.shape[:2]\n    return x.copy()\ndef pixelate(x,severity):\n    assert x.ndim==3\n    return x.copy()\n'
+    r=mk_repo(tmp_path,upstream)
+    mod=mm.import_official(mm.find_module(r),r)
+    sample=np.zeros((128,128,3),np.uint8)
+    for f in [mod.fog,mod.pixelate]:
+        assert mm.call_official(f,sample,1).shape==sample.shape
+
+
+def test_skimage_multichannel_bridge_matches_channel_axis(tmp_path):
+    from skimage.filters import gaussian
+    from types import SimpleNamespace
+    module=SimpleNamespace(gaussian=gaussian)
+    # Modern environments take channel_axis; earlier skimage versions already
+    # support the keyword and need no bridge.
+    was_adapted=mm.adapt_skimage_gaussian(module)
+    data=np.zeros((8,8,3),dtype=np.float64)
+    if was_adapted:
+        actual=module.gaussian(data,sigma=1,multichannel=True)
+        expect=gaussian(data,sigma=1,channel_axis=-1)
+        np.testing.assert_allclose(actual,expect)
+
+
+def test_companion_path_context_restores_path_and_workdir(tmp_path):
+    import os,sys
+    dependent=tmp_path/'MM_Robustness'; dependent.mkdir()
+    before=Path.cwd();paths=list(sys.path)
+    def f(x,severity):
+        assert Path.cwd()==tmp_path
+        assert sys.path[0]==str(tmp_path)
+        assert isinstance(x,np.ndarray)
+        return x
+    result=mm.call_official(f,np.zeros((128,128,3),np.uint8),1,companion_repo=dependent)
+    assert result.shape==(128,128,3) and Path.cwd()==before and sys.path==paths

@@ -16,6 +16,7 @@ from qrwatermark.utils.watermark import prepare_binary_watermark
 from qrwatermark.evaluation.metrics import ber, nc, psnr, ssim
 
 OFFICIAL_URL = 'https://github.com/Jielin-Qiu/MMWatermark-Robustness.git'
+COMPANION_URL = 'https://github.com/Jielin-Qiu/MM_Robustness.git'
 IMAGE_EXT = {'.png','.bmp','.jpg','.jpeg','.tif','.tiff','.webp'}
 # Only methods from the upstream module can be invoked. Never fall back to locally
 # implemented attacks. Names are limited to common benchmark-corruption families.
@@ -46,6 +47,49 @@ def prepare_repo(path: Path, *, clone: bool=True) -> str:
     if len(sha)!=40 or any(c not in '0123456789abcdef' for c in sha.lower()):
         raise RuntimeError('Invalid upstream revision')
     return sha
+
+
+def prepare_companion(path: Path, *, clone: bool=True) -> str:
+    """Keep the upstream dependency separate from the attested MMWatermark checkout."""
+    path=Path(path)
+    if not (path/'.git').is_dir():
+        if not clone:
+            raise RuntimeError(f'MM_Robustness checkout absent: {path}')
+        if path.exists() and any(path.iterdir()):
+            raise RuntimeError(f'Refusing a non-empty unverified companion directory: {path}')
+        path.parent.mkdir(parents=True,exist_ok=True)
+        subprocess.run(['git','clone','--depth','1',COMPANION_URL,str(path)],check=True,timeout=180,
+                       env={**os.environ,'GIT_TERMINAL_PROMPT':'0'})
+    origin=subprocess.run(['git','-C',str(path),'remote','get-url','origin'],check=True,
+                          capture_output=True,text=True).stdout.strip()
+    if origin.rstrip('/').removesuffix('.git').lower()!=COMPANION_URL.removesuffix('.git').lower():
+        raise RuntimeError(f'Incorrect MM_Robustness origin: {origin}')
+    if subprocess.run(['git','-C',str(path),'status','--porcelain'],check=True,
+                      capture_output=True,text=True).stdout.strip():
+        raise RuntimeError('MM_Robustness checkout has uncommitted changes')
+    required=path/'image_perturbation'/'imagenet_c'/'imagenet_c'/'__init__.py'
+    if not required.is_file():
+        raise RuntimeError(f'Upstream MM_Robustness package missing: {required}')
+    return subprocess.run(['git','-C',str(path),'rev-parse','HEAD'],check=True,
+                          capture_output=True,text=True).stdout.strip()
+
+
+def adapt_skimage_gaussian(module) -> bool:
+    """Translate only the retired skimage multichannel keyword, preserving its meaning."""
+    gaussian=getattr(module,'gaussian',None)
+    if gaussian is None or not callable(gaussian):
+        return False
+    if 'multichannel' in inspect.signature(gaussian).parameters:
+        return False
+    if 'channel_axis' not in inspect.signature(gaussian).parameters:
+        return False
+    def compatible_gaussian(image,*args,**kwargs):
+        if 'multichannel' in kwargs:
+            multic=kwargs.pop('multichannel')
+            kwargs.setdefault('channel_axis', -1 if multic else None)
+        return gaussian(image,*args,**kwargs)
+    module.gaussian=compatible_gaussian
+    return True
 
 
 def find_module(repo: Path) -> Path:
@@ -83,7 +127,7 @@ def import_official(path: Path, repo: Path):
     return module
 
 
-def call_official(fn, image_bgr: np.ndarray, severity: int, seed: int|None=None) -> np.ndarray:
+def call_official(fn, image_bgr: np.ndarray, severity: int, seed: int|None=None, *, companion_repo: Path|None=None) -> np.ndarray:
     """Invoke a compatible upstream function; reject all unsupported signatures/results."""
     sig=inspect.signature(fn)
     params=list(sig.parameters.values())
@@ -96,18 +140,34 @@ def call_official(fn, image_bgr: np.ndarray, severity: int, seed: int|None=None)
            (inspect.Parameter.VAR_POSITIONAL,inspect.Parameter.VAR_KEYWORD)):
         raise TypeError('Upstream perturbation requires additional unsupported arguments')
     rgb=cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
-    # Conventional image-corruption implementations accept PIL RGB images.
-    # Restore global RNG state after calling an upstream stochastic perturbation.
-    # Identical host/watermark/attack/severity => reproducible independent trial.
-    if seed is None:
-        result=fn(Image.fromarray(rgb),severity)
-    else:
-        np_state=np.random.get_state();py_state=random.getstate()
-        try:
+    # The actual d352607 upstream functions use x.shape and cv2.resize(x, ...).
+    # PIL conversion breaks 50+ combinations. Pass a fresh RGB uint8 ndarray.
+    np_state=np.random.get_state();py_state=random.getstate()
+    original_path=list(sys.path)
+    original_cwd=Path.cwd()
+    original_no_bytecode=sys.dont_write_bytecode
+    # numpy>=2 removed np.float_, which the original plasma_fractal still uses.
+    add_float_alias=not hasattr(np,'float_')
+    try:
+        sys.dont_write_bytecode=True
+        if add_float_alias:
+            np.float_=np.float64
+        if companion_repo is not None:
+            companion_repo=Path(companion_repo).resolve()
+            # Original imported functions resolve MM_Robustness *at call time*.
+            sys.path.insert(0,str(companion_repo.parent))
+            # Original frost() reads ./MM_Robustness/image_perturbation/frost*.png.
+            os.chdir(companion_repo.parent)
+        if seed is not None:
             np.random.seed(int(seed)%2**32);random.seed(int(seed))
-            result=fn(Image.fromarray(rgb),severity)
-        finally:
-            np.random.set_state(np_state);random.setstate(py_state)
+        result=fn(rgb.copy(),severity)
+    finally:
+        if add_float_alias:
+            del np.float_
+        os.chdir(original_cwd)
+        sys.path[:]=original_path
+        sys.dont_write_bytecode=original_no_bytecode
+        np.random.set_state(np_state);random.setstate(py_state)
     if isinstance(result,Image.Image): result=np.asarray(result.convert('RGB'))
     else: result=np.asarray(result)
     if result.shape!=rgb.shape:
@@ -172,7 +232,7 @@ def run(args):
     dest=Path(args.output);dest.mkdir(parents=True,exist_ok=True)
     status={'repository':OFFICIAL_URL,'official_repo_commit':None,'method':'green_quad_min_energy',
             'period':66,'payload':4096,'official_perturbations_executed':False,'skipped':{},
-            'failures':[],'completed':False}
+            'failures':[],'completed':False,'adapter':{'input':'RGB uint8 ndarray','numpy_float_compat':True}}
     try:
         repo=Path(args.official_repo)
         sha=prepare_repo(repo,clone=not args.no_clone)
@@ -189,6 +249,23 @@ def run(args):
         if len(args.severities)!=len(set(args.severities)) or any(s<1 or s>5 for s in args.severities):
             raise ValueError('severities must be unique integers from 1 to 5')
         official=import_official(script,repo)
+        status['adapter']['legacy_skimage_gaussian_kwarg']=adapt_skimage_gaussian(official)
+        companion=None
+        # Fake checkouts used in offline tests need not clone any second repository.
+        if getattr(args,'auto_companion',False) and any(
+                a in requested for a in ('frost','jpeg_compression','motion_blur')):
+            candidate=Path(getattr(args,'companion_repo',None) or
+                           (dest.resolve().parent.parent/'_mm_deps'/'MM_Robustness'))
+            try:
+                status['companion_repo_commit']=prepare_companion(
+                    candidate,clone=not getattr(args,'no_companion_clone',False))
+                companion=candidate.resolve()
+                status['companion_repo']=str(companion)
+            except Exception as error:
+                # Fail closed in strict mode. In relaxed mode, per-attack preflight
+                # must still record the missing upstream attack as unsupported.
+                status['companion_error']=f'{type(error).__name__}: {error}'
+                if args.strict: raise
         attacks={name:getattr(official,name) for name in requested}
         images=read_images(Path(args.images_dir),args.max_images)
         if len(images)<args.min_images:raise RuntimeError(f'Only {len(images)} eligible images; require {args.min_images}')
@@ -218,7 +295,7 @@ def run(args):
             for severity in args.severities:
                 label=f'{attack}:{severity}'
                 try:
-                    altered=call_official(fn,preflight_image,severity,seed=trial_seed(args.seed,'preflight',0,attack,severity))
+                    altered=call_official(fn,preflight_image,severity,seed=trial_seed(args.seed,'preflight',0,attack,severity),companion_repo=companion)
                     if altered.shape!=preflight_image.shape:raise RuntimeError('geometry mismatch')
                     ok.add((attack,severity))
                 except Exception as e:
@@ -240,7 +317,7 @@ def run(args):
                 for attack,severity in sorted(ok):
                     try:
                         attack_seed=trial_seed(args.seed,host_id,wm_id,attack,severity)
-                        attacked=call_official(attacks[attack],result.image,severity,seed=attack_seed)
+                        attacked=call_official(attacks[attack],result.image,severity,seed=attack_seed,companion_repo=companion)
                         rec=method.extract(attacked,key=key,watermark_shape=(64,64)).watermark
                         trials.append(dict(host_id=host_id,watermark=wm_id,attack=attack,severity=severity,
                                            psnr=float(psnr(im,result.image)),ssim=float(ssim(im,result.image)),
@@ -273,6 +350,11 @@ def parse_args(argv=None):
     p.add_argument('--images-dir',type=Path,default=Path(__file__).resolve().parents[1]/'data/hosts/classical',help='Host image directory (default: six existing repository hosts; not independent external validation)')
     p.add_argument('--official-repo',type=Path,default=Path('third_party/MMWatermark-Robustness'))
     p.add_argument('--no-clone',action='store_true')
+    p.add_argument('--auto-companion',action=argparse.BooleanOptionalAction,default=True,
+                   help='Auto-clone official MM_Robustness dependency for frost/jpeg/motion')
+    p.add_argument('--companion-repo',type=Path,default=None,
+                   help='Optional precloned official MM_Robustness repository')
+    p.add_argument('--no-companion-clone',action='store_true')
     p.add_argument('--list-attacks',action='store_true')
     p.add_argument('--output',type=Path,default=Path('results/mmwatermark'))
     p.add_argument('--max-images',type=int,default=100)

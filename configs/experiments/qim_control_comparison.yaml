@@ -2,7 +2,7 @@
 # Their published method carries one bit per 16x16 host block, hence a 16x16
 # payload is used here so all methods can be evaluated on the identical bits.
 watermark_size: 16
-match_psnr_to_proposed: true
+match_psnr_to_proposed: false
 methods:
   - {name: proposed, config: configs/methods/proposed.yaml}
   - {name: su2014_qr, config: configs/methods/su2014_qr.yaml}
