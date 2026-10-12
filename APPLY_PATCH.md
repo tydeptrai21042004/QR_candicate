@@ -1,20 +1,19 @@
-# Apply v4 patch
+# Minimal Green-Quad benchmark/video patch
 
-Copy the files in this archive over the same relative paths in the latest corrected repository.
+Copy **only** the folders/files in this ZIP into the root of your latest `QR_candicate` checkout, preserving their relative paths:
 
-Then run:
+- `scripts/run_mmwatermark_official.py` (NEW)
+- `scripts/run_video_pipeline.py` (NEW)
+- `tests/test_mmwatermark_official_integration.py` (NEW)
+- `tests/test_video_pipeline_integration.py` (NEW)
+- `docs/MMWATERMARK_VIDEO_INTEGRATION.md` (NEW)
+- `pyproject.toml` (MODIFIED: adds `Pillow>=10.0` only)
 
-```bash
-pip install -e .
-python -m compileall -q src scripts tests
-pytest -q
-python scripts/run_hardware_sanity.py --samples 20000
-```
+No modifications to `src/qrwatermark/proposed/**` or the existing experiments.
+No WAVES/OmniSeal adapters are included. No COCO-specific runner is included.
 
-Expected final checks:
+Install: `python -m pip install -e '.[test]'`
 
-- `44 passed`;
-- `rounded_reconstruction_mismatches=0`;
-- `qim_hard_decision_mismatches=0`.
+Run the test and experiment commands in `docs/MMWATERMARK_VIDEO_INTEGRATION.md`.
 
-The v4 final path theorem is enabled in `configs/methods/proposed.yaml`. It is applied only after the watermarked image and period allocation are frozen, so it does not change the embedding PSNR or payload.
+**Validation statement**: Tests on a synthetic upstream fixture and synthetic video passed. The real external benchmark requires cloning the upstream repo with working Internet access and may require integration updates for that precise revision. Results are not included or invented.

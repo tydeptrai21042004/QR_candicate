@@ -1,23 +1,13 @@
 {
-  "patch": "QR reviewer audit v2",
-  "base": "uploaded QR_candicate-main (2026-10-11)",
-  "changed_files": [
-    "src/qrwatermark/evaluation/review_statistics.py",
-    "src/qrwatermark/evaluation/review_protocol.py",
-    "src/qrwatermark/evaluation/fairness.py",
-    "scripts/run_reviewer_suite.py",
-    "scripts/run_main_comparison.py",
-    "scripts/prepare_reviewer_hosts.py",
-    "tests/test_evaluation_audit_v2.py",
-    "kaggle/QR_REVIEWER_AUDIT_V2_ONE_CELL.py",
-    "REVIEWER_AUDIT_V2_README.md"
-  ],
-  "full_12_host_results_available": false,
-  "six_host_exploratory_security_test": {
-    "auc": 0.9045981032338308,
-    "tpr": 0.7708333333333334,
-    "fpr": 0.011504975124378109,
-    "independent_test_hosts": 3
-  },
-  "tests": "111 passed"
+  "source": "QR_candicate-main(20261012-084405).zip",
+  "scope": "MMWatermark official clone/perturbation adaptation + real video pipeline",
+  "files_sha256": {
+    "scripts/run_mmwatermark_official.py": "0a361f4bd13d2b0e0ca1d75f8cad9933072637c1bf60fea0b59ccd357d6e6d93",
+    "scripts/run_video_pipeline.py": "2ba576d8a489d2a3f68d3e6ce7e76cda922df2302f5d40a6669e8c07db609d50",
+    "tests/test_mmwatermark_official_integration.py": "6f9016a16b6f79d4bc39d780cc31874a52c69b559fe71320bab558fc6f861c53",
+    "tests/test_video_pipeline_integration.py": "513675600a79bd669155b92765299109d1051595aa1cdd37b37a30a1e6c35b3c",
+    "docs/MMWATERMARK_VIDEO_INTEGRATION.md": "71a58a3ab3143d7213c1246bab3f040975010d316f394c75f9c403eda3664ac1",
+    "pyproject.toml": "ada7778cb88ebdee9d45e2e67ad22268bd8d91c92741a7b2d5ab18fb9f13e04b",
+    "APPLY_PATCH.md": "38c0d6d527d178c1d6dcf19ebe5e19208c63755703f9b9dafbcbde979d5ea9b1"
+  }
 }
